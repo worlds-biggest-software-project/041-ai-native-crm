@@ -38,28 +38,28 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T011 Create Drizzle ORM client and connection in target/src/server/db/index.ts
-- [ ] T012 Configure target/drizzle.config.ts with PostgreSQL connection and schema/migration paths
-- [ ] T013 Create workspace schema in target/src/server/db/schema/workspaces.ts per data-model.md
-- [ ] T014 [P] Create user schema in target/src/server/db/schema/users.ts with workspace FK and unique(workspace_id, email) per data-model.md
-- [ ] T015 [P] Create field_definition schema in target/src/server/db/schema/field-definitions.ts per data-model.md
-- [ ] T016 Configure Auth.js v5 with Google and Microsoft Entra ID OAuth providers, Drizzle adapter, and JWT session strategy in target/src/server/lib/auth.ts
-- [ ] T017 Create NextAuth type augmentation for workspaceId and role in session at target/src/types/next-auth.d.ts
-- [ ] T018 Create tRPC initialization with superjson transformer in target/src/server/trpc/router.ts
-- [ ] T019 Create tRPC context with auth session and db injection in target/src/server/trpc/context.ts
-- [ ] T020 Create publicProcedure, protectedProcedure (with workspace isolation middleware), and adminProcedure (extends protectedProcedure, rejects non-admin role) in target/src/server/trpc/router.ts
-- [ ] T021 Create health check procedure in root tRPC router
-- [ ] T022 Create tRPC HTTP handler route at target/src/app/api/trpc/[trpc]/route.ts
-- [ ] T023 [P] Create Redis client in target/src/server/lib/redis.ts
-- [ ] T024 [P] Create BullMQ queue definitions (email-sync, calendar-sync, ai-jobs, scoring, enrichment, webhook-dispatch) in target/src/server/lib/queue.ts
-- [ ] T025 [P] Create AES-256-GCM encrypt/decrypt helpers in target/src/server/lib/encryption.ts
-- [ ] T026 [P] Create shared Zod validator schemas in target/src/server/lib/validators.ts
-- [ ] T027 [P] Create tRPC client for React in target/src/lib/trpc-client.ts
+- [x] T011 Create Drizzle ORM client and connection in target/src/server/db/index.ts
+- [x] T012 Configure target/drizzle.config.ts with PostgreSQL connection and schema/migration paths
+- [x] T013 Create workspace schema in target/src/server/db/schema/workspaces.ts per data-model.md
+- [x] T014 [P] Create user schema in target/src/server/db/schema/users.ts with workspace FK and unique(workspace_id, email) per data-model.md
+- [x] T015 [P] Create field_definition schema in target/src/server/db/schema/field-definitions.ts per data-model.md
+- [x] T016 Configure Auth.js v5 with Google and Microsoft Entra ID OAuth providers, Drizzle adapter, and JWT session strategy in target/src/server/lib/auth.ts
+- [x] T017 Create NextAuth type augmentation for workspaceId and role in session at target/src/types/next-auth.d.ts
+- [x] T018 Create tRPC initialization with superjson transformer in target/src/server/trpc/router.ts
+- [x] T019 Create tRPC context with auth session and db injection in target/src/server/trpc/context.ts
+- [x] T020 Create publicProcedure, protectedProcedure (with workspace isolation middleware), and adminProcedure (extends protectedProcedure, rejects non-admin role) in target/src/server/trpc/router.ts
+- [x] T021 Create health check procedure in root tRPC router
+- [x] T022 Create tRPC HTTP handler route at target/src/app/api/trpc/[trpc]/route.ts
+- [x] T023 [P] Create Redis client in target/src/server/lib/redis.ts
+- [x] T024 [P] Create BullMQ queue definitions (email-sync, calendar-sync, ai-jobs, scoring, enrichment, webhook-dispatch) in target/src/server/lib/queue.ts
+- [x] T025 [P] Create AES-256-GCM encrypt/decrypt helpers in target/src/server/lib/encryption.ts
+- [x] T026 [P] Create shared Zod validator schemas in target/src/server/lib/validators.ts
+- [x] T027 [P] Create tRPC client for React in target/src/lib/trpc-client.ts
 - [ ] T028 Run initial database migration: pnpm drizzle-kit push
-- [ ] T029 Write integration test: health procedure returns ok without auth in target/tests/integration/trpc-health.test.ts
-- [ ] T030 Write integration test: protectedProcedure rejects unauthenticated request in target/tests/integration/trpc-auth.test.ts
-- [ ] T217 [P] Create workspace settings tRPC router (getWorkspace, updateWorkspace, listUsers, inviteUser, updateUserRole, deactivateUser) in target/src/server/trpc/routers/settings.ts
-- [ ] T218 [P] Create workspace settings page at target/src/app/(dashboard)/settings/workspace/page.tsx
+- [x] T029 Write integration test: health procedure returns ok without auth in target/tests/integration/trpc-health.test.ts
+- [x] T030 Write integration test: protectedProcedure rejects unauthenticated request in target/tests/integration/trpc-auth.test.ts
+- [x] T217 [P] Create workspace settings tRPC router (getWorkspace, updateWorkspace, listUsers, inviteUser, updateUserRole, deactivateUser) in target/src/server/trpc/routers/settings.ts
+- [x] T218 [P] Create workspace settings page at target/src/app/(dashboard)/settings/workspace/page.tsx
 
 **Checkpoint**: Foundation ready — database connected, auth working, tRPC scaffold operational, workspace admin settings available. User story implementation can begin.
 
@@ -73,88 +73,88 @@
 
 ### Tests for User Story 1
 
-- [ ] T031 [P] [US1] Write contract tests for REST API contacts endpoints (GET/POST/PATCH/DELETE) in target/tests/contract/contacts-api.test.ts
-- [ ] T032 [P] [US1] Write contract tests for REST API companies endpoints in target/tests/contract/companies-api.test.ts
-- [ ] T033 [P] [US1] Write contract tests for REST API deals endpoints (including stage move via PATCH) in target/tests/contract/deals-api.test.ts
-- [ ] T034 [P] [US1] Write contract tests for REST API pipelines endpoints in target/tests/contract/pipelines-api.test.ts
-- [ ] T035 [P] [US1] Write integration test: create contact, list contacts, contact appears in list in target/tests/integration/contacts.test.ts
-- [ ] T036 [P] [US1] Write integration test: workspace isolation — contact in workspace A not visible from workspace B in target/tests/integration/workspace-isolation.test.ts
-- [ ] T037 [P] [US1] Write integration test: deal stage change sets actualCloseDate on won/lost in target/tests/integration/deals-stage.test.ts
+- [x] T031 [P] [US1] Write contract tests for REST API contacts endpoints (GET/POST/PATCH/DELETE) in target/tests/contract/contacts-api.test.ts
+- [x] T032 [P] [US1] Write contract tests for REST API companies endpoints in target/tests/contract/companies-api.test.ts
+- [x] T033 [P] [US1] Write contract tests for REST API deals endpoints (including stage move via PATCH) in target/tests/contract/deals-api.test.ts
+- [x] T034 [P] [US1] Write contract tests for REST API pipelines endpoints in target/tests/contract/pipelines-api.test.ts
+- [x] T035 [P] [US1] Write integration test: create contact, list contacts, contact appears in list in target/tests/integration/contacts.test.ts
+- [x] T036 [P] [US1] Write integration test: workspace isolation — contact in workspace A not visible from workspace B in target/tests/integration/workspace-isolation.test.ts
+- [x] T037 [P] [US1] Write integration test: deal stage change sets actualCloseDate on won/lost in target/tests/integration/deals-stage.test.ts
 
 ### Implementation for User Story 1
 
 #### Database Schemas
 
-- [ ] T038 [P] [US1] Create contact schema with all columns, indexes, and soft delete (deleted_at) in target/src/server/db/schema/contacts.ts per data-model.md
-- [ ] T039 [P] [US1] Create company schema with all columns, indexes, and soft delete in target/src/server/db/schema/companies.ts per data-model.md
-- [ ] T040 [P] [US1] Create pipeline schema with JSONB stages column in target/src/server/db/schema/pipelines.ts per data-model.md
-- [ ] T041 [P] [US1] Create deal schema with all columns, indexes, contact_ids array, and soft delete in target/src/server/db/schema/deals.ts per data-model.md
-- [ ] T042 [P] [US1] Create audit_log schema (partitioned by quarter) in target/src/server/db/schema/audit-log.ts per data-model.md
-- [ ] T043 [P] [US1] Create tag and entity_tag schemas in target/src/server/db/schema/tags.ts per data-model.md
+- [x] T038 [P] [US1] Create contact schema with all columns, indexes, and soft delete (deleted_at) in target/src/server/db/schema/contacts.ts per data-model.md
+- [x] T039 [P] [US1] Create company schema with all columns, indexes, and soft delete in target/src/server/db/schema/companies.ts per data-model.md
+- [x] T040 [P] [US1] Create pipeline schema with JSONB stages column in target/src/server/db/schema/pipelines.ts per data-model.md
+- [x] T041 [P] [US1] Create deal schema with all columns, indexes, contact_ids array, and soft delete in target/src/server/db/schema/deals.ts per data-model.md
+- [x] T042 [P] [US1] Create audit_log schema (partitioned by quarter) in target/src/server/db/schema/audit-log.ts per data-model.md
+- [x] T043 [P] [US1] Create tag and entity_tag schemas in target/src/server/db/schema/tags.ts per data-model.md
 - [ ] T044 [US1] Run migration to apply all Phase 3 schemas: pnpm drizzle-kit push
 
 #### Zod Validators
 
-- [ ] T045 [P] [US1] Add createContactSchema, updateContactSchema, listContactsSchema to target/src/server/lib/validators.ts
-- [ ] T046 [P] [US1] Add createCompanySchema, updateCompanySchema, listCompaniesSchema to target/src/server/lib/validators.ts
-- [ ] T047 [P] [US1] Add createDealSchema, updateDealSchema, listDealsSchema, pipelineStageSchema to target/src/server/lib/validators.ts
+- [x] T045 [P] [US1] Add createContactSchema, updateContactSchema, listContactsSchema to target/src/server/lib/validators.ts
+- [x] T046 [P] [US1] Add createCompanySchema, updateCompanySchema, listCompaniesSchema to target/src/server/lib/validators.ts
+- [x] T047 [P] [US1] Add createDealSchema, updateDealSchema, listDealsSchema, pipelineStageSchema to target/src/server/lib/validators.ts
 
 #### tRPC Routers (CRUD)
 
-- [ ] T048 [US1] Create contacts tRPC router (list, getById, create, update, delete) with workspace isolation in target/src/server/trpc/routers/contacts.ts
-- [ ] T049 [US1] Create companies tRPC router (list, getById, create, update, delete) with contactCount/dealCount denormalization in target/src/server/trpc/routers/companies.ts
-- [ ] T050 [US1] Create pipelines tRPC router (list, create, update) with default pipeline seeding in target/src/server/trpc/routers/pipelines.ts
-- [ ] T051 [US1] Create deals tRPC router (list, getById, create, update, delete, moveStage) with stage validation and audit logging in target/src/server/trpc/routers/deals.ts
-- [ ] T052 [US1] Create audit log helper function writeAuditLog in target/src/server/lib/audit.ts
-- [ ] T053 [US1] Register all routers in root tRPC appRouter in target/src/server/trpc/router.ts
+- [x] T048 [US1] Create contacts tRPC router (list, getById, create, update, delete) with workspace isolation in target/src/server/trpc/routers/contacts.ts
+- [x] T049 [US1] Create companies tRPC router (list, getById, create, update, delete) with contactCount/dealCount denormalization in target/src/server/trpc/routers/companies.ts
+- [x] T050 [US1] Create pipelines tRPC router (list, create, update) with default pipeline seeding in target/src/server/trpc/routers/pipelines.ts
+- [x] T051 [US1] Create deals tRPC router (list, getById, create, update, delete, moveStage) with stage validation and audit logging in target/src/server/trpc/routers/deals.ts
+- [x] T052 [US1] Create audit log helper function writeAuditLog in target/src/server/lib/audit.ts
+- [x] T053 [US1] Register all routers in root tRPC appRouter in target/src/server/trpc/router.ts
 
 #### Public REST API
 
-- [ ] T054 [P] [US1] Create REST contacts routes (GET/POST list, GET/PATCH/DELETE by id) at target/src/app/api/v1/contacts/route.ts and src/app/api/v1/contacts/[id]/route.ts
-- [ ] T055 [P] [US1] Create REST companies routes at target/src/app/api/v1/companies/route.ts and src/app/api/v1/companies/[id]/route.ts
-- [ ] T056 [P] [US1] Create REST deals routes at target/src/app/api/v1/deals/route.ts and src/app/api/v1/deals/[id]/route.ts
-- [ ] T057 [P] [US1] Create REST pipelines routes at target/src/app/api/v1/pipelines/route.ts and src/app/api/v1/pipelines/[id]/route.ts
-- [ ] T058 [US1] Create API key authentication middleware for Bearer token auth on /api/v1/* routes in target/src/server/lib/api-auth.ts
+- [x] T054 [P] [US1] Create REST contacts routes (GET/POST list, GET/PATCH/DELETE by id) at target/src/app/api/v1/contacts/route.ts and src/app/api/v1/contacts/[id]/route.ts
+- [x] T055 [P] [US1] Create REST companies routes at target/src/app/api/v1/companies/route.ts and src/app/api/v1/companies/[id]/route.ts
+- [x] T056 [P] [US1] Create REST deals routes at target/src/app/api/v1/deals/route.ts and src/app/api/v1/deals/[id]/route.ts
+- [x] T057 [P] [US1] Create REST pipelines routes at target/src/app/api/v1/pipelines/route.ts and src/app/api/v1/pipelines/[id]/route.ts
+- [x] T058 [US1] Create API key authentication middleware for Bearer token auth on /api/v1/* routes in target/src/server/lib/api-auth.ts
 
 #### Frontend Shell
 
-- [ ] T059 [US1] Install UI dependencies: @shadcn/ui, @dnd-kit/core, @dnd-kit/sortable, @tanstack/react-table, @tanstack/react-query, recharts
-- [ ] T060 [US1] Initialize shadcn/ui components (button, input, dialog, dropdown-menu, table, badge, avatar, tabs, command, separator, sheet) in target/src/components/ui/
-- [ ] T061 [US1] Create dashboard layout shell with collapsible sidebar in target/src/app/(dashboard)/layout.tsx
-- [ ] T062 [P] [US1] Create sidebar component with nav items (Contacts, Companies, Deals, Activities, Reports, Settings) in target/src/components/layout/sidebar.tsx
-- [ ] T063 [P] [US1] Create header component with breadcrumb, search trigger, and user menu in target/src/components/layout/header.tsx
-- [ ] T064 [US1] Create command palette component (Cmd+K) with global search via tRPC in target/src/components/layout/command-palette.tsx
-- [ ] T065 [US1] Create auth pages: login page at target/src/app/(auth)/login/page.tsx and OAuth callback at target/src/app/(auth)/callback/route.ts
+- [x] T059 [US1] Install UI dependencies: @shadcn/ui, @dnd-kit/core, @dnd-kit/sortable, @tanstack/react-table, @tanstack/react-query, recharts
+- [x] T060 [US1] Initialize shadcn/ui components (button, input, dialog, dropdown-menu, table, badge, avatar, tabs, command, separator, sheet) in target/src/components/ui/
+- [x] T061 [US1] Create dashboard layout shell with collapsible sidebar in target/src/app/(dashboard)/layout.tsx
+- [x] T062 [P] [US1] Create sidebar component with nav items (Contacts, Companies, Deals, Activities, Reports, Settings) in target/src/components/layout/sidebar.tsx
+- [x] T063 [P] [US1] Create header component with breadcrumb, search trigger, and user menu in target/src/components/layout/header.tsx
+- [x] T064 [US1] Create command palette component (Cmd+K) with global search via tRPC in target/src/components/layout/command-palette.tsx
+- [x] T065 [US1] Create auth pages: login page at target/src/app/(auth)/login/page.tsx and OAuth callback at target/src/app/(auth)/callback/route.ts
 
 #### Contact & Company List Views
 
-- [ ] T066 [US1] Create contact table component with TanStack Table (server-side pagination, sorting, filtering, bulk actions) in target/src/components/contacts/contact-table.tsx
-- [ ] T067 [US1] Create contacts list page at target/src/app/(dashboard)/contacts/page.tsx
-- [ ] T068 [P] [US1] Create company table component in target/src/components/companies/company-table.tsx
-- [ ] T069 [P] [US1] Create companies list page at target/src/app/(dashboard)/companies/page.tsx
+- [x] T066 [US1] Create contact table component with TanStack Table (server-side pagination, sorting, filtering, bulk actions) in target/src/components/contacts/contact-table.tsx
+- [x] T067 [US1] Create contacts list page at target/src/app/(dashboard)/contacts/page.tsx
+- [x] T068 [P] [US1] Create company table component in target/src/components/companies/company-table.tsx
+- [x] T069 [P] [US1] Create companies list page at target/src/app/(dashboard)/companies/page.tsx
 
 #### Pipeline Kanban Board
 
-- [ ] T070 [US1] Create pipeline board component with @dnd-kit drag-and-drop, stage columns, and optimistic updates in target/src/components/deals/pipeline-board.tsx
-- [ ] T071 [P] [US1] Create deal card component (name, company, amount, health badge, owner, days-in-stage) in target/src/components/deals/deal-card.tsx
-- [ ] T072 [US1] Create deals pipeline page with pipeline selector at target/src/app/(dashboard)/deals/page.tsx
+- [x] T070 [US1] Create pipeline board component with @dnd-kit drag-and-drop, stage columns, and optimistic updates in target/src/components/deals/pipeline-board.tsx
+- [x] T071 [P] [US1] Create deal card component (name, company, amount, health badge, owner, days-in-stage) in target/src/components/deals/deal-card.tsx
+- [x] T072 [US1] Create deals pipeline page with pipeline selector at target/src/app/(dashboard)/deals/page.tsx
 
 #### Detail Pages
 
-- [ ] T073 [US1] Create contact detail page (header, action bar, tabs: Overview/Activity/Deals/Tasks) at target/src/app/(dashboard)/contacts/[id]/page.tsx
-- [ ] T074 [P] [US1] Create contact detail component with field display and inline editing in target/src/components/contacts/contact-detail.tsx
-- [ ] T075 [P] [US1] Create contact form component for create/edit in target/src/components/contacts/contact-form.tsx
-- [ ] T076 [US1] Create deal detail page (header, stage badge, tabs: Overview/Activity/Contacts/AI Insights) at target/src/app/(dashboard)/deals/[id]/page.tsx
-- [ ] T077 [P] [US1] Create deal detail component in target/src/components/deals/deal-detail.tsx
-- [ ] T078 [P] [US1] Create deal form component in target/src/components/deals/deal-form.tsx
-- [ ] T079 [P] [US1] Create company detail page at target/src/app/(dashboard)/companies/[id]/page.tsx
-- [ ] T080 [P] [US1] Create shared empty state component in target/src/components/shared/empty-state.tsx
-- [ ] T081 [P] [US1] Create shared entity tags component in target/src/components/shared/entity-tags.tsx
+- [x] T073 [US1] Create contact detail page (header, action bar, tabs: Overview/Activity/Deals/Tasks) at target/src/app/(dashboard)/contacts/[id]/page.tsx
+- [x] T074 [P] [US1] Create contact detail component with field display and inline editing in target/src/components/contacts/contact-detail.tsx
+- [x] T075 [P] [US1] Create contact form component for create/edit in target/src/components/contacts/contact-form.tsx
+- [x] T076 [US1] Create deal detail page (header, stage badge, tabs: Overview/Activity/Contacts/AI Insights) at target/src/app/(dashboard)/deals/[id]/page.tsx
+- [x] T077 [P] [US1] Create deal detail component in target/src/components/deals/deal-detail.tsx
+- [x] T078 [P] [US1] Create deal form component in target/src/components/deals/deal-form.tsx
+- [x] T079 [P] [US1] Create company detail page at target/src/app/(dashboard)/companies/[id]/page.tsx
+- [x] T080 [P] [US1] Create shared empty state component in target/src/components/shared/empty-state.tsx
+- [x] T081 [P] [US1] Create shared entity tags component in target/src/components/shared/entity-tags.tsx
 
 #### E2E Tests
 
-- [ ] T082 [US1] Write E2E test: login, sidebar navigation, create contact, verify in list in target/tests/e2e/contacts.spec.ts
-- [ ] T083 [US1] Write E2E test: pipeline board drag deal between stages, verify totals update in target/tests/e2e/pipeline-board.spec.ts
+- [x] T082 [US1] Write E2E test: login, sidebar navigation, create contact, verify in list in target/tests/e2e/contacts.spec.ts
+- [x] T083 [US1] Write E2E test: pipeline board drag deal between stages, verify totals update in target/tests/e2e/pipeline-board.spec.ts
 
 **Checkpoint**: Core CRM is fully functional — contacts, companies, deals, pipeline board, REST API. This is the Core CRM Checkpoint (not yet constitution MVP — see Phase 9 checkpoint).
 
