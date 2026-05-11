@@ -15,9 +15,11 @@
 
 ```bash
 git clone <repo-url> ai-native-crm
-cd ai-native-crm
+cd ai-native-crm/target
 pnpm install
 ```
+
+> **Note**: All application code lives in `target/`. Run all `pnpm` and `docker` commands from the `target/` directory.
 
 ### 2. Start infrastructure
 
@@ -78,6 +80,8 @@ pnpm tsx src/server/workers/index.ts
 Workers handle email sync, calendar sync, AI summarization, scoring, enrichment, and webhook dispatch.
 
 ## Development Commands
+
+All commands run from the `target/` directory:
 
 | Command | Description |
 |---------|-------------|

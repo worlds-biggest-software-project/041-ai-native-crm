@@ -1,30 +1,30 @@
 <!--
   Sync Impact Report
   ==================
-  Version change: N/A → 1.0.0 (initial ratification)
+  Version change: 1.0.0 → 1.1.0 (MINOR — material expansion)
 
-  Added principles:
-    - I. AI-Native by Default
-    - II. Privacy-First Data Handling
-    - III. Open Standards & Interoperability
-    - IV. Test-First Development
-    - V. Simplicity & Incremental Delivery
+  Modified sections:
+    - Development Workflow — added repository layout constraint
+      (target/ directory convention)
 
-  Added sections:
-    - Technology & Compliance Constraints
-    - Development Workflow
-
-  Removed sections: none (initial creation)
+  Added principles: none
+  Added sections: none
+  Removed sections: none
 
   Templates requiring updates:
-    - .specify/templates/plan-template.md — ✅ compatible (Constitution Check
-      section references constitution file generically)
-    - .specify/templates/spec-template.md — ✅ compatible (no constitution-
-      specific references)
-    - .specify/templates/tasks-template.md — ✅ compatible (no constitution-
-      specific references)
+    - .specify/templates/plan-template.md — ✅ compatible (generic
+      src/ references are template placeholders, not project paths)
+    - .specify/templates/spec-template.md — ✅ compatible (no
+      directory structure references)
+    - .specify/templates/tasks-template.md — ✅ compatible (file
+      paths in generated tasks are project-specific)
     - .specify/templates/checklist-template.md — ✅ compatible
-    - .specify/templates/commands/ — directory does not exist; no action needed
+
+  Affected project artifacts (already updated):
+    - specs/001-ai-native-crm-platform/plan.md — ✅ updated
+    - specs/001-ai-native-crm-platform/tasks.md — ✅ updated
+    - specs/001-ai-native-crm-platform/quickstart.md — ✅ updated
+    - CLAUDE.md — ✅ updated
 
   Follow-up TODOs: none
 -->
@@ -144,6 +144,12 @@ Complexity MUST be justified and documented.
   "what".
 - Code reviews MUST verify compliance with this constitution's
   principles — reviewers are expected to flag violations.
+- **Repository layout**: All application source code, tests,
+  configuration files, and Docker artifacts MUST reside under the
+  `target/` directory. The repository root MUST contain only research,
+  planning, specifications, orchestration files, and project-level
+  configuration (CLAUDE.md, .gitignore, .specify/). All `pnpm` and
+  build commands MUST be executed from the `target/` directory.
 
 ## Governance
 
@@ -161,4 +167,4 @@ It supersedes all other guidance when conflicts arise.
   resolved or explicitly justified with a Complexity Tracking entry
   before merge.
 
-**Version**: 1.0.0 | **Ratified**: 2026-05-12 | **Last Amended**: 2026-05-12
+**Version**: 1.1.0 | **Ratified**: 2026-05-12 | **Last Amended**: 2026-05-12

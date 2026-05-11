@@ -88,10 +88,10 @@ specs/001-ai-native-crm-platform/
 └── tasks.md             # Phase 2 output (via /speckit-tasks)
 ```
 
-### Source Code (repository root)
+### Source Code (under target/)
 
 ```text
-ai-native-crm/
+ai-native-crm/target/
 ├── package.json
 ├── pnpm-lock.yaml
 ├── tsconfig.json
@@ -179,7 +179,7 @@ ai-native-crm/
 └── public/
 ```
 
-**Structure Decision**: Next.js 15 App Router monolith with co-located server code under `src/server/` and React components under `src/components/`. Background workers run in a separate Node.js process from the same codebase. This follows the development plan's established architecture and avoids premature monorepo complexity per Constitution Principle V.
+**Structure Decision**: All application code lives under `target/` — the top level contains only research, specs, and orchestration. Next.js App Router monolith with co-located server code under `target/src/server/` and React components under `target/src/components/`. Background workers run in a separate Node.js process from the same codebase. Run all `pnpm` commands from the `target/` directory.
 
 ## Complexity Tracking
 
