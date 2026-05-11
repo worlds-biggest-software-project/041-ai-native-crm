@@ -43,11 +43,11 @@
 - [ ] T013 Create workspace schema in src/server/db/schema/workspaces.ts per data-model.md
 - [ ] T014 [P] Create user schema in src/server/db/schema/users.ts with workspace FK and unique(workspace_id, email) per data-model.md
 - [ ] T015 [P] Create field_definition schema in src/server/db/schema/field-definitions.ts per data-model.md
-- [ ] T016 Configure Auth.js v5 with Google OAuth provider, Drizzle adapter, and JWT session strategy in src/server/lib/auth.ts
+- [ ] T016 Configure Auth.js v5 with Google and Microsoft Entra ID OAuth providers, Drizzle adapter, and JWT session strategy in src/server/lib/auth.ts
 - [ ] T017 Create NextAuth type augmentation for workspaceId and role in session at src/types/next-auth.d.ts
 - [ ] T018 Create tRPC initialization with superjson transformer in src/server/trpc/router.ts
 - [ ] T019 Create tRPC context with auth session and db injection in src/server/trpc/context.ts
-- [ ] T020 Create publicProcedure and protectedProcedure (with workspace isolation middleware) in src/server/trpc/router.ts
+- [ ] T020 Create publicProcedure, protectedProcedure (with workspace isolation middleware), and adminProcedure (extends protectedProcedure, rejects non-admin role) in src/server/trpc/router.ts
 - [ ] T021 Create health check procedure in root tRPC router
 - [ ] T022 Create tRPC HTTP handler route at src/app/api/trpc/[trpc]/route.ts
 - [ ] T023 [P] Create Redis client in src/server/lib/redis.ts
@@ -58,12 +58,14 @@
 - [ ] T028 Run initial database migration: pnpm drizzle-kit push
 - [ ] T029 Write integration test: health procedure returns ok without auth in tests/integration/trpc-health.test.ts
 - [ ] T030 Write integration test: protectedProcedure rejects unauthenticated request in tests/integration/trpc-auth.test.ts
+- [ ] T217 [P] Create workspace settings tRPC router (getWorkspace, updateWorkspace, listUsers, inviteUser, updateUserRole, deactivateUser) in src/server/trpc/routers/settings.ts
+- [ ] T218 [P] Create workspace settings page at src/app/(dashboard)/settings/workspace/page.tsx
 
-**Checkpoint**: Foundation ready — database connected, auth working, tRPC scaffold operational. User story implementation can begin.
+**Checkpoint**: Foundation ready — database connected, auth working, tRPC scaffold operational, workspace admin settings available. User story implementation can begin.
 
 ---
 
-## Phase 3: User Story 1 — Sales Rep Manages Contacts, Companies, and Deals (Priority: P1) MVP
+## Phase 3: User Story 1 — Sales Rep Manages Contacts, Companies, and Deals (Priority: P1)
 
 **Goal**: Authenticated users can CRUD contacts, companies, and deals. Pipeline Kanban board with drag-and-drop. Dashboard shell with sidebar navigation.
 
@@ -154,7 +156,7 @@
 - [ ] T082 [US1] Write E2E test: login, sidebar navigation, create contact, verify in list in tests/e2e/contacts.spec.ts
 - [ ] T083 [US1] Write E2E test: pipeline board drag deal between stages, verify totals update in tests/e2e/pipeline-board.spec.ts
 
-**Checkpoint**: Core CRM is fully functional — contacts, companies, deals, pipeline board, REST API. This is the MVP.
+**Checkpoint**: Core CRM is fully functional — contacts, companies, deals, pipeline board, REST API. This is the Core CRM Checkpoint (not yet constitution MVP — see Phase 9 checkpoint).
 
 ---
 
@@ -239,6 +241,7 @@
 - [ ] T116 [P] [US5] Create email thread component for grouped email display in src/components/activities/email-thread.tsx
 - [ ] T117 [US5] Create activities list page at src/app/(dashboard)/activities/page.tsx
 - [ ] T118 [US5] Wire command palette search to tRPC search.global procedure in src/components/layout/command-palette.tsx
+- [ ] T225 [P] [US5] Create REST activities routes (GET list, POST create, GET by id) at src/app/api/v1/activities/route.ts and src/app/api/v1/activities/[id]/route.ts per rest-api.md contract
 - [ ] T119 [US5] Write E2E test: contact detail Activity tab shows timeline with mixed types, load more works in tests/e2e/activity-timeline.spec.ts
 
 **Checkpoint**: Activity timelines visible on all detail pages. Global search working via command palette.
@@ -364,6 +367,8 @@
 
 **Checkpoint**: Webhooks dispatching CRM events. Workflows automating sales sequences.
 
+**CONSTITUTION MVP COMPLETE**: After Phases 3-7 + 9, the constitution's MVP scope is met: contact/company/deal management, two-way email and calendar sync, pipeline board, LLM meeting summaries, ML deal scoring, and REST API with webhooks. Validate before proceeding to post-MVP features.
+
 ---
 
 ## Phase 10: User Story 8 — MCP Server for AI Assistant Integration (Priority: P3)
@@ -469,8 +474,6 @@
 - [ ] T214 [P] Add rate limiting middleware for /api/v1/* REST endpoints and MCP transport in src/server/lib/rate-limit.ts
 - [ ] T215 [P] Configure Content Security Policy, CORS, and security headers in next.config.ts
 - [ ] T216 Verify soft delete filtering is applied on all list/search queries (contacts, companies, deals, custom objects)
-- [ ] T217 [P] Add workspace settings tRPC router (getWorkspace, updateWorkspace, listUsers, inviteUser, updateUserRole, deactivateUser) in src/server/trpc/routers/settings.ts
-- [ ] T218 [P] Create workspace settings page at src/app/(dashboard)/settings/workspace/page.tsx
 - [ ] T219 Run full test suite: pnpm test && pnpm test:e2e
 - [ ] T220 Run TypeScript strict mode build: pnpm build with zero errors
 - [ ] T221 Run ESLint: pnpm lint with zero errors
@@ -486,7 +489,7 @@
 
 - **Setup (Phase 1)**: No dependencies — start immediately
 - **Foundational (Phase 2)**: Depends on Setup — BLOCKS all user stories
-- **US1 (Phase 3)**: Depends on Foundational — core CRM MVP
+- **US1 (Phase 3)**: Depends on Foundational — core CRM checkpoint
 - **US2 (Phase 4)**: Depends on Foundational — can parallel with US1 backend, needs US1 schemas
 - **US5 (Phase 5)**: Depends on US1 + US2 schemas (activities) — timeline needs both
 - **US3 (Phase 6)**: Depends on US2 (synced meetings) + US5 (timeline display)
@@ -505,7 +508,7 @@ Phase 1: Setup
     ↓
 Phase 2: Foundational
     ↓
-Phase 3: US1 (Core CRM)  ←──────────────────────────────── MVP STOP POINT
+Phase 3: US1 (Core CRM)  ←──────────────────────────────── CORE CRM CHECKPOINT
     ↓                    ↘
 Phase 4: US2 (Sync)      Phase 8: US6 (Enrichment)  ┐
     ↓                     Phase 9: US7 (Webhooks)    ├── Can parallel after Phase 2
@@ -513,7 +516,7 @@ Phase 5: US5 (Timeline)   Phase 11: US9 (Custom Fields)┘
     ↓        ↘
 Phase 6: US3  Phase 7: US4    Phase 10: US8 (MCP) ← after US1
 (AI Summary)  (ML Scoring)
-    ↓
+              ↓               ←──────────────────── CONSTITUTION MVP (Phases 3-7 + 9)
 Phase 12: US10 (Reports/Import/Export)
     ↓
 Phase 13: Polish
@@ -579,19 +582,20 @@ T069: companies page
 1. Complete Phase 1: Setup
 2. Complete Phase 2: Foundational (CRITICAL — blocks all stories)
 3. Complete Phase 3: User Story 1 (Core CRM)
-4. **STOP and VALIDATE**: Full CRM with contacts, companies, deals, pipeline board, REST API
-5. Deploy/demo if ready
+4. **CORE CRM CHECKPOINT**: Full CRM with contacts, companies, deals, pipeline board, REST API
+5. Continue to constitution MVP (Phases 4-7 + 9)
 
-### Incremental Delivery (Recommended)
+### Constitution MVP (Recommended)
 
 1. Setup + Foundational → Foundation ready
-2. US1 → Core CRM MVP → Deploy/Demo
+2. US1 → Core CRM checkpoint → Deploy/Demo
 3. US2 → Zero-entry sync → Deploy/Demo (primary differentiator)
 4. US5 → Timeline + Search → Deploy/Demo (makes sync data visible)
 5. US3 + US4 → AI summaries + ML scoring → Deploy/Demo (AI features)
-6. US6 + US7 + US8 + US9 → Enrichment, webhooks, MCP, custom fields (parallel sprint)
-7. US10 → Reports + Import/Export → Deploy/Demo (production readiness)
-8. Polish → Security hardening, performance, documentation
+6. US7 → Webhooks → **CONSTITUTION MVP COMPLETE** → Deploy/Demo
+7. US6 + US8 + US9 → Enrichment, MCP, custom fields (parallel post-MVP sprint)
+8. US10 → Reports + Import/Export → Deploy/Demo (production readiness)
+9. Polish → Security hardening, performance, documentation
 
 ### Parallel Team Strategy
 

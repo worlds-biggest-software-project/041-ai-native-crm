@@ -133,6 +133,15 @@
 |-----------|------|-------|--------|
 | global | query | `{ query, types?, limit? }` | `{ type, id, title, subtitle }[]` |
 
+### export
+
+| Procedure | Type | Input | Output |
+|-----------|------|-------|--------|
+| contactsCsv | query | `{ search?, lifecycleStage?, ownerId? }` | `{ csv: string, count: number }` |
+| contactsVcard | query | `{ search?, lifecycleStage?, ownerId? }` | `{ vcard: string, count: number }` |
+| companiesCsv | query | `{ search? }` | `{ csv: string, count: number }` |
+| dealsCsv | query | `{ pipelineId?, stageId? }` | `{ csv: string, count: number }` |
+
 ### reports
 
 | Procedure | Type | Input | Output |
