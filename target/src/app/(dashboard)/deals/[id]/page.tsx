@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DealDetail } from "@/components/deals/deal-detail";
+import { MeetingSummaryCard } from "@/components/ai/meeting-summary-card";
+import { FollowUpDraft } from "@/components/ai/follow-up-draft";
 
 interface DealDetailPageProps {
   params: Promise<{ id: string }>;
@@ -65,8 +67,33 @@ export default async function DealDetailPage({
         </TabsContent>
 
         <TabsContent value="ai-insights">
-          <div className="py-8 text-center text-sm text-muted-foreground">
-            AI-generated insights and recommendations will be displayed here.
+          <div className="space-y-6">
+            {/* Meeting Summary Cards */}
+            <div>
+              <h3 className="mb-4 text-lg font-semibold">Meeting Summaries</h3>
+              {/* TODO: Fetch summaries via tRPC and map over them */}
+              <MeetingSummaryCard
+                summary={{
+                  summary: "Loading summary data...",
+                  key_points: [],
+                  action_items: [],
+                  sentiment: "neutral",
+                  topics: [],
+                }}
+              />
+            </div>
+
+            {/* Follow-Up Drafts */}
+            <div>
+              <h3 className="mb-4 text-lg font-semibold">Follow-Up Drafts</h3>
+              {/* TODO: Fetch follow-ups via tRPC and map over them */}
+              <FollowUpDraft
+                draft={{
+                  subject: "",
+                  bodyText: "Generate a meeting summary first to create follow-up drafts.",
+                }}
+              />
+            </div>
           </div>
         </TabsContent>
       </Tabs>

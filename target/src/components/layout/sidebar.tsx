@@ -9,6 +9,7 @@ import {
   Activity,
   BarChart3,
   Settings,
+  Boxes,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -55,6 +56,15 @@ export function Sidebar() {
             </Link>
           );
         })}
+
+        {/* Custom Objects — static placeholder for MVP */}
+        <div className="mt-6 border-t border-gray-200 pt-4">
+          <div className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-400">
+            <Boxes className="h-5 w-5 shrink-0" />
+            Custom Objects
+            <span className="ml-auto text-xs">(Coming soon)</span>
+          </div>
+        </div>
       </nav>
     </aside>
   );

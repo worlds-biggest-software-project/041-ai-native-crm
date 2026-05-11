@@ -73,6 +73,8 @@ export interface DealCardProps {
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
+// TODO: Wire ScoreBadge component for deal health score display
+
 export function DealCard({ deal, isDragging = false }: DealCardProps) {
   const {
     attributes,

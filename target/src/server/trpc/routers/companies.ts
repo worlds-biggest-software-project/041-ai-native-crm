@@ -81,6 +81,7 @@ export const companiesRouter = createRouter({
         entityId: company!.id,
       });
 
+      // TODO: Enqueue enrichment job after company creation
       return company!;
     }),
 

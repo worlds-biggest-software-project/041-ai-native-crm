@@ -161,3 +161,6 @@ export const contactsRouter = createRouter({
       return { success: !!deleted };
     }),
 });
+
+// TODO: dispatchWebhooks(ctx.workspaceId, "contact.created", contact)
+// TODO: Enqueue enrichment job after contact creation

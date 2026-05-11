@@ -253,3 +253,6 @@ export const dealsRouter = createRouter({
       return updated;
     }),
 });
+
+// TODO: dispatchWebhooks(ctx.workspaceId, "deal.created", deal)
+// TODO: dispatchWebhooks(ctx.workspaceId, "deal.stage_changed", { deal, oldStage, newStage })

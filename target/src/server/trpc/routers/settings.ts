@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { eq, and } from "drizzle-orm";
+import crypto from "node:crypto";
 import { protectedProcedure, adminProcedure, createRouter } from "../init";
 import { workspaces } from "@/server/db/schema/workspaces";
 import { users } from "@/server/db/schema/users";
@@ -107,4 +108,11 @@ export const settingsRouter = createRouter({
 
       return updated;
     }),
+
+  generateMcpKey: adminProcedure.mutation(({ ctx }) => {
+    const secret = crypto.randomBytes(32).toString("hex");
+    const key = `${ctx.workspaceId}:${secret}`;
+
+    return { key };
+  }),
 });

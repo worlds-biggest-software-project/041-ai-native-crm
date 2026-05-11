@@ -168,50 +168,50 @@
 
 ### Tests for User Story 2
 
-- [ ] T084 [P] [US2] Write unit test: parseEmailToActivity extracts subject, direction, from, to for inbound/outbound email in target/tests/unit/email-parser.test.ts
-- [ ] T085 [P] [US2] Write unit test: extractUniqueContacts deduplicates by email across from/to/cc in target/tests/unit/email-parser.test.ts
-- [ ] T086 [P] [US2] Write unit test: encrypt/decrypt round-trip and wrong-key rejection in target/tests/unit/encryption.test.ts
-- [ ] T087 [P] [US2] Write integration test (mocked Gmail API): initial sync of 100 threads creates activities and contacts in target/tests/integration/gmail-sync.test.ts
-- [ ] T088 [P] [US2] Write integration test (mocked Graph API): delta sync processes only new messages in target/tests/integration/outlook-sync.test.ts
+- [x] T084 [P] [US2] Write unit test: parseEmailToActivity extracts subject, direction, from, to for inbound/outbound email in target/tests/unit/email-parser.test.ts
+- [x] T085 [P] [US2] Write unit test: extractUniqueContacts deduplicates by email across from/to/cc in target/tests/unit/email-parser.test.ts
+- [x] T086 [P] [US2] Write unit test: encrypt/decrypt round-trip and wrong-key rejection in target/tests/unit/encryption.test.ts
+- [x] T087 [P] [US2] Write integration test (mocked Gmail API): initial sync of 100 threads creates activities and contacts in target/tests/integration/gmail-sync.test.ts
+- [x] T088 [P] [US2] Write integration test (mocked Graph API): delta sync processes only new messages in target/tests/integration/outlook-sync.test.ts
 
 ### Implementation for User Story 2
 
 #### Database Schema
 
-- [ ] T089 [US2] Create oauth_connection schema with encrypted token columns in target/src/server/db/schema/oauth-connections.ts per data-model.md
-- [ ] T090 [US2] Create activity schema with JSONB detail column in target/src/server/db/schema/activities.ts per data-model.md
-- [ ] T091 [US2] Create task schema in target/src/server/db/schema/tasks.ts per data-model.md
+- [x] T089 [US2] Create oauth_connection schema with encrypted token columns in target/src/server/db/schema/oauth-connections.ts per data-model.md
+- [x] T090 [US2] Create activity schema with JSONB detail column in target/src/server/db/schema/activities.ts per data-model.md
+- [x] T091 [US2] Create task schema in target/src/server/db/schema/tasks.ts per data-model.md
 - [ ] T092 [US2] Run migration for Phase 4 schemas: pnpm drizzle-kit push
 
 #### Email Sync Services
 
-- [ ] T093 [US2] Create email parser service (parseEmailToActivity, extractUniqueContacts, isFromUs) in target/src/server/services/email-sync/parser.ts
-- [ ] T094 [US2] Create Gmail sync service (initialSync, incrementalSync, registerPushNotifications) in target/src/server/services/email-sync/gmail.ts
-- [ ] T095 [US2] Create Outlook sync service (initialSync via Graph, incrementalSync via delta query, registerChangeNotifications) in target/src/server/services/email-sync/outlook.ts
-- [ ] T096 [US2] Create domain exclusion filter that skips internal emails based on workspace settings.excluded_domains in target/src/server/services/email-sync/parser.ts
+- [x] T093 [US2] Create email parser service (parseEmailToActivity, extractUniqueContacts, isFromUs) in target/src/server/services/email-sync/parser.ts
+- [x] T094 [US2] Create Gmail sync service (initialSync, incrementalSync, registerPushNotifications) in target/src/server/services/email-sync/gmail.ts
+- [x] T095 [US2] Create Outlook sync service (initialSync via Graph, incrementalSync via delta query, registerChangeNotifications) in target/src/server/services/email-sync/outlook.ts
+- [x] T096 [US2] Create domain exclusion filter that skips internal emails based on workspace settings.excluded_domains in target/src/server/services/email-sync/parser.ts
 
 #### Calendar Sync Services
 
-- [ ] T097 [P] [US2] Create Google Calendar sync service (syncEvents, attendee-to-contact mapping) in target/src/server/services/calendar-sync/google-calendar.ts
-- [ ] T098 [P] [US2] Create Outlook Calendar sync service (syncEvents via Microsoft Graph) in target/src/server/services/calendar-sync/outlook-calendar.ts
+- [x] T097 [P] [US2] Create Google Calendar sync service (syncEvents, attendee-to-contact mapping) in target/src/server/services/calendar-sync/google-calendar.ts
+- [x] T098 [P] [US2] Create Outlook Calendar sync service (syncEvents via Microsoft Graph) in target/src/server/services/calendar-sync/outlook-calendar.ts
 
 #### OAuth & Webhook Routes
 
-- [ ] T099 [US2] Create sync tRPC router (getConnections, initiateOAuth, revokeConnection) in target/src/server/trpc/routers/sync.ts
-- [ ] T100 [P] [US2] Create Gmail push notification webhook receiver at target/src/app/api/webhooks/gmail/route.ts
-- [ ] T101 [P] [US2] Create Outlook change notification webhook receiver at target/src/app/api/webhooks/outlook/route.ts
+- [x] T099 [US2] Create sync tRPC router (getConnections, initiateOAuth, revokeConnection) in target/src/server/trpc/routers/sync.ts
+- [x] T100 [P] [US2] Create Gmail push notification webhook receiver at target/src/app/api/webhooks/gmail/route.ts
+- [x] T101 [P] [US2] Create Outlook change notification webhook receiver at target/src/app/api/webhooks/outlook/route.ts
 
 #### Background Workers
 
-- [ ] T102 [US2] Create email sync BullMQ worker (initial + incremental, provider dispatch, rate limiting) in target/src/server/workers/email-sync.worker.ts
-- [ ] T103 [P] [US2] Create calendar sync BullMQ worker in target/src/server/workers/calendar-sync.worker.ts
-- [ ] T104 [US2] Create worker bootstrap entry point with repeatable job scheduling in target/src/server/workers/index.ts
-- [ ] T105 [US2] Create token refresh repeatable job (check tokenExpiresAt, refresh via provider endpoint) in target/src/server/workers/index.ts
+- [x] T102 [US2] Create email sync BullMQ worker (initial + incremental, provider dispatch, rate limiting) in target/src/server/workers/email-sync.worker.ts
+- [x] T103 [P] [US2] Create calendar sync BullMQ worker in target/src/server/workers/calendar-sync.worker.ts
+- [x] T104 [US2] Create worker bootstrap entry point with repeatable job scheduling in target/src/server/workers/index.ts
+- [x] T105 [US2] Create token refresh repeatable job (check tokenExpiresAt, refresh via provider endpoint) in target/src/server/workers/index.ts
 
 #### Settings UI
 
-- [ ] T106 [US2] Create integrations settings page with OAuth connect/disconnect buttons at target/src/app/(dashboard)/settings/integrations/page.tsx
-- [ ] T107 [US2] Create domain exclusion configuration in workspace settings UI at target/src/app/(dashboard)/settings/workspace/page.tsx
+- [x] T106 [US2] Create integrations settings page with OAuth connect/disconnect buttons at target/src/app/(dashboard)/settings/integrations/page.tsx
+- [x] T107 [US2] Create domain exclusion configuration in workspace settings UI at target/src/components/settings/domain-exclusion.tsx
 
 **Checkpoint**: Email and calendar sync operational. Contacts auto-created, activities auto-logged. Zero-entry pipeline population working.
 
@@ -227,22 +227,22 @@
 
 ### Tests for User Story 5
 
-- [ ] T108 [P] [US5] Write integration test: create activities, query timeline with cursor pagination in target/tests/integration/activities-timeline.test.ts
-- [ ] T109 [P] [US5] Write integration test: search "acme" returns matching company and contacts in target/tests/integration/global-search.test.ts
+- [x] T108 [P] [US5] Write integration test: create activities, query timeline with cursor pagination in target/tests/integration/activities-timeline.test.ts
+- [x] T109 [P] [US5] Write integration test: search "acme" returns matching company and contacts in target/tests/integration/global-search.test.ts
 
 ### Implementation for User Story 5
 
-- [ ] T110 [US5] Create activities tRPC router (timeline query with cursor pagination, create note/call, filter by type/contact/deal/company) in target/src/server/trpc/routers/activities.ts
+- [x] T110 [US5] Create activities tRPC router (timeline query with cursor pagination, create note/call, filter by type/contact/deal/company) in target/src/server/trpc/routers/activities.ts
 - [ ] T111 [US5] Add search_vector tsvector columns to contacts, companies, deals schemas and create GIN indexes via SQL migration
 - [ ] T112 [US5] Create PostgreSQL trigger functions for auto-updating search_vector on INSERT/UPDATE for contacts, companies, deals via raw SQL migration
-- [ ] T113 [US5] Create search tRPC router (global search across contacts/companies/deals with ts_rank_cd ranking) in target/src/server/trpc/routers/search.ts
-- [ ] T114 [US5] Create activity timeline UI component (vertical timeline, type-specific icons/rendering, load-more pagination) in target/src/components/activities/activity-timeline.tsx
-- [ ] T115 [P] [US5] Create activity item component (email: direction badge + body preview; meeting: attendees + conference link; note: collapsible text; stage_change: stage badges) in target/src/components/activities/activity-item.tsx
-- [ ] T116 [P] [US5] Create email thread component for grouped email display in target/src/components/activities/email-thread.tsx
-- [ ] T117 [US5] Create activities list page at target/src/app/(dashboard)/activities/page.tsx
-- [ ] T118 [US5] Wire command palette search to tRPC search.global procedure in target/src/components/layout/command-palette.tsx
-- [ ] T225 [P] [US5] Create REST activities routes (GET list, POST create, GET by id) at target/src/app/api/v1/activities/route.ts and src/app/api/v1/activities/[id]/route.ts per rest-api.md contract
-- [ ] T119 [US5] Write E2E test: contact detail Activity tab shows timeline with mixed types, load more works in target/tests/e2e/activity-timeline.spec.ts
+- [x] T113 [US5] Create search tRPC router (global search across contacts/companies/deals with ts_rank_cd ranking) in target/src/server/trpc/routers/search.ts
+- [x] T114 [US5] Create activity timeline UI component (vertical timeline, type-specific icons/rendering, load-more pagination) in target/src/components/activities/activity-timeline.tsx
+- [x] T115 [P] [US5] Create activity item component (email: direction badge + body preview; meeting: attendees + conference link; note: collapsible text; stage_change: stage badges) in target/src/components/activities/activity-item.tsx
+- [x] T116 [P] [US5] Create email thread component for grouped email display in target/src/components/activities/email-thread.tsx
+- [x] T117 [US5] Create activities list page at target/src/app/(dashboard)/activities/page.tsx
+- [x] T118 [US5] Wire command palette search to tRPC search.global procedure in target/src/components/layout/command-palette.tsx
+- [x] T225 [P] [US5] Create REST activities routes (GET list, POST create, GET by id) at target/src/app/api/v1/activities/route.ts and src/app/api/v1/activities/[id]/route.ts per rest-api.md contract
+- [x] T119 [US5] Write E2E test: contact detail Activity tab shows timeline with mixed types, load more works in target/tests/e2e/activity-timeline.spec.ts
 
 **Checkpoint**: Activity timelines visible on all detail pages. Global search working via command palette.
 
@@ -256,26 +256,26 @@
 
 ### Tests for User Story 3
 
-- [ ] T120 [P] [US3] Write unit test: buildMeetingContext produces well-formatted prompt with all context sections in target/tests/unit/meeting-summary.test.ts
-- [ ] T121 [P] [US3] Write unit test: parseMeetingSummaryResponse parses Claude response into typed MeetingSummaryOutput in target/tests/unit/meeting-summary.test.ts
-- [ ] T122 [P] [US3] Write integration test (mocked LLM): meeting with email context generates summary with action items and creates tasks in target/tests/integration/ai-summary.test.ts
+- [x] T120 [P] [US3] Write unit test: buildMeetingContext produces well-formatted prompt with all context sections in target/tests/unit/meeting-summary.test.ts
+- [x] T121 [P] [US3] Write unit test: parseMeetingSummaryResponse parses Claude response into typed MeetingSummaryOutput in target/tests/unit/meeting-summary.test.ts
+- [x] T122 [P] [US3] Write integration test (mocked LLM): meeting with email context generates summary with action items and creates tasks in target/tests/integration/ai-summary.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T123 [US3] Install AI dependencies: @anthropic-ai/sdk, ai (Vercel AI SDK)
-- [ ] T124 [US3] Create ai_summary schema in target/src/server/db/schema/ai-summaries.ts per data-model.md
-- [ ] T125 [P] [US3] Create ai_follow_up schema in target/src/server/db/schema/ai-follow-ups.ts per data-model.md
-- [ ] T126 [US3] Create meeting summary system prompt and context builder in target/src/server/services/ai/prompts.ts
-- [ ] T127 [US3] Create meeting summary generation service (generateMeetingSummary with Claude, structured JSON output) in target/src/server/services/ai/meeting-summary.ts
-- [ ] T128 [US3] Create entity extraction service for identifying contacts/companies from email text in target/src/server/services/ai/entity-extraction.ts
-- [ ] T129 [US3] Create follow-up draft generation service (generateFollowUpDraft using summary + deal context) in target/src/server/services/ai/follow-up-draft.ts
-- [ ] T130 [US3] Create AI summary BullMQ worker (load context, generate summary, store result, create tasks from action items) in target/src/server/workers/ai-summary.worker.ts
-- [ ] T131 [US3] Create AI tRPC router (getSummary, generateSummary, reviewSummary, getFollowUp, generateFollowUp, sendFollowUp) in target/src/server/trpc/routers/ai.ts
-- [ ] T132 [US3] Add auto-trigger: when calendar sync creates a past meeting activity, enqueue AI summary job in target/src/server/workers/calendar-sync.worker.ts
-- [ ] T133 [US3] Create meeting summary card UI component (summary text, key points, action items checklist, sentiment badge, topics tags, regenerate button) in target/src/components/ai/meeting-summary-card.tsx
-- [ ] T134 [US3] Create follow-up draft UI component (editable subject, rich text body, send/discard buttons) in target/src/components/ai/follow-up-draft.tsx
-- [ ] T135 [US3] Wire AI Insights tab on deal detail page to display summaries and follow-up drafts in target/src/app/(dashboard)/deals/[id]/page.tsx
-- [ ] T136 [US3] Write E2E test: deal AI Insights tab shows summary, click Generate Follow-Up, edit, send in target/tests/e2e/ai-insights.spec.ts
+- [x] T123 [US3] Install AI dependencies: @anthropic-ai/sdk, ai (Vercel AI SDK)
+- [x] T124 [US3] Create ai_summary schema in target/src/server/db/schema/ai-summaries.ts per data-model.md
+- [x] T125 [P] [US3] Create ai_follow_up schema in target/src/server/db/schema/ai-follow-ups.ts per data-model.md
+- [x] T126 [US3] Create meeting summary system prompt and context builder in target/src/server/services/ai/prompts.ts
+- [x] T127 [US3] Create meeting summary generation service (generateMeetingSummary with Claude, structured JSON output) in target/src/server/services/ai/meeting-summary.ts
+- [x] T128 [US3] Create entity extraction service for identifying contacts/companies from email text in target/src/server/services/ai/entity-extraction.ts
+- [x] T129 [US3] Create follow-up draft generation service (generateFollowUpDraft using summary + deal context) in target/src/server/services/ai/follow-up-draft.ts
+- [x] T130 [US3] Create AI summary BullMQ worker (load context, generate summary, store result, create tasks from action items) in target/src/server/workers/ai-summary.worker.ts
+- [x] T131 [US3] Create AI tRPC router (getSummary, generateSummary, reviewSummary, getFollowUp, generateFollowUp, sendFollowUp) in target/src/server/trpc/routers/ai.ts
+- [x] T132 [US3] Add auto-trigger: when calendar sync creates a past meeting activity, enqueue AI summary job in target/src/server/workers/calendar-sync.worker.ts
+- [x] T133 [US3] Create meeting summary card UI component (summary text, key points, action items checklist, sentiment badge, topics tags, regenerate button) in target/src/components/ai/meeting-summary-card.tsx
+- [x] T134 [US3] Create follow-up draft UI component (editable subject, rich text body, send/discard buttons) in target/src/components/ai/follow-up-draft.tsx
+- [x] T135 [US3] Wire AI Insights tab on deal detail page to display summaries and follow-up drafts in target/src/app/(dashboard)/deals/[id]/page.tsx
+- [x] T136 [US3] Write E2E test: deal AI Insights tab shows summary, click Generate Follow-Up, edit, send in target/tests/e2e/ai-insights.spec.ts
 
 **Checkpoint**: Meeting summaries auto-generate after synced meetings. Follow-up drafts editable and sendable.
 
@@ -289,24 +289,24 @@
 
 ### Tests for User Story 4
 
-- [ ] T137 [P] [US4] Write unit test: heuristicDealHealth returns "hot" for active deal and "cold" for stale deal in target/tests/unit/scoring-heuristic.test.ts
-- [ ] T138 [P] [US4] Write unit test: computeDealHealthFeatures returns correct emailsLast7Days and handles zero-activity deals in target/tests/unit/feature-engineering.test.ts
-- [ ] T139 [P] [US4] Write integration test: new activity triggers rescore, score updates on deal in target/tests/integration/scoring-pipeline.test.ts
+- [x] T137 [P] [US4] Write unit test: heuristicDealHealth returns "hot" for active deal and "cold" for stale deal in target/tests/unit/scoring-heuristic.test.ts
+- [x] T138 [P] [US4] Write unit test: computeDealHealthFeatures returns correct emailsLast7Days and handles zero-activity deals in target/tests/unit/feature-engineering.test.ts
+- [x] T139 [P] [US4] Write integration test: new activity triggers rescore, score updates on deal in target/tests/integration/scoring-pipeline.test.ts
 
 ### Implementation for User Story 4
 
-- [ ] T140 [US4] Create scoring_model and score_history schemas in target/src/server/db/schema/scoring.ts per data-model.md
-- [ ] T141 [US4] Create deal health feature engineering (computeDealHealthFeatures: email velocity, meeting frequency, response time, stage velocity) in target/src/server/services/scoring/feature-engineering.ts
-- [ ] T142 [P] [US4] Create lead score feature engineering (computeLeadScoreFeatures) in target/src/server/services/scoring/feature-engineering.ts
-- [ ] T143 [US4] Create heuristic deal health scorer (heuristicDealHealth) as fallback in target/src/server/services/scoring/inference.ts
-- [ ] T144 [US4] Create ONNX Runtime inference service (scoreDeal, featuresToArray) in target/src/server/services/scoring/inference.ts
-- [ ] T145 [US4] Create scoring pipeline orchestrator (select model or fallback, compute features, run inference, store result) in target/src/server/services/scoring/pipeline.ts
-- [ ] T146 [US4] Create scoring BullMQ worker (score-deal, score-lead, batch-rescore) in target/src/server/workers/scoring.worker.ts
-- [ ] T147 [US4] Add score triggers: enqueue score-deal job on activity.created and deal.stage_changed in target/src/server/trpc/routers/activities.ts and src/server/trpc/routers/deals.ts
-- [ ] T148 [US4] Create scoring tRPC router (getDealHealth, getLeadScore, rescore) in target/src/server/trpc/routers/scoring.ts
-- [ ] T149 [US4] Create Python training script (export features, train XGBoost, export ONNX) in target/scripts/train-scoring-model.py
-- [ ] T150 [US4] Create score badge UI component (colored badge with score, label, trend arrow, timestamp) in target/src/components/ai/score-badge.tsx
-- [ ] T151 [US4] Wire score badges onto pipeline board deal cards and contact/deal detail pages
+- [x] T140 [US4] Create scoring_model and score_history schemas in target/src/server/db/schema/scoring.ts per data-model.md
+- [x] T141 [US4] Create deal health feature engineering (computeDealHealthFeatures: email velocity, meeting frequency, response time, stage velocity) in target/src/server/services/scoring/feature-engineering.ts
+- [x] T142 [P] [US4] Create lead score feature engineering (computeLeadScoreFeatures) in target/src/server/services/scoring/feature-engineering.ts
+- [x] T143 [US4] Create heuristic deal health scorer (heuristicDealHealth) as fallback in target/src/server/services/scoring/inference.ts
+- [x] T144 [US4] Create ONNX Runtime inference service (scoreDeal, featuresToArray) in target/src/server/services/scoring/inference.ts
+- [x] T145 [US4] Create scoring pipeline orchestrator (select model or fallback, compute features, run inference, store result) in target/src/server/services/scoring/pipeline.ts
+- [x] T146 [US4] Create scoring BullMQ worker (score-deal, score-lead, batch-rescore) in target/src/server/workers/scoring.worker.ts
+- [x] T147 [US4] Add score triggers: enqueue score-deal job on activity.created and deal.stage_changed in target/src/server/trpc/routers/activities.ts and src/server/trpc/routers/deals.ts
+- [x] T148 [US4] Create scoring tRPC router (getDealHealth, getLeadScore, rescore) in target/src/server/trpc/routers/scoring.ts
+- [x] T149 [US4] Create Python training script (export features, train XGBoost, export ONNX) in target/scripts/train-scoring-model.py
+- [x] T150 [US4] Create score badge UI component (colored badge with score, label, trend arrow, timestamp) in target/src/components/ai/score-badge.tsx
+- [x] T151 [US4] Wire score badges onto pipeline board deal cards and contact/deal detail pages
 
 **Checkpoint**: Health scores visible on all deals. Lead scores on contacts. Heuristic fallback working.
 
@@ -320,22 +320,22 @@
 
 ### Tests for User Story 6
 
-- [ ] T152 [P] [US6] Write unit test: validateEnrichmentGDPR rejects source without documented GDPR basis in target/tests/unit/gdpr-compliance.test.ts
-- [ ] T153 [P] [US6] Write integration test (mocked API): enrich company by domain creates enrichment_log with provenance in target/tests/integration/enrichment.test.ts
-- [ ] T154 [P] [US6] Write integration test: processErasureRequest reverts enriched fields and creates audit entry in target/tests/integration/gdpr-erasure.test.ts
+- [x] T152 [P] [US6] Write unit test: validateEnrichmentGDPR rejects source without documented GDPR basis in target/tests/unit/gdpr-compliance.test.ts
+- [x] T153 [P] [US6] Write integration test (mocked API): enrich company by domain creates enrichment_log with provenance in target/tests/integration/enrichment.test.ts
+- [x] T154 [P] [US6] Write integration test: processErasureRequest reverts enriched fields and creates audit entry in target/tests/integration/gdpr-erasure.test.ts
 
 ### Implementation for User Story 6
 
-- [ ] T155 [US6] Create enrichment_source and enrichment_log schemas in target/src/server/db/schema/enrichment.ts per data-model.md
-- [ ] T156 [US6] Create enrichment engine interface (EnrichmentSource, EnrichmentResult) in target/src/server/services/enrichment/enrichment-engine.ts
-- [ ] T157 [P] [US6] Create OpenCorporates enrichment source (company data from public registries) in target/src/server/services/enrichment/sources/opencorporates.ts
-- [ ] T158 [P] [US6] Create company registries enrichment source (UK Companies House, US SEC EDGAR) in target/src/server/services/enrichment/sources/company-registries.ts
-- [ ] T159 [US6] Create GDPR compliance layer (validateEnrichmentGDPR, generateArticle14Notice, processErasureRequest) in target/src/server/services/enrichment/gdpr-compliance.ts
-- [ ] T160 [US6] Create enrichment BullMQ worker (load sources, enrich, confidence threshold, auto-apply or queue for review) in target/src/server/workers/enrichment.worker.ts
-- [ ] T161 [US6] Create enrichment tRPC router (enrich, getLog, reviewEnrichment) in target/src/server/trpc/routers/enrichment.ts
-- [ ] T162 [US6] Add enrichment triggers: enqueue job on contact.created and company.created with email/domain in target/src/server/trpc/routers/contacts.ts and src/server/trpc/routers/companies.ts
-- [ ] T163 [US6] Add enrichment settings UI (source list, enable/disable, auto-apply threshold, LIA doc link) to target/src/app/(dashboard)/settings/integrations/page.tsx
-- [ ] T164 [US6] Add enrichment log review UI (approve/reject pending enrichments) to company/contact detail pages
+- [x] T155 [US6] Create enrichment_source and enrichment_log schemas in target/src/server/db/schema/enrichment.ts per data-model.md
+- [x] T156 [US6] Create enrichment engine interface (EnrichmentSource, EnrichmentResult) in target/src/server/services/enrichment/enrichment-engine.ts
+- [x] T157 [P] [US6] Create OpenCorporates enrichment source (company data from public registries) in target/src/server/services/enrichment/sources/opencorporates.ts
+- [x] T158 [P] [US6] Create company registries enrichment source (UK Companies House, US SEC EDGAR) in target/src/server/services/enrichment/sources/company-registries.ts
+- [x] T159 [US6] Create GDPR compliance layer (validateEnrichmentGDPR, generateArticle14Notice, processErasureRequest) in target/src/server/services/enrichment/gdpr-compliance.ts
+- [x] T160 [US6] Create enrichment BullMQ worker (load sources, enrich, confidence threshold, auto-apply or queue for review) in target/src/server/workers/enrichment.worker.ts
+- [x] T161 [US6] Create enrichment tRPC router (enrich, getLog, reviewEnrichment) in target/src/server/trpc/routers/enrichment.ts
+- [x] T162 [US6] Add enrichment triggers: enqueue job on contact.created and company.created with email/domain in target/src/server/trpc/routers/contacts.ts and src/server/trpc/routers/companies.ts
+- [x] T163 [US6] Add enrichment settings UI (source list, enable/disable, auto-apply threshold, LIA doc link) to target/src/app/(dashboard)/settings/integrations/page.tsx
+- [x] T164 [US6] Add enrichment log review UI (approve/reject pending enrichments) to company/contact detail pages
 
 **Checkpoint**: Enrichment running from public sources with GDPR compliance. Provenance auditable.
 
@@ -349,21 +349,21 @@
 
 ### Tests for User Story 7
 
-- [ ] T165 [P] [US7] Write unit test: HMAC-SHA256 signature computed correctly with shared secret in target/tests/unit/webhook-signature.test.ts
-- [ ] T166 [P] [US7] Write integration test: create contact triggers webhook dispatch to mock endpoint in target/tests/integration/webhook-dispatch.test.ts
-- [ ] T167 [P] [US7] Write integration test: workflow "on stage_changed to Negotiation, create task" executes correctly in target/tests/integration/workflow-engine.test.ts
+- [x] T165 [P] [US7] Write unit test: HMAC-SHA256 signature computed correctly with shared secret in target/tests/unit/webhook-signature.test.ts
+- [x] T166 [P] [US7] Write integration test: create contact triggers webhook dispatch to mock endpoint in target/tests/integration/webhook-dispatch.test.ts
+- [x] T167 [P] [US7] Write integration test: workflow "on stage_changed to Negotiation, create task" executes correctly in target/tests/integration/workflow-engine.test.ts
 
 ### Implementation for User Story 7
 
-- [ ] T168 [US7] Create webhook and workflow/workflow_execution schemas in target/src/server/db/schema/webhooks.ts and src/server/db/schema/workflows.ts per data-model.md
-- [ ] T169 [US7] Create webhook dispatch service (find matching webhooks, enqueue delivery jobs, HMAC signing) in target/src/server/services/webhook-dispatch.ts
-- [ ] T170 [US7] Create webhook BullMQ worker (sign payload, POST to URL, retry on 5xx with backoff, log delivery status) in target/src/server/workers/webhook.worker.ts
-- [ ] T171 [US7] Wire webhook dispatch into CRM event points (contact/company/deal create/update/delete, deal.stage_changed, activity.created, task events)
-- [ ] T172 [US7] Create workflow engine (evaluateTrigger, walkStepTree, execute actions: create_task, update_field, send_notification, wait, call_webhook) in target/src/server/services/workflow-engine.ts
-- [ ] T173 [US7] Create webhooks tRPC router (list, create, update, delete) admin-only in target/src/server/trpc/routers/webhooks.ts
-- [ ] T174 [US7] Create workflows tRPC router (list, create, update, delete, getExecutions) admin-only in target/src/server/trpc/routers/workflows.ts
-- [ ] T175 [US7] Create webhooks settings page (register URL, select events, view delivery log) at target/src/app/(dashboard)/settings/webhooks/page.tsx
-- [ ] T176 [US7] Create workflow builder UI in settings (trigger selector, condition builder, action steps) at target/src/app/(dashboard)/settings/workflows/page.tsx
+- [x] T168 [US7] Create webhook and workflow/workflow_execution schemas in target/src/server/db/schema/webhooks.ts and src/server/db/schema/workflows.ts per data-model.md
+- [x] T169 [US7] Create webhook dispatch service (find matching webhooks, enqueue delivery jobs, HMAC signing) in target/src/server/services/webhook-dispatch.ts
+- [x] T170 [US7] Create webhook BullMQ worker (sign payload, POST to URL, retry on 5xx with backoff, log delivery status) in target/src/server/workers/webhook.worker.ts
+- [x] T171 [US7] Wire webhook dispatch into CRM event points (contact/company/deal create/update/delete, deal.stage_changed, activity.created, task events)
+- [x] T172 [US7] Create workflow engine (evaluateTrigger, walkStepTree, execute actions: create_task, update_field, send_notification, wait, call_webhook) in target/src/server/services/workflow-engine.ts
+- [x] T173 [US7] Create webhooks tRPC router (list, create, update, delete) admin-only in target/src/server/trpc/routers/webhooks.ts
+- [x] T174 [US7] Create workflows tRPC router (list, create, update, delete, getExecutions) admin-only in target/src/server/trpc/routers/workflows.ts
+- [x] T175 [US7] Create webhooks settings page (register URL, select events, view delivery log) at target/src/app/(dashboard)/settings/webhooks/page.tsx
+- [x] T176 [US7] Create workflow builder UI in settings (trigger selector, condition builder, action steps) at target/src/app/(dashboard)/settings/workflows/page.tsx
 
 **Checkpoint**: Webhooks dispatching CRM events. Workflows automating sales sequences.
 
@@ -379,20 +379,20 @@
 
 ### Tests for User Story 8
 
-- [ ] T177 [P] [US8] Write integration test: MCP client connects, resources/list returns contacts/deals/companies/activities in target/tests/integration/mcp-resources.test.ts
-- [ ] T178 [P] [US8] Write integration test: MCP tool create_contact creates contact in database in target/tests/integration/mcp-tools.test.ts
-- [ ] T179 [P] [US8] Write integration test: MCP prompt meeting_prep returns formatted context in target/tests/integration/mcp-prompts.test.ts
+- [x] T177 [P] [US8] Write integration test: MCP client connects, resources/list returns contacts/deals/companies/activities in target/tests/integration/mcp-resources.test.ts
+- [x] T178 [P] [US8] Write integration test: MCP tool create_contact creates contact in database in target/tests/integration/mcp-tools.test.ts
+- [x] T179 [P] [US8] Write integration test: MCP prompt meeting_prep returns formatted context in target/tests/integration/mcp-prompts.test.ts
 
 ### Implementation for User Story 8
 
-- [ ] T180 [US8] Install MCP dependency: @modelcontextprotocol/sdk
-- [ ] T181 [US8] Create MCP server factory (createMcpServer with workspace-scoped resources, tools, prompts) in target/src/server/services/mcp/server.ts
-- [ ] T182 [US8] Register MCP resources (crm://contacts, crm://contacts/{id}, crm://deals, crm://deals/{id}, crm://companies/{id}, crm://activities) in target/src/server/services/mcp/resources.ts
-- [ ] T183 [US8] Register MCP tools (create_contact, update_contact, create_deal, update_deal_stage, log_activity, create_task, search_crm, get_deal_health) in target/src/server/services/mcp/tools.ts
-- [ ] T184 [US8] Register MCP prompts (meeting_prep, deal_summary, follow_up_draft, pipeline_review) in target/src/server/services/mcp/prompts.ts
-- [ ] T185 [US8] Create MCP HTTP SSE transport route with Bearer token authentication at target/src/app/api/mcp/route.ts
-- [ ] T186 [US8] Create MCP API key generation (generateMcpKey mutation, display-once key) in target/src/server/trpc/routers/settings.ts
-- [ ] T187 [US8] Add MCP settings section (generate key, connection instructions, active connections) to target/src/app/(dashboard)/settings/integrations/page.tsx
+- [x] T180 [US8] Install MCP dependency: @modelcontextprotocol/sdk
+- [x] T181 [US8] Create MCP server factory (createMcpServer with workspace-scoped resources, tools, prompts) in target/src/server/services/mcp/server.ts
+- [x] T182 [US8] Register MCP resources (crm://contacts, crm://contacts/{id}, crm://deals, crm://deals/{id}, crm://companies/{id}, crm://activities) in target/src/server/services/mcp/resources.ts
+- [x] T183 [US8] Register MCP tools (create_contact, update_contact, create_deal, update_deal_stage, log_activity, create_task, search_crm, get_deal_health) in target/src/server/services/mcp/tools.ts
+- [x] T184 [US8] Register MCP prompts (meeting_prep, deal_summary, follow_up_draft, pipeline_review) in target/src/server/services/mcp/prompts.ts
+- [x] T185 [US8] Create MCP HTTP SSE transport route with Bearer token authentication at target/src/app/api/mcp/route.ts
+- [x] T186 [US8] Create MCP API key generation (generateMcpKey mutation, display-once key) in target/src/server/trpc/routers/settings.ts
+- [x] T187 [US8] Add MCP settings section (generate key, connection instructions, active connections) to target/src/app/(dashboard)/settings/integrations/page.tsx
 
 **Checkpoint**: MCP server operational. AI assistants can connect and interact with CRM data.
 
@@ -406,20 +406,20 @@
 
 ### Tests for User Story 9
 
-- [ ] T188 [P] [US9] Write unit test: validateCustomFields rejects required field missing and unknown field key in target/tests/unit/custom-fields-validation.test.ts
-- [ ] T189 [P] [US9] Write integration test: create field definition, create contact with custom field, validate and retrieve in target/tests/integration/custom-fields.test.ts
+- [x] T188 [P] [US9] Write unit test: validateCustomFields rejects required field missing and unknown field key in target/tests/unit/custom-fields-validation.test.ts
+- [x] T189 [P] [US9] Write integration test: create field definition, create contact with custom field, validate and retrieve in target/tests/integration/custom-fields.test.ts
 
 ### Implementation for User Story 9
 
-- [ ] T190 [US9] Create custom_object_definition and custom_object_record schemas in target/src/server/db/schema/custom-objects.ts per data-model.md
-- [ ] T191 [US9] Create validateCustomFields function (validate JSONB against field_definitions, reject unknown keys, type-check values) in target/src/server/lib/validators.ts
-- [ ] T192 [US9] Create custom fields tRPC router (list, create, update, delete, reorder) admin-only in target/src/server/trpc/routers/custom-fields.ts
-- [ ] T193 [US9] Wire validateCustomFields into contact, company, and deal create/update mutations
-- [ ] T194 [US9] Create custom objects tRPC router (listDefinitions, createDefinition, deleteDefinition, listRecords, createRecord, updateRecord, deleteRecord) in target/src/server/trpc/routers/custom-objects.ts
-- [ ] T195 [US9] Create custom field renderer component (maps fieldType to appropriate input: TextInput, NumberInput, CurrencyInput, DatePicker, SelectDropdown, etc.) in target/src/components/shared/custom-field-renderer.tsx
-- [ ] T196 [US9] Create custom fields settings page (add/edit/reorder/delete field definitions) at target/src/app/(dashboard)/settings/custom-fields/page.tsx
-- [ ] T197 [US9] Wire custom field renderer into contact, company, and deal detail/form components
-- [ ] T198 [US9] Add dynamic sidebar navigation for custom objects in target/src/components/layout/sidebar.tsx
+- [x] T190 [US9] Create custom_object_definition and custom_object_record schemas in target/src/server/db/schema/custom-objects.ts per data-model.md
+- [x] T191 [US9] Create validateCustomFields function (validate JSONB against field_definitions, reject unknown keys, type-check values) in target/src/server/lib/validators.ts
+- [x] T192 [US9] Create custom fields tRPC router (list, create, update, delete, reorder) admin-only in target/src/server/trpc/routers/custom-fields.ts
+- [x] T193 [US9] Wire validateCustomFields into contact, company, and deal create/update mutations
+- [x] T194 [US9] Create custom objects tRPC router (listDefinitions, createDefinition, deleteDefinition, listRecords, createRecord, updateRecord, deleteRecord) in target/src/server/trpc/routers/custom-objects.ts
+- [x] T195 [US9] Create custom field renderer component (maps fieldType to appropriate input: TextInput, NumberInput, CurrencyInput, DatePicker, SelectDropdown, etc.) in target/src/components/shared/custom-field-renderer.tsx
+- [x] T196 [US9] Create custom fields settings page (add/edit/reorder/delete field definitions) at target/src/app/(dashboard)/settings/custom-fields/page.tsx
+- [x] T197 [US9] Wire custom field renderer into contact, company, and deal detail/form components
+- [x] T198 [US9] Add dynamic sidebar navigation for custom objects in target/src/components/layout/sidebar.tsx
 
 **Checkpoint**: Custom fields visible on all entity forms. Custom objects navigable in sidebar.
 
@@ -433,34 +433,34 @@
 
 ### Tests for User Story 10
 
-- [ ] T199 [P] [US10] Write unit test: vCard parser extracts FN, EMAIL, ORG into contact/company in target/tests/unit/vcard-parser.test.ts
-- [ ] T200 [P] [US10] Write integration test: pipelineSummary returns correct aggregates for known deal data in target/tests/integration/reports.test.ts
-- [ ] T201 [P] [US10] Write integration test: import 100-contact CSV with deduplication by email in target/tests/integration/csv-import.test.ts
+- [x] T199 [P] [US10] Write unit test: vCard parser extracts FN, EMAIL, ORG into contact/company in target/tests/unit/vcard-parser.test.ts
+- [x] T200 [P] [US10] Write integration test: pipelineSummary returns correct aggregates for known deal data in target/tests/integration/reports.test.ts
+- [x] T201 [P] [US10] Write integration test: import 100-contact CSV with deduplication by email in target/tests/integration/csv-import.test.ts
 
 ### Implementation for User Story 10
 
 #### Reports
 
-- [ ] T202 [US10] Create reports tRPC router (pipelineSummary, activityVolume, staleDeals) in target/src/server/trpc/routers/reports.ts
-- [ ] T203 [US10] Create dashboard page with KPI cards, funnel chart, health distribution, activity volume chart, stale deals table at target/src/app/(dashboard)/reports/page.tsx
-- [ ] T204 [US10] Wire root page (src/app/page.tsx) to redirect authenticated users to dashboard
+- [x] T202 [US10] Create reports tRPC router (pipelineSummary, activityVolume, staleDeals) in target/src/server/trpc/routers/reports.ts
+- [x] T203 [US10] Create dashboard page with KPI cards, funnel chart, health distribution, activity volume chart, stale deals table at target/src/app/(dashboard)/reports/page.tsx
+- [x] T204 [US10] Wire root page (src/app/page.tsx) to redirect authenticated users to dashboard
 
 #### Import/Export
 
-- [ ] T205 [US10] Create vCard parser (RFC 6350: FN→fullName, N→first/last, EMAIL, TEL, TITLE, ADR, ORG→company) in target/src/server/services/import/vcard-parser.ts
-- [ ] T206 [P] [US10] Create CSV parser with configurable column mapping and deduplication in target/src/server/services/import/csv-parser.ts
-- [ ] T207 [US10] Create export tRPC router (contacts as CSV/vCard, companies as CSV, deals as CSV) in target/src/server/trpc/routers/export.ts
-- [ ] T208 [US10] Create import UI page (upload file, preview, column mapping, confirm) at target/src/app/(dashboard)/contacts/import/page.tsx
+- [x] T205 [US10] Create vCard parser (RFC 6350: FN→fullName, N→first/last, EMAIL, TEL, TITLE, ADR, ORG→company) in target/src/server/services/import/vcard-parser.ts
+- [x] T206 [P] [US10] Create CSV parser with configurable column mapping and deduplication in target/src/server/services/import/csv-parser.ts
+- [x] T207 [US10] Create export tRPC router (contacts as CSV/vCard, companies as CSV, deals as CSV) in target/src/server/trpc/routers/export.ts
+- [x] T208 [US10] Create import UI page (upload file, preview, column mapping, confirm) at target/src/app/(dashboard)/contacts/import/page.tsx
 
 #### OpenAPI & Seed
 
-- [ ] T209 [US10] Install zod-to-openapi and create OpenAPI 3.1 spec generation route at target/src/app/api/v1/openapi.json/route.ts
-- [ ] T210 [US10] Create seed data script (1 workspace, 3 users, 1 pipeline, 50 companies, 200 contacts, 30 deals, 500 activities, 5 custom fields, pre-computed scores) in target/scripts/seed.ts
+- [x] T209 [US10] Install zod-to-openapi and create OpenAPI 3.1 spec generation route at target/src/app/api/v1/openapi.json/route.ts
+- [x] T210 [US10] Create seed data script (1 workspace, 3 users, 1 pipeline, 50 companies, 200 contacts, 30 deals, 500 activities, 5 custom fields, pre-computed scores) in target/scripts/seed.ts
 
 #### E2E Tests
 
-- [ ] T211 [US10] Write E2E test: dashboard loads with seed data, funnel chart renders, click stage filters deals in target/tests/e2e/dashboard.spec.ts
-- [ ] T212 [US10] Write E2E test: import CSV, preview, confirm, contacts appear in list in target/tests/e2e/import.spec.ts
+- [x] T211 [US10] Write E2E test: dashboard loads with seed data, funnel chart renders, click stage filters deals in target/tests/e2e/dashboard.spec.ts
+- [x] T212 [US10] Write E2E test: import CSV, preview, confirm, contacts appear in list in target/tests/e2e/import.spec.ts
 
 **Checkpoint**: Dashboard analytics operational. Import/export working. OpenAPI spec published. Seed data available.
 
@@ -470,10 +470,10 @@
 
 **Purpose**: Quality, security, and documentation improvements across all stories.
 
-- [ ] T213 [P] Verify OWASP API Security Top 10 compliance: BOLA (workspace isolation), mass assignment (Zod validation), excessive data exposure (field selection) across all API routes
-- [ ] T214 [P] Add rate limiting middleware for /api/v1/* REST endpoints and MCP transport in target/src/server/lib/rate-limit.ts
-- [ ] T215 [P] Configure Content Security Policy, CORS, and security headers in target/next.config.ts
-- [ ] T216 Verify soft delete filtering is applied on all list/search queries (contacts, companies, deals, custom objects)
+- [x] T213 [P] Verify OWASP API Security Top 10 compliance: BOLA (workspace isolation), mass assignment (Zod validation), excessive data exposure (field selection) across all API routes
+- [x] T214 [P] Add rate limiting middleware for /api/v1/* REST endpoints and MCP transport in target/src/server/lib/rate-limit.ts
+- [x] T215 [P] Configure Content Security Policy, CORS, and security headers in target/next.config.ts
+- [x] T216 Verify soft delete filtering is applied on all list/search queries (contacts, companies, deals, custom objects)
 - [ ] T219 Run full test suite: pnpm test && pnpm test:e2e
 - [ ] T220 Run TypeScript strict mode build: pnpm build with zero errors
 - [ ] T221 Run ESLint: pnpm lint with zero errors
