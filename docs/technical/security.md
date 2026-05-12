@@ -1,0 +1,451 @@
+# NativeCRM Security Documentation
+
+## Overview
+
+NativeCRM implements defense-in-depth security across authentication, authorization, data encryption, network hardening, input validation, and privacy compliance. This document covers the security architecture, threat mitigations, and operational practices.
+
+---
+
+## Authentication Architecture
+
+### OAuth 2.0 Providers
+
+NativeCRM authenticates users via OAuth 2.0 with two providers:
+
+**Google:**
+- OAuth 2.0 Authorization Code Grant with PKCE
+- Scopes: `openid`, `email`, `profile`, `https://www.googleapis.com/auth/gmail.readonly`, `https://www.googleapis.com/auth/calendar.readonly`
+- Access type: `offline` (requests refresh token)
+- Prompt: `consent` (ensures refresh token is always issued)
+
+**Microsoft Entra ID:**
+- OAuth 2.0 Authorization Code Grant
+- Scopes: `openid`, `email`, `profile`, `offline_access`, `Mail.Read`, `Calendars.Read`
+- Issuer: `https://login.microsoftonline.com/{tenantId}/v2.0`
+- Tenant ID configurable via `MICROSOFT_ENTRA_ID_TENANT_ID` (defaults to `common` for multi-tenant)
+
+No plain-auth IMAP/SMTP or password-based authentication is supported. All third-party integrations use OAuth 2.0 exclusively.
+
+### JWT Session Strategy
+
+Auth.js v5 is configured with the **JWT strategy** (no server-side session store):
+
+1. On successful OAuth login, the `jwt` callback:
+   - Looks up the user by email in the `users` table.
+   - Verifies the user is active (`is_active = true`).
+   - Embeds `workspaceId` and `role` into the JWT payload.
+
+2. The JWT is stored as an HTTP-only, secure cookie.
+
+3. On each request, the `session` callback reconstructs the session object from the JWT, providing `workspaceId` and `role` to the application.
+
+4. JWT signing uses the `NEXTAUTH_SECRET` environment variable (minimum 32 bytes recommended).
+
+**Important:** Users must be pre-provisioned in the `users` table by a workspace admin before they can log in. There is no self-service signup.
+
+### Token Refresh
+
+OAuth access tokens for email/calendar sync have limited lifetimes:
+- A background worker checks every 5 minutes for tokens expiring within 10 minutes.
+- Tokens are refreshed via the provider's token endpoint using the encrypted refresh token.
+- On refresh failure (e.g., user revoked access), the connection is marked `is_active = false` and sync stops.
+- The user is notified to re-authorize.
+
+---
+
+## Authorization Model
+
+### Workspace Isolation
+
+Every database query is scoped to the authenticated user's workspace. This is the primary security boundary:
+
+1. **tRPC layer:** `protectedProcedure` middleware extracts `workspaceId` from the JWT and injects it into the request context. All router handlers use `ctx.workspaceId` in WHERE clauses.
+
+2. **REST API layer:** `authenticateApiRequest()` extracts the workspace ID from the Bearer token (`workspace_id:secret` format).
+
+3. **MCP server:** Workspace ID derived from the MCP API key.
+
+4. **Service layer:** All service functions require `workspaceId` as a parameter.
+
+5. **Database indexes:** Composite indexes on `(workspace_id, ...)` ensure efficient scoped queries.
+
+There is no mechanism for cross-workspace queries. A user in workspace A cannot access data in workspace B under any circumstances.
+
+### Role-Based Access Control
+
+Two roles are supported per workspace:
+
+| Role | Permissions |
+|------|-------------|
+| **admin** | All actions: workspace settings, integrations (OAuth connections, enrichment sources), custom field/object definitions, webhooks, workflows, user management, MCP API key generation, plus all member permissions |
+| **member** | Create, read, update, delete CRM records (contacts, companies, deals, activities, tasks). Read-only access to settings and integrations |
+
+Role enforcement is implemented at the tRPC middleware level:
+
+```typescript
+// protectedProcedure — requires authenticated user with workspaceId
+// adminProcedure — extends protectedProcedure, requires role === "admin"
+```
+
+Attempting an admin-only operation as a member returns `403 Forbidden` (tRPC `FORBIDDEN` error code).
+
+---
+
+## API Authentication
+
+### REST API (Bearer Token)
+
+The public REST API uses Bearer token authentication:
+
+**Token format:** `workspace_id:secret`
+
+```
+Authorization: Bearer a1b2c3d4-e5f6-7890-abcd-ef1234567890:your-api-secret
+```
+
+**Validation flow:**
+1. Extract the `Authorization` header.
+2. Verify it starts with `Bearer `.
+3. Split the token on `:` to get `workspace_id` and `secret`.
+4. Validate `secret` against the `API_SECRET` environment variable.
+5. Return `{ workspaceId, userId: "api" }` or `null` (401 Unauthorized).
+
+**Security considerations:**
+- The API secret should be a high-entropy random string (minimum 32 bytes).
+- Bearer tokens must be transmitted only over HTTPS.
+- Failed authentication attempts are logged (not the token itself).
+
+### MCP Server Authentication
+
+The MCP server at `/api/mcp` uses the same Bearer token format as the REST API. MCP API keys are generated by workspace admins via `settings.generateMcpKey` and shown only once.
+
+---
+
+## Data Encryption
+
+### OAuth Tokens at Rest
+
+All OAuth access tokens and refresh tokens are encrypted at rest using **AES-256-GCM**:
+
+**Algorithm:** AES-256-GCM (authenticated encryption)
+- **Key:** 32-byte key derived from the `ENCRYPTION_KEY` environment variable (64-character hex string).
+- **IV:** 12-byte random initialization vector, generated per encryption operation.
+- **Authentication tag:** 16 bytes, appended to ciphertext.
+
+**Storage format:** `Base64(IV || AuthTag || Ciphertext)`
+
+**Implementation details:**
+- The `encrypt()` function generates a fresh random IV for each operation.
+- The `decrypt()` function extracts IV, auth tag, and ciphertext from the base64-encoded value.
+- GCM mode provides both confidentiality and integrity -- tampered ciphertext will fail authentication.
+
+**Key management:**
+- The encryption key is stored in the `ENCRYPTION_KEY` environment variable.
+- The key must be exactly 64 hex characters (32 bytes).
+- Key rotation requires re-encrypting all stored tokens (a migration script should be provided).
+- The key should never be committed to version control or logged.
+
+### Database Encryption
+
+PostgreSQL database encryption is handled at the infrastructure level:
+- **In transit:** TLS connections between application and database (configured via `DATABASE_URL` with `sslmode=require`).
+- **At rest:** Managed by the database hosting provider (e.g., AWS RDS encryption, Google Cloud SQL encryption).
+
+---
+
+## Network Security
+
+### Security Headers
+
+The Next.js application configures the following security headers (in `next.config.ts`):
+
+| Header | Value | Purpose |
+|--------|-------|---------|
+| `Content-Security-Policy` | `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:; font-src 'self'; frame-ancestors 'none'` | Prevents XSS, clickjacking, and data injection |
+| `Strict-Transport-Security` | `max-age=63072000; includeSubDomains; preload` | Forces HTTPS for 2 years |
+| `X-Content-Type-Options` | `nosniff` | Prevents MIME type sniffing |
+| `X-Frame-Options` | `DENY` | Prevents clickjacking (redundant with CSP frame-ancestors) |
+| `X-XSS-Protection` | `1; mode=block` | Legacy XSS protection for older browsers |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | Controls referrer information leakage |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` | Disables unnecessary browser APIs |
+
+### CORS Policy
+
+CORS is configured to allow requests only from the application's own origin. The REST API does not set `Access-Control-Allow-Origin: *` -- API clients should make server-to-server requests.
+
+### TLS
+
+All traffic must be encrypted with TLS 1.2 or higher:
+- Application-to-client: HTTPS enforced via HSTS.
+- Application-to-database: TLS via `sslmode=require` in the connection string.
+- Application-to-Redis: TLS via `rediss://` URL scheme in production.
+- Application-to-external APIs: HTTPS for Gmail API, Microsoft Graph, enrichment sources.
+
+---
+
+## Rate Limiting
+
+### Implementation
+
+Rate limiting uses an in-memory sliding window counter:
+
+- **Scope:** Per IP address (extracted from `X-Forwarded-For` header or connection IP).
+- **Default limit:** 100 requests per 60-second window.
+- **Configurable:** `windowMs` and `max` parameters can be overridden per route.
+
+**Response headers on every request:**
+- `X-RateLimit-Limit` -- Maximum requests allowed.
+- `X-RateLimit-Remaining` -- Requests remaining in the current window.
+- `X-RateLimit-Reset` -- Unix timestamp when the window resets.
+
+**On limit exceeded (429):**
+- Additional `Retry-After` header with seconds until the window resets.
+
+### Limitations
+
+The current implementation uses an in-memory `Map` store, which means:
+- Rate limits are per-process (not shared across multiple server instances).
+- Rate limit state is lost on server restart.
+
+For multi-instance deployments, the rate limiter should be migrated to Redis-backed storage (using Redis INCR + TTL).
+
+---
+
+## Webhook Security
+
+### HMAC-SHA256 Signing
+
+Every outbound webhook payload is signed using HMAC-SHA256:
+
+1. When a webhook is created, a random `secret` is generated and stored in the `webhooks` table.
+2. On delivery, the full JSON payload body is signed: `HMAC-SHA256(secret, raw_body)`.
+3. The signature is sent in the `X-Webhook-Signature` header: `sha256=<hex_digest>`.
+
+**Verification by recipients:**
+```
+1. Compute HMAC-SHA256(webhook_secret, raw_request_body)
+2. Compare the result (in constant time) with the value after "sha256=" in X-Webhook-Signature
+```
+
+### Replay Prevention
+
+The `X-Webhook-Timestamp` header contains the Unix timestamp of the delivery. Recipients SHOULD verify the timestamp is within an acceptable window (e.g., 5 minutes) to prevent replay attacks.
+
+### Delivery Security
+
+- Webhooks are delivered only over HTTPS.
+- 10-second timeout per delivery attempt.
+- 5 retry attempts with exponential backoff (5s base delay).
+- Persistent 4xx failures may result in automatic webhook deactivation.
+- Each delivery has a unique `X-Webhook-Id` for idempotency tracking.
+
+---
+
+## GDPR Compliance
+
+### Right to Erasure (Article 17)
+
+When a GDPR erasure request is processed for a contact:
+
+1. All enriched data on the contact is reverted to pre-enrichment state.
+2. AI summaries mentioning the contact are removed.
+3. AI follow-up drafts for the contact are deleted.
+4. The contact record is hard-deleted (bypasses soft delete).
+5. An audit log entry is created recording the erasure action.
+6. The `enrichment_log` entries for the contact are retained (without PII) for compliance auditing.
+
+### Right to Data Portability (Article 20)
+
+Users can export their data via:
+- **CSV export:** Contacts, companies, deals exported as CSV via `export.contactsCsv`, `export.companiesCsv`, `export.dealsCsv` tRPC procedures.
+- **vCard export:** Contacts exported as vCard (RFC 6350) via `export.contactsVcard`.
+- **REST API:** Programmatic access to all data via the public REST API.
+
+### Transparency Notices (Article 14)
+
+For contact enrichment from public sources:
+
+1. Each enrichment operation is logged in the `enrichment_log` table with:
+   - Source identifier and URL (provenance).
+   - Confidence score per field.
+   - Timestamp of enrichment.
+   - Review status (pending/accepted/rejected).
+
+2. The GDPR compliance service (`enrichment/gdpr-compliance.ts`) generates Article 14 transparency notices documenting:
+   - What data was collected.
+   - From which sources.
+   - On what legal basis (legitimate interest, public data).
+   - When the collection occurred.
+
+3. Enrichment sources must have a documented legal basis:
+   - `gdpr_basis` field on `enrichment_source`: `legitimate_interest` or `public_data`.
+   - `lia_document_url`: Link to the Legitimate Interest Assessment document.
+
+### Enrichment Data Sources
+
+Only permissioned, auditable public data sources are used:
+
+| Source | Type | Legal Basis |
+|--------|------|-------------|
+| OpenCorporates | Company registry data | Public data |
+| Companies House (UK) | Company registry data | Public data |
+| SEC EDGAR | SEC filings (US) | Public data |
+
+No data scraping, social media harvesting, or purchased data lists are used.
+
+### Data Minimization
+
+- Email body is stored as plain text only (HTML stripped).
+- Email attachments are referenced by name and size but not stored.
+- Enrichment applies only fields relevant to business context (industry, employee count, etc.) -- not personal behavioral data.
+- Custom fields can be tagged with `gdpr_category` (personally_identifiable, sensitive, business, none) for data classification.
+
+---
+
+## Soft Delete vs Hard Delete Policy
+
+| Operation | Behavior | Use Case |
+|-----------|----------|----------|
+| **Soft delete** (default) | Sets `deleted_at` timestamp. Record hidden but recoverable for 30 days. | Normal record deletion by users |
+| **Hard delete** | Permanently removes the record from the database. | GDPR right-to-erasure requests only |
+
+Soft-deleted records:
+- Are excluded from list queries via `WHERE deleted_at IS NULL`.
+- Return `404` on direct GET by ID.
+- Can be restored within the 30-day window.
+- Are permanently purged by a scheduled cleanup job after 30 days.
+- Related records with SET NULL foreign keys retain their integrity (the FK column is set to NULL).
+
+---
+
+## Input Validation
+
+### Zod Schema Validation
+
+All inputs are validated at the API boundary using Zod v4 schemas:
+
+**REST API routes:** Every request body and query parameter set is parsed through a Zod schema before any business logic executes. Invalid inputs return `400 Bad Request` with detailed field-level error messages.
+
+**tRPC procedures:** Input schemas are defined inline on each procedure. tRPC automatically returns structured validation errors.
+
+**Validation examples:**
+- UUIDs validated with `z.string().uuid()`
+- Email addresses validated with `z.string().email()`
+- Enum values restricted to defined options
+- String lengths bounded with `.min()` and `.max()`
+- Numbers bounded with `.min()`, `.max()`, `.int()`, `.nonnegative()`
+- Pagination limits enforced (1-100 for `limit`)
+- Search query length bounded (max 200-500 chars depending on endpoint)
+- Country codes validated as exactly 2 characters
+- Currency codes validated as exactly 3 characters
+- ISO 8601 date/datetime format validation
+
+### Custom Field Validation
+
+Custom field values are validated against their `field_definition` metadata:
+
+1. Unknown keys (not defined in `field_definitions`) are rejected.
+2. Required fields must have non-null, non-empty values.
+3. Type-specific validation:
+   - `text`: Must be string
+   - `number`, `currency`: Must be number
+   - `date`: Must match `YYYY-MM-DD` pattern
+   - `datetime`: Must match ISO 8601 datetime pattern
+   - `email`: Must match email format
+   - `checkbox`: Must be boolean
+   - `select`: Must be one of the defined options
+   - `multi_select`: Must be array of strings, each a defined option
+4. Validation errors include the field key and a descriptive message.
+
+### SQL Injection Prevention
+
+All database queries use Drizzle ORM's parameterized query builder. Raw SQL is never constructed from user input. The ORM automatically escapes all values.
+
+### XSS Prevention
+
+- Server-side rendering with React automatically escapes HTML in JSX expressions.
+- Content-Security-Policy header restricts script execution sources.
+- User-provided content (email bodies, notes) is stored as plain text and rendered with proper escaping.
+
+---
+
+## Dependency Security
+
+### Package Management
+
+- **Package manager:** pnpm (lockfile integrity verification).
+- **Lock file:** `pnpm-lock.yaml` is committed to version control and verified on install.
+- **License compliance:** All dependencies are MIT or Apache-2.0 compatible. No AGPL dependencies.
+
+### Recommended Practices
+
+- Run `pnpm audit` regularly to check for known vulnerabilities.
+- Use Dependabot or Renovate for automated dependency update PRs.
+- Pin major versions in `package.json` to prevent unexpected breaking changes.
+- Review changelogs before upgrading critical dependencies (Auth.js, Drizzle, tRPC).
+
+---
+
+## Incident Response Guidelines
+
+### Detection
+
+- Monitor application logs for authentication failures, rate limit violations, and unexpected 5xx errors.
+- Set up alerts for:
+  - Unusual spike in 401/403 responses (potential credential stuffing or unauthorized access attempts).
+  - Rate limit (429) spikes from a single IP (potential abuse).
+  - Database connection errors (potential infrastructure compromise).
+  - Encryption/decryption failures (potential key compromise).
+
+### Containment
+
+1. **Compromised API key:** Rotate the `API_SECRET` environment variable immediately. All existing Bearer tokens become invalid.
+2. **Compromised OAuth tokens:** Mark the affected `oauth_connection` as `is_active = false`. Revoke the token at the provider (Google/Microsoft admin console).
+3. **Compromised encryption key:** Rotate the `ENCRYPTION_KEY` and re-encrypt all stored tokens. This requires a migration script.
+4. **Compromised JWT secret:** Rotate `NEXTAUTH_SECRET`. All active sessions are immediately invalidated.
+5. **Compromised database:** Enable PostgreSQL audit logging. Revoke compromised credentials. Assess data exposure scope.
+
+### Recovery
+
+1. Notify affected workspace admins.
+2. Force re-authentication for all users (rotate `NEXTAUTH_SECRET`).
+3. Regenerate all API keys and MCP keys.
+4. Review audit logs for unauthorized data access.
+5. Document the incident timeline, impact, and remediation steps.
+
+### Communication
+
+- Notify affected parties within 72 hours (GDPR Article 33 requirement for personal data breaches).
+- Document the breach in the audit log with a dedicated breach-response action type.
+
+---
+
+## Security Checklist
+
+### Environment Variables
+
+| Variable | Security Requirement |
+|----------|---------------------|
+| `NEXTAUTH_SECRET` | Minimum 32-byte random string. Never share or commit. |
+| `ENCRYPTION_KEY` | Exactly 64 hex characters (32 bytes). Never share or commit. |
+| `API_SECRET` | High-entropy random string. Never share or commit. |
+| `GOOGLE_CLIENT_SECRET` | OAuth client secret. Never share or commit. |
+| `MICROSOFT_ENTRA_ID_CLIENT_SECRET` | OAuth client secret. Never share or commit. |
+| `ANTHROPIC_API_KEY` | API key for LLM services. Never share or commit. |
+| `DATABASE_URL` | Contains database credentials. Use `sslmode=require` in production. |
+| `REDIS_URL` | Use `rediss://` (TLS) in production. |
+
+### OWASP API Security Top 10 Coverage
+
+| Risk | Mitigation |
+|------|------------|
+| **API1:2023 Broken Object Level Authorization** | Workspace-scoped queries on every endpoint. Users can only access data within their workspace. |
+| **API2:2023 Broken Authentication** | OAuth 2.0 only. JWT with workspace-scoped claims. No password-based auth. |
+| **API3:2023 Broken Object Property Level Authorization** | Zod schemas define exactly which fields are accepted on create/update. Mass assignment is impossible. |
+| **API4:2023 Unrestricted Resource Consumption** | Rate limiting (100 req/min per IP). Pagination limits (max 100 per page). Search query length limits. |
+| **API5:2023 Broken Function Level Authorization** | Admin-only procedures enforced via `adminProcedure` middleware. Role checked on every request. |
+| **API6:2023 Unrestricted Access to Sensitive Business Flows** | Webhook delivery with HMAC signing. OAuth token encryption. Enrichment confidence thresholds. |
+| **API7:2023 Server Side Request Forgery** | Webhook URLs are stored and delivered via background workers. No user-provided URLs are fetched in request context. |
+| **API8:2023 Security Misconfiguration** | Security headers configured. CORS restricted. Debug mode disabled in production. |
+| **API9:2023 Improper Inventory Management** | OpenAPI 3.1 auto-generated from Zod schemas. All endpoints documented. |
+| **API10:2023 Unsafe Consumption of APIs** | External API responses (Gmail, Microsoft Graph, enrichment sources) are validated before processing. Timeouts configured. |

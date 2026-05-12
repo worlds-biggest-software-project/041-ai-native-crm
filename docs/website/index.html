@@ -1,0 +1,2694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NativeCRM — The AI-Native CRM That Fills Itself</title>
+  <meta name="description" content="Zero manual data entry. Your emails, meetings, and calls automatically become CRM records. AI summaries, ML scoring, and smart enrichment do the rest.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* =========================================
+       RESET & BASE
+       ========================================= */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #1e293b;
+      background: #ffffff;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; }
+
+    /* =========================================
+       DESIGN TOKENS
+       ========================================= */
+    :root {
+      --indigo-50: #eef2ff;
+      --indigo-100: #e0e7ff;
+      --indigo-200: #c7d2fe;
+      --indigo-400: #818cf8;
+      --indigo-500: #6366f1;
+      --indigo-600: #4f46e5;
+      --indigo-700: #4338ca;
+      --indigo-800: #3730a3;
+      --indigo-900: #312e81;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --white: #ffffff;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+      --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-2xl: 24px;
+      --max-w: 1200px;
+    }
+
+    /* =========================================
+       ANIMATIONS
+       ========================================= */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(79,70,229,0.3); }
+      50%      { box-shadow: 0 0 0 12px rgba(79,70,229,0); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+
+    @keyframes gradient-shift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Stagger children */
+    .stagger > * { transition-delay: calc(var(--i, 0) * 0.08s); }
+
+    /* =========================================
+       UTILITY
+       ========================================= */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section {
+      padding: 96px 0;
+    }
+
+    .section-alt {
+      background: var(--slate-50);
+    }
+
+    .section-dark {
+      background: var(--slate-900);
+      color: var(--white);
+    }
+
+    .section-indigo {
+      background: linear-gradient(135deg, var(--indigo-600) 0%, var(--indigo-800) 100%);
+      color: var(--white);
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--indigo-600);
+      margin-bottom: 12px;
+    }
+
+    .section-dark .section-label {
+      color: var(--indigo-400);
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: clamp(16px, 2vw, 19px);
+      color: var(--slate-500);
+      max-width: 640px;
+      line-height: 1.65;
+    }
+
+    .section-dark .section-subtitle {
+      color: var(--slate-400);
+    }
+
+    .text-center { text-align: center; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: var(--radius-lg);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--indigo-600);
+      color: var(--white);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 0 0 0 rgba(79,70,229,0);
+    }
+
+    .btn-primary:hover {
+      background: var(--indigo-700);
+      box-shadow: 0 4px 12px rgba(79,70,229,0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--slate-800);
+      border: 1px solid var(--slate-200);
+    }
+
+    .btn-secondary:hover {
+      background: var(--slate-50);
+      border-color: var(--slate-300);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.4);
+    }
+
+    .btn-large {
+      padding: 16px 32px;
+      font-size: 16px;
+      border-radius: var(--radius-lg);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 100px;
+      background: var(--indigo-50);
+      color: var(--indigo-700);
+      letter-spacing: 0.01em;
+    }
+
+    /* =========================================
+       NAVIGATION
+       ========================================= */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(226,232,240,0.6);
+      transition: all 0.3s ease;
+    }
+
+    .nav.scrolled {
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--slate-900);
+    }
+
+    .nav-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--indigo-600), var(--indigo-400));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--slate-600);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--indigo-600);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-actions .btn {
+      padding: 9px 18px;
+      font-size: 14px;
+    }
+
+    .nav-mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .nav-mobile-toggle span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--slate-700);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-mobile-toggle span::before,
+    .nav-mobile-toggle span::after {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--slate-700);
+      border-radius: 2px;
+      position: absolute;
+      transition: all 0.3s ease;
+    }
+
+    .nav-mobile-toggle span::before { top: -6px; }
+    .nav-mobile-toggle span::after  { top: 6px; }
+
+    .nav-mobile-toggle.active span { background: transparent; }
+    .nav-mobile-toggle.active span::before { top: 0; transform: rotate(45deg); background: var(--slate-700); }
+    .nav-mobile-toggle.active span::after  { top: 0; transform: rotate(-45deg); background: var(--slate-700); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--white);
+      z-index: 999;
+      padding: 24px;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      display: block;
+      padding: 14px 16px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--slate-700);
+      border-radius: var(--radius-md);
+      transition: background 0.2s ease;
+    }
+
+    .mobile-menu a:hover { background: var(--slate-50); }
+
+    .mobile-menu .btn {
+      margin-top: 16px;
+      width: 100%;
+    }
+
+    /* =========================================
+       HERO
+       ========================================= */
+    .hero {
+      padding: 160px 0 96px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: -200px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .hero-content {
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero-badge {
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      color: var(--slate-900);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--indigo-600), var(--indigo-400));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(17px, 2vw, 20px);
+      color: var(--slate-500);
+      line-height: 1.65;
+      margin-bottom: 36px;
+      max-width: 520px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-social-proof {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid var(--slate-100);
+    }
+
+    .hero-avatars {
+      display: flex;
+    }
+
+    .hero-avatars span {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+      margin-left: -8px;
+    }
+
+    .hero-avatars span:first-child { margin-left: 0; background: var(--indigo-500); }
+    .hero-avatars span:nth-child(2) { background: #06b6d4; }
+    .hero-avatars span:nth-child(3) { background: #8b5cf6; }
+    .hero-avatars span:nth-child(4) { background: #ec4899; }
+    .hero-avatars span:nth-child(5) { background: var(--slate-400); font-size: 11px; }
+
+    .hero-social-text {
+      font-size: 14px;
+      color: var(--slate-500);
+      line-height: 1.4;
+    }
+
+    .hero-social-text strong {
+      color: var(--slate-800);
+    }
+
+    /* Hero Mockup */
+    .hero-visual {
+      animation: fadeIn 1s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+      position: relative;
+    }
+
+    .mockup-window {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .mockup-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      background: var(--slate-50);
+      border-bottom: 1px solid var(--slate-100);
+    }
+
+    .mockup-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .mockup-dot:nth-child(1) { background: #ef4444; }
+    .mockup-dot:nth-child(2) { background: #f59e0b; }
+    .mockup-dot:nth-child(3) { background: #22c55e; }
+
+    .mockup-url {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      color: var(--slate-400);
+      background: var(--white);
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-left: 8px;
+    }
+
+    .mockup-body {
+      padding: 24px;
+      min-height: 320px;
+    }
+
+    .mockup-pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .mockup-col-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--slate-400);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mockup-col-count {
+      background: var(--slate-100);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .mockup-card {
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 8px;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .mockup-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .mockup-card-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--slate-800);
+      margin-bottom: 4px;
+    }
+
+    .mockup-card-company {
+      font-size: 10px;
+      color: var(--slate-400);
+      margin-bottom: 8px;
+    }
+
+    .mockup-card-score {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+
+    .score-hot {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .score-warm {
+      background: #fef3c7;
+      color: #a16207;
+    }
+
+    .score-cold {
+      background: var(--slate-100);
+      color: var(--slate-500);
+    }
+
+    .mockup-float-card {
+      position: absolute;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      padding: 16px;
+      animation: float 4s ease-in-out infinite;
+      border: 1px solid var(--slate-100);
+    }
+
+    .mockup-ai-card {
+      top: -20px;
+      right: -30px;
+      width: 200px;
+      animation-delay: 0s;
+    }
+
+    .mockup-ai-card-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--indigo-600);
+      margin-bottom: 6px;
+    }
+
+    .mockup-ai-card-text {
+      font-size: 12px;
+      color: var(--slate-600);
+      line-height: 1.5;
+    }
+
+    .mockup-score-card {
+      bottom: 20px;
+      left: -30px;
+      width: 160px;
+      animation-delay: 2s;
+    }
+
+    .mockup-score-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--indigo-600);
+      line-height: 1;
+    }
+
+    .mockup-score-label {
+      font-size: 11px;
+      color: var(--slate-500);
+      margin-top: 4px;
+    }
+
+    .mockup-score-bar {
+      height: 4px;
+      background: var(--slate-100);
+      border-radius: 2px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .mockup-score-fill {
+      height: 100%;
+      width: 87%;
+      background: linear-gradient(90deg, var(--indigo-500), var(--indigo-400));
+      border-radius: 2px;
+    }
+
+    /* =========================================
+       PROBLEM STATEMENT
+       ========================================= */
+    .problem {
+      text-align: center;
+    }
+
+    .problem-card {
+      background: var(--slate-900);
+      color: var(--white);
+      border-radius: var(--radius-2xl);
+      padding: 64px 48px;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .problem-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .problem-icon {
+      font-size: 48px;
+      margin-bottom: 24px;
+    }
+
+    .problem-card h2 {
+      font-size: clamp(24px, 3.5vw, 36px);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .problem-card p {
+      font-size: 17px;
+      color: var(--slate-400);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .problem-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+      padding-top: 48px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .problem-stat-value {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--indigo-400);
+      letter-spacing: -0.02em;
+    }
+
+    .problem-stat-label {
+      font-size: 14px;
+      color: var(--slate-400);
+      margin-top: 4px;
+    }
+
+    /* =========================================
+       HOW IT WORKS
+       ========================================= */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 56px;
+    }
+
+    .step-card {
+      position: relative;
+      text-align: center;
+      padding: 40px 24px;
+    }
+
+    .step-number {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--indigo-600), var(--indigo-400));
+      color: var(--white);
+      font-size: 22px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 14px rgba(79,70,229,0.3);
+    }
+
+    .step-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+
+    .step-card p {
+      font-size: 15px;
+      color: var(--slate-500);
+      line-height: 1.6;
+    }
+
+    .step-connector {
+      display: none;
+    }
+
+    /* =========================================
+       FEATURE GRID
+       ========================================= */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-xl);
+      padding: 32px 28px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--indigo-200);
+      box-shadow: 0 8px 24px rgba(79,70,229,0.08);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--indigo-50);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 18px;
+    }
+
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--slate-500);
+      line-height: 1.6;
+    }
+
+    /* =========================================
+       AI DEEP DIVE
+       ========================================= */
+    .ai-features {
+      margin-top: 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 80px;
+    }
+
+    .ai-feature-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .ai-feature-row.reverse .ai-feature-content {
+      order: 2;
+    }
+
+    .ai-feature-row.reverse .ai-feature-visual {
+      order: 1;
+    }
+
+    .ai-feature-content h3 {
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+
+    .ai-feature-content p {
+      font-size: 16px;
+      color: var(--slate-500);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .ai-feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ai-feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 15px;
+      color: var(--slate-600);
+    }
+
+    .ai-feature-list li::before {
+      content: '\2713';
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--indigo-50);
+      color: var(--indigo-600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .ai-feature-visual {
+      background: var(--slate-50);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--slate-200);
+      padding: 32px;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* AI Summary Card */
+    .summary-demo {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--slate-200);
+      padding: 24px;
+    }
+
+    .summary-demo-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .summary-demo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--indigo-500), var(--indigo-400));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .summary-demo-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .summary-demo-time {
+      font-size: 12px;
+      color: var(--slate-400);
+    }
+
+    .summary-demo-body {
+      font-size: 13px;
+      color: var(--slate-600);
+      line-height: 1.7;
+    }
+
+    .summary-demo-body strong {
+      color: var(--slate-800);
+    }
+
+    .summary-demo-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-top: 12px;
+      margin-right: 6px;
+    }
+
+    .tag-positive { background: #dcfce7; color: #15803d; }
+    .tag-action   { background: #dbeafe; color: #1d4ed8; }
+    .tag-follow   { background: #fef3c7; color: #a16207; }
+
+    /* Score Demo */
+    .score-demo {
+      text-align: center;
+    }
+
+    .score-demo-ring {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: conic-gradient(var(--indigo-500) 0% 87%, var(--slate-100) 87% 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+
+    .score-demo-ring-inner {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .score-demo-ring-value {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--indigo-600);
+      line-height: 1;
+    }
+
+    .score-demo-ring-label {
+      font-size: 11px;
+      color: var(--slate-500);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+
+    .score-demo-factors {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .score-factor {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .score-factor-label {
+      width: 120px;
+      text-align: right;
+      color: var(--slate-500);
+      font-weight: 500;
+    }
+
+    .score-factor-bar {
+      flex: 1;
+      height: 6px;
+      background: var(--slate-100);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .score-factor-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--indigo-500);
+    }
+
+    /* Enrichment Demo */
+    .enrichment-demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .enrichment-before,
+    .enrichment-after {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--slate-200);
+      padding: 20px;
+    }
+
+    .enrichment-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .enrichment-before .enrichment-label { color: var(--slate-400); }
+    .enrichment-after .enrichment-label  { color: var(--indigo-600); }
+
+    .enrichment-field {
+      margin-bottom: 10px;
+    }
+
+    .enrichment-field-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--slate-400);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .enrichment-field-value {
+      font-size: 13px;
+      color: var(--slate-700);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .enrichment-field-empty {
+      font-size: 13px;
+      color: var(--slate-300);
+      font-style: italic;
+    }
+
+    .enrichment-new {
+      background: var(--indigo-50);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--indigo-700);
+      font-weight: 600;
+    }
+
+    /* =========================================
+       INTEGRATIONS
+       ========================================= */
+    .integrations-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      margin-top: 56px;
+    }
+
+    .integration-card {
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-xl);
+      padding: 32px 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .integration-card:hover {
+      border-color: var(--indigo-200);
+      box-shadow: 0 8px 24px rgba(79,70,229,0.08);
+      transform: translateY(-2px);
+    }
+
+    .integration-icon {
+      font-size: 36px;
+      margin-bottom: 14px;
+    }
+
+    .integration-name {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .integration-desc {
+      font-size: 12px;
+      color: var(--slate-500);
+      line-height: 1.5;
+    }
+
+    /* =========================================
+       DEVELOPERS
+       ========================================= */
+    .dev-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-top: 56px;
+      align-items: center;
+    }
+
+    .dev-features {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .dev-feature {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .dev-feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .dev-feature h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .dev-feature p {
+      font-size: 14px;
+      color: var(--slate-400);
+      line-height: 1.6;
+    }
+
+    .dev-code {
+      background: #0d1117;
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      overflow-x: auto;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .dev-code-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .dev-code-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dev-code pre {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #c9d1d9;
+    }
+
+    .dev-code .comment { color: #8b949e; }
+    .dev-code .keyword { color: #ff7b72; }
+    .dev-code .string  { color: #a5d6ff; }
+    .dev-code .fn      { color: #d2a8ff; }
+    .dev-code .const   { color: #79c0ff; }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 32px;
+    }
+
+    .tech-tag {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--slate-300);
+    }
+
+    /* =========================================
+       PRICING
+       ========================================= */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .pricing-card {
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-xl);
+      padding: 40px 32px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .pricing-card:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .pricing-card.featured {
+      border-color: var(--indigo-500);
+      box-shadow: 0 0 0 1px var(--indigo-500), var(--shadow-xl);
+    }
+
+    .pricing-popular {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--indigo-600);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 16px;
+      border-radius: 100px;
+      letter-spacing: 0.02em;
+    }
+
+    .pricing-name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .pricing-desc {
+      font-size: 14px;
+      color: var(--slate-500);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .pricing-price {
+      margin-bottom: 28px;
+    }
+
+    .pricing-amount {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .pricing-period {
+      font-size: 15px;
+      color: var(--slate-400);
+      font-weight: 500;
+    }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .pricing-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--slate-600);
+    }
+
+    .pricing-features li::before {
+      content: '\2713';
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--indigo-50);
+      color: var(--indigo-600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .pricing-card .btn {
+      width: 100%;
+    }
+
+    /* =========================================
+       TESTIMONIALS
+       ========================================= */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .testimonial-card {
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-xl);
+      padding: 32px 28px;
+    }
+
+    .testimonial-stars {
+      color: #f59e0b;
+      font-size: 16px;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+
+    .testimonial-text {
+      font-size: 15px;
+      color: var(--slate-600);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .testimonial-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .testimonial-role {
+      font-size: 13px;
+      color: var(--slate-500);
+    }
+
+    /* =========================================
+       FAQ
+       ========================================= */
+    .faq-grid {
+      max-width: 768px;
+      margin: 56px auto 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 24px 0;
+      background: none;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--slate-800);
+      text-align: left;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .faq-question:hover {
+      color: var(--indigo-600);
+    }
+
+    .faq-icon {
+      font-size: 20px;
+      color: var(--slate-400);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+      margin-left: 16px;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+    }
+
+    .faq-answer p {
+      padding-bottom: 24px;
+      font-size: 15px;
+      color: var(--slate-500);
+      line-height: 1.7;
+    }
+
+    /* =========================================
+       CTA FOOTER
+       ========================================= */
+    .cta-section {
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .cta-section p {
+      font-size: 18px;
+      opacity: 0.8;
+      margin-bottom: 36px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .footer {
+      background: var(--slate-900);
+      color: var(--slate-400);
+      padding: 64px 0 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      line-height: 1.7;
+      margin-top: 12px;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--slate-300);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col a {
+      font-size: 14px;
+      color: var(--slate-400);
+      transition: color 0.2s ease;
+    }
+
+    .footer-col a:hover {
+      color: var(--white);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-social a {
+      font-size: 18px;
+      color: var(--slate-500);
+      transition: color 0.2s ease;
+    }
+
+    .footer-social a:hover {
+      color: var(--white);
+    }
+
+    /* =========================================
+       RESPONSIVE
+       ========================================= */
+    @media (max-width: 1024px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .hero-visual {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .mockup-ai-card { right: -10px; }
+      .mockup-score-card { left: -10px; }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .integrations-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .ai-feature-row {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .ai-feature-row.reverse .ai-feature-content { order: 1; }
+      .ai-feature-row.reverse .ai-feature-visual  { order: 2; }
+
+      .dev-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .section { padding: 64px 0; }
+
+      .nav-links { display: none; }
+      .nav-actions { display: none; }
+      .nav-mobile-toggle { display: flex; }
+
+      .hero { padding: 120px 0 64px; }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+      }
+
+      .problem-card {
+        padding: 40px 24px;
+      }
+
+      .problem-stats {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .integrations-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .mockup-pipeline {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .mockup-ai-card,
+      .mockup-score-card {
+        display: none;
+      }
+
+      .enrichment-demo {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 32px; }
+      .container { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============== NAVIGATION =============== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">N</div>
+        NativeCRM
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#ai">AI</a></li>
+        <li><a href="#integrations">Integrations</a></li>
+        <li><a href="#developers">Developers</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="#" class="btn btn-secondary">Sign In</a>
+        <a href="#" class="btn btn-primary">Get Started</a>
+      </div>
+      <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu">
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features" class="mobile-link">Features</a>
+    <a href="#ai" class="mobile-link">AI</a>
+    <a href="#integrations" class="mobile-link">Integrations</a>
+    <a href="#developers" class="mobile-link">Developers</a>
+    <a href="#pricing" class="mobile-link">Pricing</a>
+    <a href="#faq" class="mobile-link">FAQ</a>
+    <a href="#" class="btn btn-secondary" style="margin-top: 16px;">Sign In</a>
+    <a href="#" class="btn btn-primary">Get Started Free</a>
+  </div>
+
+  <!-- =============== HERO =============== -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="badge">Now in Public Beta</span>
+          </div>
+          <h1>The AI-Native CRM<br>That <span class="gradient-text">Fills Itself</span></h1>
+          <p class="hero-subtitle">Zero manual data entry. Your emails, meetings, and calls automatically become CRM records. AI summaries, ML scoring, and smart enrichment do the rest.</p>
+          <div class="hero-actions">
+            <a href="#" class="btn btn-primary btn-large">Get Started Free</a>
+            <a href="#" class="btn btn-secondary btn-large">View Demo</a>
+          </div>
+          <div class="hero-social-proof">
+            <div class="hero-avatars">
+              <span>A</span>
+              <span>M</span>
+              <span>S</span>
+              <span>J</span>
+              <span>+</span>
+            </div>
+            <div class="hero-social-text">
+              <strong>1,200+ teams</strong> already using NativeCRM<br>to close more deals with less busywork
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="mockup-window">
+            <div class="mockup-titlebar">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-url">app.nativecrm.dev</div>
+            </div>
+            <div class="mockup-body">
+              <div class="mockup-pipeline">
+                <div>
+                  <div class="mockup-col-header">Lead <span class="mockup-col-count">4</span></div>
+                  <div class="mockup-card">
+                    <div class="mockup-card-name">Sarah Chen</div>
+                    <div class="mockup-card-company">Acme Corp</div>
+                    <div class="mockup-card-score score-hot">&#9679; 92</div>
+                  </div>
+                  <div class="mockup-card">
+                    <div class="mockup-card-name">James Park</div>
+                    <div class="mockup-card-company">StartupXYZ</div>
+                    <div class="mockup-card-score score-warm">&#9679; 67</div>
+                  </div>
+                </div>
+                <div>
+                  <div class="mockup-col-header">Qualified <span class="mockup-col-count">3</span></div>
+                  <div class="mockup-card">
+                    <div class="mockup-card-name">Emily Davis</div>
+                    <div class="mockup-card-company">TechFlow</div>
+                    <div class="mockup-card-score score-hot">&#9679; 88</div>
+                  </div>
+                  <div class="mockup-card">
+                    <div class="mockup-card-name">Marcus Lee</div>
+                    <div class="mockup-card-company">DataSync</div>
+                    <div class="mockup-card-score score-cold">&#9679; 34</div>
+                  </div>
+                </div>
+                <div>
+                  <div class="mockup-col-header">Proposal <span class="mockup-col-count">2</span></div>
+                  <div class="mockup-card">
+                    <div class="mockup-card-name">Ana Martinez</div>
+                    <div class="mockup-card-company">CloudBase</div>
+                    <div class="mockup-card-score score-hot">&#9679; 95</div>
+                  </div>
+                </div>
+                <div>
+                  <div class="mockup-col-header">Closed <span class="mockup-col-count">5</span></div>
+                  <div class="mockup-card">
+                    <div class="mockup-card-name">Tom Wilson</div>
+                    <div class="mockup-card-company">GrowthLab</div>
+                    <div class="mockup-card-score score-hot">&#9679; 100</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mockup-float-card mockup-ai-card">
+            <div class="mockup-ai-card-label">&#10024; AI Summary</div>
+            <div class="mockup-ai-card-text">Positive meeting. Budget confirmed at $45k. Decision by Friday. Send proposal draft.</div>
+          </div>
+          <div class="mockup-float-card mockup-score-card">
+            <div class="mockup-score-value">87</div>
+            <div class="mockup-score-label">Deal Health Score</div>
+            <div class="mockup-score-bar"><div class="mockup-score-fill"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== PROBLEM STATEMENT =============== -->
+  <section class="section" id="problem">
+    <div class="container">
+      <div class="problem reveal">
+        <div class="problem-card">
+          <div class="problem-icon">&#128561;</div>
+          <h2>Your CRM is empty because nobody wants to fill it</h2>
+          <p>Sales reps spend more time updating their CRM than actually selling. So they stop updating it. Then leadership can't forecast. Then everyone buys another tool. Sound familiar?</p>
+          <div class="problem-stats">
+            <div>
+              <div class="problem-stat-value">71%</div>
+              <div class="problem-stat-label">of CRM data is stale<br>within 90 days</div>
+            </div>
+            <div>
+              <div class="problem-stat-value">5.5h</div>
+              <div class="problem-stat-label">per week reps spend<br>on manual data entry</div>
+            </div>
+            <div>
+              <div class="problem-stat-value">43%</div>
+              <div class="problem-stat-label">of salespeople say their<br>CRM hurts productivity</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== HOW IT WORKS =============== -->
+  <section class="section section-alt" id="how-it-works">
+    <div class="container text-center">
+      <div class="reveal">
+        <span class="section-label">How It Works</span>
+        <h2 class="section-title">Three steps. Zero data entry.</h2>
+        <p class="section-subtitle mx-auto">Connect your tools, let AI do the work, and focus on what matters: closing deals.</p>
+      </div>
+      <div class="steps-grid stagger">
+        <div class="step-card reveal" style="--i: 0">
+          <div class="step-number">1</div>
+          <h3>Connect</h3>
+          <p>Link your Gmail or Outlook account. Connect your calendar. It takes less than two minutes.</p>
+        </div>
+        <div class="step-card reveal" style="--i: 1">
+          <div class="step-number">2</div>
+          <h3>Sync</h3>
+          <p>Emails and meetings automatically become contacts, companies, and deal activities. No typing required.</p>
+        </div>
+        <div class="step-card reveal" style="--i: 2">
+          <div class="step-number">3</div>
+          <h3>Sell</h3>
+          <p>AI scores your deals, summarizes meetings, and drafts follow-ups. You just focus on the conversation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== FEATURE GRID =============== -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">Features</span>
+        <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
+        <p class="section-subtitle mx-auto">Built from scratch for the way modern sales teams actually work. No legacy baggage, no feature bloat.</p>
+      </div>
+      <div class="features-grid stagger">
+        <div class="feature-card reveal" style="--i: 0">
+          <div class="feature-icon">&#128232;</div>
+          <h3>Zero-Entry Pipeline</h3>
+          <p>Connect Gmail or Outlook. Emails and calendar events automatically sync. Contacts are auto-created. No typing.</p>
+        </div>
+        <div class="feature-card reveal" style="--i: 1">
+          <div class="feature-icon">&#129302;</div>
+          <h3>AI Meeting Summaries</h3>
+          <p>Get structured summaries with key points, action items, sentiment analysis, and auto-generated follow-up drafts.</p>
+        </div>
+        <div class="feature-card reveal" style="--i: 2">
+          <div class="feature-icon">&#127919;</div>
+          <h3>ML Deal Scoring</h3>
+          <p>Every deal gets a health score (0-100) based on engagement signals. Know which deals need attention at a glance.</p>
+        </div>
+        <div class="feature-card reveal" style="--i: 3">
+          <div class="feature-icon">&#128203;</div>
+          <h3>Kanban Pipeline Board</h3>
+          <p>Drag-and-drop deal management across customizable stages with real-time totals and optimistic updates.</p>
+        </div>
+        <div class="feature-card reveal" style="--i: 4">
+          <div class="feature-icon">&#128274;</div>
+          <h3>GDPR-Safe Enrichment</h3>
+          <p>Public data sources enrich contacts and companies with full provenance tracking and erasure support.</p>
+        </div>
+        <div class="feature-card reveal" style="--i: 5">
+          <div class="feature-icon">&#128337;</div>
+          <h3>Activity Timeline</h3>
+          <p>Every interaction in one chronological view. Emails, meetings, calls, notes, and stage changes per entity.</p>
+        </div>
+        <div class="feature-card reveal" style="--i: 6">
+          <div class="feature-icon">&#128269;</div>
+          <h3>Global Search</h3>
+          <p>Command palette (Cmd+K) searches across all contacts, companies, and deals instantly. Find anything in milliseconds.</p>
+        </div>
+        <div class="feature-card reveal" style="--i: 7">
+          <div class="feature-icon">&#9889;</div>
+          <h3>Workflow Automation</h3>
+          <p>Outbound webhooks with HMAC signing. Trigger-condition-action workflow builder for custom automations.</p>
+        </div>
+        <div class="feature-card reveal" style="--i: 8">
+          <div class="feature-icon">&#128196;</div>
+          <h3>Reports &amp; Export</h3>
+          <p>Pipeline analytics, conversion funnels, activity metrics. CSV/JSON export for any dataset you need.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== AI DEEP DIVE =============== -->
+  <section class="section section-alt" id="ai">
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">AI-Powered</span>
+        <h2 class="section-title">AI that actually helps you sell</h2>
+        <p class="section-subtitle mx-auto">Not just a chatbot bolted onto a spreadsheet. AI is woven into every layer of the product.</p>
+      </div>
+      <div class="ai-features">
+        <!-- Meeting Summaries -->
+        <div class="ai-feature-row">
+          <div class="ai-feature-content reveal-left">
+            <span class="section-label">Meeting Intelligence</span>
+            <h3>AI Meeting Summaries</h3>
+            <p>After every meeting, NativeCRM generates a structured summary so you never lose context. Key points, action items, and sentiment are extracted automatically.</p>
+            <ul class="ai-feature-list">
+              <li>Key discussion points extracted</li>
+              <li>Action items identified with owners</li>
+              <li>Sentiment analysis per participant</li>
+              <li>Auto-generated follow-up email drafts</li>
+            </ul>
+          </div>
+          <div class="ai-feature-visual reveal-right">
+            <div class="summary-demo">
+              <div class="summary-demo-header">
+                <div class="summary-demo-icon">&#10024;</div>
+                <div>
+                  <div class="summary-demo-title">Meeting Summary</div>
+                  <div class="summary-demo-time">Product Demo with Acme Corp &mdash; 45 min</div>
+                </div>
+              </div>
+              <div class="summary-demo-body">
+                <p><strong>Key Points:</strong> Acme Corp evaluated 3 competitors. Budget approved at $45k/year. Main concern is SSO integration timeline. Decision expected by Friday.</p>
+                <br>
+                <p><strong>Action Items:</strong></p>
+                <p>&#8226; Send SSO implementation timeline (You)<br>&#8226; Schedule technical deep-dive (Acme CTO)<br>&#8226; Prepare enterprise proposal (You)</p>
+                <br>
+                <div>
+                  <span class="summary-demo-tag tag-positive">&#9650; Positive Sentiment</span>
+                  <span class="summary-demo-tag tag-action">3 Action Items</span>
+                  <span class="summary-demo-tag tag-follow">Follow-up Draft Ready</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deal Scoring -->
+        <div class="ai-feature-row reverse">
+          <div class="ai-feature-content reveal-right">
+            <span class="section-label">Predictive Analytics</span>
+            <h3>ML Deal Scoring</h3>
+            <p>Every deal in your pipeline is continuously scored based on real engagement signals. No guesswork, no gut feelings &mdash; just data-driven prioritization.</p>
+            <ul class="ai-feature-list">
+              <li>Real-time scores updated with each interaction</li>
+              <li>Engagement velocity tracking</li>
+              <li>Multi-stakeholder analysis</li>
+              <li>Risk alerts for stalling deals</li>
+            </ul>
+          </div>
+          <div class="ai-feature-visual reveal-left">
+            <div class="score-demo">
+              <div class="score-demo-ring">
+                <div class="score-demo-ring-inner">
+                  <div class="score-demo-ring-value">87</div>
+                  <div class="score-demo-ring-label">Health Score</div>
+                </div>
+              </div>
+              <div class="score-demo-factors">
+                <div class="score-factor">
+                  <div class="score-factor-label">Email activity</div>
+                  <div class="score-factor-bar"><div class="score-factor-fill" style="width: 92%"></div></div>
+                </div>
+                <div class="score-factor">
+                  <div class="score-factor-label">Meeting frequency</div>
+                  <div class="score-factor-bar"><div class="score-factor-fill" style="width: 85%"></div></div>
+                </div>
+                <div class="score-factor">
+                  <div class="score-factor-label">Stakeholders</div>
+                  <div class="score-factor-bar"><div class="score-factor-fill" style="width: 78%"></div></div>
+                </div>
+                <div class="score-factor">
+                  <div class="score-factor-label">Response time</div>
+                  <div class="score-factor-bar"><div class="score-factor-fill" style="width: 95%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enrichment -->
+        <div class="ai-feature-row">
+          <div class="ai-feature-content reveal-left">
+            <span class="section-label">Data Quality</span>
+            <h3>GDPR-Safe Enrichment</h3>
+            <p>Sparse contact records become rich profiles automatically. Public data sources fill in the gaps while maintaining full compliance with data privacy regulations.</p>
+            <ul class="ai-feature-list">
+              <li>Automatic company and contact enrichment</li>
+              <li>Full provenance tracking per data point</li>
+              <li>GDPR/CCPA erasure support built in</li>
+              <li>Never uses private or purchased data</li>
+            </ul>
+          </div>
+          <div class="ai-feature-visual reveal-right">
+            <div class="enrichment-demo">
+              <div class="enrichment-before">
+                <div class="enrichment-label">Before</div>
+                <div class="enrichment-field">
+                  <div class="enrichment-field-label">Name</div>
+                  <div class="enrichment-field-value">Sarah Chen</div>
+                </div>
+                <div class="enrichment-field">
+                  <div class="enrichment-field-label">Email</div>
+                  <div class="enrichment-field-value">s.chen@acme.co</div>
+                </div>
+                <div class="enrichment-field">
+                  <div class="enrichment-field-label">Title</div>
+                  <div class="enrichment-field-empty">&mdash;</div>
+                </div>
+                <div class="enrichment-field">
+                  <div class="enrichment-field-label">Company Size</div>
+                  <div class="enrichment-field-empty">&mdash;</div>
+                </div>
+                <div class="enrichment-field">
+                  <div class="enrichment-field-label">Industry</div>
+                  <div class="enrichment-field-empty">&mdash;</div>
+                </div>
+                <div class="enrichment-field">
+                  <div class="enrichment-field-label">LinkedIn</div>
+                  <div class="enrichment-field-empty">&mdash;</div>
+                </div>
+              </div>
+              <div class="enrichment-after">
+                <div class="enrichment-label">After &#10024;</div>
+                <div class="enrichment-field">
+                  <div class="enrichment-field-label">Name</div>
+                  <div class="enrichment-field-value">Sarah Chen</div>
+                </div>
+                <div class="enrichment-field">
+                  <div class="enrichment-field-label">Email</div>
+                  <div class="enrichment-field-value">s.chen@acme.co</div>
+                </div>
+                <div class="enrichment-field">
+                  <div class="enrichment-field-label">Title</div>
+                  <div class="enrichment-field-value"><span class="enrichment-new">VP of Sales</span></div>
+                </div>
+                <div class="enrichment-field">
+                  <div class="enrichment-field-label">Company Size</div>
+                  <div class="enrichment-field-value"><span class="enrichment-new">250-500</span></div>
+                </div>
+                <div class="enrichment-field">
+                  <div class="enrichment-field-label">Industry</div>
+                  <div class="enrichment-field-value"><span class="enrichment-new">SaaS / B2B</span></div>
+                </div>
+                <div class="enrichment-field">
+                  <div class="enrichment-field-label">LinkedIn</div>
+                  <div class="enrichment-field-value"><span class="enrichment-new">linkedin.com/in/schen</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== INTEGRATIONS =============== -->
+  <section class="section" id="integrations">
+    <div class="container text-center">
+      <div class="reveal">
+        <span class="section-label">Integrations</span>
+        <h2 class="section-title">Connects to the tools you already use</h2>
+        <p class="section-subtitle mx-auto">First-class integrations with the platforms your team relies on every day.</p>
+      </div>
+      <div class="integrations-grid stagger">
+        <div class="integration-card reveal" style="--i: 0">
+          <div class="integration-icon">&#128231;</div>
+          <div class="integration-name">Gmail</div>
+          <div class="integration-desc">Auto-sync emails and contacts. Two-way integration.</div>
+        </div>
+        <div class="integration-card reveal" style="--i: 1">
+          <div class="integration-icon">&#128236;</div>
+          <div class="integration-name">Outlook</div>
+          <div class="integration-desc">Full Microsoft 365 email and calendar sync.</div>
+        </div>
+        <div class="integration-card reveal" style="--i: 2">
+          <div class="integration-icon">&#129520;</div>
+          <div class="integration-name">MCP Server</div>
+          <div class="integration-desc">Model Context Protocol for AI assistant integration.</div>
+        </div>
+        <div class="integration-card reveal" style="--i: 3">
+          <div class="integration-icon">&#128279;</div>
+          <div class="integration-name">REST API</div>
+          <div class="integration-desc">Full CRUD API with OpenAPI docs for custom integrations.</div>
+        </div>
+        <div class="integration-card reveal" style="--i: 4">
+          <div class="integration-icon">&#128268;</div>
+          <div class="integration-name">Webhooks</div>
+          <div class="integration-desc">Outbound webhooks with HMAC signing for secure automation.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== FOR DEVELOPERS =============== -->
+  <section class="section section-dark" id="developers">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label">For Developers</span>
+        <h2 class="section-title">Open source. API-first.<br>Built to be extended.</h2>
+        <p class="section-subtitle">Self-host on your own infrastructure, extend with custom fields and objects, or build on top of the API.</p>
+      </div>
+      <div class="dev-grid">
+        <div class="dev-features stagger">
+          <div class="dev-feature reveal" style="--i: 0">
+            <div class="dev-feature-icon">&#128187;</div>
+            <div>
+              <h4>Self-Hosted with Docker</h4>
+              <p>One-command deployment with Docker Compose. Your data stays on your servers.</p>
+            </div>
+          </div>
+          <div class="dev-feature reveal" style="--i: 1">
+            <div class="dev-feature-icon">&#128736;</div>
+            <div>
+              <h4>Custom Fields &amp; Objects</h4>
+              <p>Extend the data model with custom fields on any entity, or create entirely new object types.</p>
+            </div>
+          </div>
+          <div class="dev-feature reveal" style="--i: 2">
+            <div class="dev-feature-icon">&#128640;</div>
+            <div>
+              <h4>MCP Server Integration</h4>
+              <p>Native Model Context Protocol server lets AI assistants read and update your CRM data directly.</p>
+            </div>
+          </div>
+          <div class="dev-feature reveal" style="--i: 3">
+            <div class="dev-feature-icon">&#128214;</div>
+            <div>
+              <h4>OpenAPI Documentation</h4>
+              <p>Complete REST API with auto-generated OpenAPI docs. Type-safe client generation included.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-right">
+          <div class="dev-code">
+            <div class="dev-code-header">
+              <div class="dev-code-dot" style="background: #ef4444;"></div>
+              <div class="dev-code-dot" style="background: #f59e0b;"></div>
+              <div class="dev-code-dot" style="background: #22c55e;"></div>
+            </div>
+            <pre><span class="comment">// Query deals via tRPC</span>
+<span class="keyword">const</span> deals = <span class="keyword">await</span> trpc.deal.<span class="fn">list</span>({
+  stage: <span class="string">"qualified"</span>,
+  minScore: <span class="const">70</span>,
+  include: [<span class="string">"contacts"</span>, <span class="string">"activities"</span>],
+});
+
+<span class="comment">// AI enrichment via API</span>
+<span class="keyword">const</span> enriched = <span class="keyword">await</span> <span class="fn">fetch</span>(
+  <span class="string">"/api/v1/contacts/enrich"</span>,
+  {
+    method: <span class="string">"POST"</span>,
+    body: <span class="fn">JSON.stringify</span>({
+      email: <span class="string">"s.chen@acme.co"</span>,
+    }),
+  }
+);
+
+<span class="comment">// MCP Server for AI agents</span>
+<span class="keyword">const</span> server = <span class="keyword">new</span> <span class="fn">MCPServer</span>({
+  tools: [<span class="string">"search_contacts"</span>,
+          <span class="string">"create_deal"</span>,
+          <span class="string">"update_stage"</span>],
+});</pre>
+          </div>
+          <div class="tech-stack">
+            <span class="tech-tag">Next.js</span>
+            <span class="tech-tag">TypeScript</span>
+            <span class="tech-tag">PostgreSQL</span>
+            <span class="tech-tag">Redis</span>
+            <span class="tech-tag">Drizzle ORM</span>
+            <span class="tech-tag">tRPC</span>
+            <span class="tech-tag">BullMQ</span>
+            <span class="tech-tag">Auth.js</span>
+            <span class="tech-tag">Tailwind CSS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== PRICING =============== -->
+  <section class="section section-alt" id="pricing">
+    <div class="container text-center">
+      <div class="reveal">
+        <span class="section-label">Pricing</span>
+        <h2 class="section-title">Simple, transparent pricing</h2>
+        <p class="section-subtitle mx-auto">Start free with self-hosting. Scale up when you're ready for managed infrastructure and premium features.</p>
+      </div>
+      <div class="pricing-grid stagger">
+        <div class="pricing-card reveal" style="--i: 0">
+          <div class="pricing-name">Free</div>
+          <div class="pricing-desc">Self-hosted, forever free. Perfect for developers and small teams.</div>
+          <div class="pricing-price">
+            <span class="pricing-amount">$0</span>
+            <span class="pricing-period">/forever</span>
+          </div>
+          <ul class="pricing-features">
+            <li>All core CRM features</li>
+            <li>AI meeting summaries</li>
+            <li>ML deal scoring</li>
+            <li>Gmail &amp; Outlook sync</li>
+            <li>REST API &amp; webhooks</li>
+            <li>Community support</li>
+          </ul>
+          <a href="#" class="btn btn-secondary">Self-Host Now</a>
+        </div>
+        <div class="pricing-card featured reveal" style="--i: 1">
+          <div class="pricing-popular">Most Popular</div>
+          <div class="pricing-name">Team</div>
+          <div class="pricing-desc">Managed cloud with premium AI features and priority support.</div>
+          <div class="pricing-price">
+            <span class="pricing-amount">$29</span>
+            <span class="pricing-period">/user/mo</span>
+          </div>
+          <ul class="pricing-features">
+            <li>Everything in Free</li>
+            <li>Managed cloud hosting</li>
+            <li>Advanced enrichment</li>
+            <li>Workflow automation</li>
+            <li>Custom fields &amp; objects</li>
+            <li>Priority email support</li>
+          </ul>
+          <a href="#" class="btn btn-primary">Get Started Free</a>
+        </div>
+        <div class="pricing-card reveal" style="--i: 2">
+          <div class="pricing-name">Enterprise</div>
+          <div class="pricing-desc">Dedicated infrastructure, SSO, audit logs, and custom SLAs.</div>
+          <div class="pricing-price">
+            <span class="pricing-amount">Custom</span>
+          </div>
+          <ul class="pricing-features">
+            <li>Everything in Team</li>
+            <li>Dedicated infrastructure</li>
+            <li>SAML/SCIM SSO</li>
+            <li>Audit logging</li>
+            <li>Custom SLA</li>
+            <li>Dedicated success manager</li>
+          </ul>
+          <a href="#" class="btn btn-secondary">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== TESTIMONIALS =============== -->
+  <section class="section" id="testimonials">
+    <div class="container text-center">
+      <div class="reveal">
+        <span class="section-label">Testimonials</span>
+        <h2 class="section-title">Loved by modern sales teams</h2>
+        <p class="section-subtitle mx-auto">Hear from teams that switched to NativeCRM and never looked back.</p>
+      </div>
+      <div class="testimonials-grid stagger">
+        <div class="testimonial-card reveal" style="--i: 0">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">"We went from 40% CRM adoption to 100% overnight. Not because we forced anyone &mdash; there's simply nothing to adopt. It just works in the background."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background: var(--indigo-500);">A</div>
+            <div>
+              <div class="testimonial-name">Alex Rivera</div>
+              <div class="testimonial-role">VP of Sales, ScaleUp Inc.</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal" style="--i: 1">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">"The AI meeting summaries alone saved us 10 hours a week. No more scrambling to write up notes after every call. Game changer for our team."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background: #06b6d4;">K</div>
+            <div>
+              <div class="testimonial-name">Kim Nakamura</div>
+              <div class="testimonial-role">Head of Revenue, DataStack</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal" style="--i: 2">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">"As a developer, I love that it's open source and self-hosted. The MCP integration means our AI tools can read and write CRM data natively. Incredible."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background: #8b5cf6;">P</div>
+            <div>
+              <div class="testimonial-name">Priya Sharma</div>
+              <div class="testimonial-role">CTO, BuildFast</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== FAQ =============== -->
+  <section class="section section-alt" id="faq">
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title">Frequently asked questions</h2>
+        <p class="section-subtitle mx-auto">Everything you need to know about NativeCRM.</p>
+      </div>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <button class="faq-question">
+            How does NativeCRM populate data without manual entry?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>NativeCRM connects to your email (Gmail or Outlook) and calendar via OAuth. It automatically creates contacts from email correspondents, logs email threads as activities, and generates deal records from meeting patterns. AI enrichment then fills in company details, job titles, and other fields from public sources.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Is my email data safe?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Absolutely. If you self-host, your data never leaves your servers. On our managed cloud, all data is encrypted at rest and in transit. We never sell your data, and you can export or delete everything at any time. We're SOC 2 Type II compliant.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Can I migrate from Salesforce or HubSpot?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. NativeCRM includes a CSV import tool that maps fields from common CRM exports. We also provide migration guides for Salesforce, HubSpot, and Pipedrive. Most teams are up and running within a day.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            What does the MCP Server integration do?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>The Model Context Protocol (MCP) server exposes your CRM data to AI assistants like Claude. This means your AI tools can search contacts, create deals, update stages, and more &mdash; all through a standardized, secure protocol. It's like giving your AI a native CRM interface.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            How accurate is the ML deal scoring?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Deal scores are based on engagement signals: email frequency, response times, meeting cadence, stakeholder involvement, and more. The model improves over time as it learns from your team's win/loss patterns. Early users report 80-85% accuracy in predicting deal outcomes.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Do I need technical skills to self-host?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Basic familiarity with Docker is all you need. Our Docker Compose setup gets you running with a single command. We provide detailed documentation for deploying on common platforms like AWS, DigitalOcean, Railway, and Fly.io.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Is NativeCRM GDPR compliant?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. GDPR compliance is built into the architecture. All enriched data includes provenance tracking, so you know exactly where each data point came from. The system supports data subject access requests and right-to-erasure out of the box.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Can I extend NativeCRM with custom fields?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. You can add custom fields to any entity (contacts, companies, deals) or create entirely new object types. Custom fields are fully supported in the API, search, filters, and reports. No code changes needed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== CTA FOOTER =============== -->
+  <section class="section section-indigo cta-section" id="cta">
+    <div class="container reveal">
+      <h2>Ready to stop babysitting your CRM?</h2>
+      <p>Join thousands of teams who sell more and type less with NativeCRM.</p>
+      <div class="cta-actions">
+        <a href="#" class="btn btn-large" style="background: var(--white); color: var(--indigo-700); font-weight: 700;">Get Started Free</a>
+        <a href="#" class="btn btn-ghost btn-large">View Documentation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== FOOTER =============== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo" style="color: var(--white);">
+            <div class="nav-logo-icon">N</div>
+            NativeCRM
+          </a>
+          <p>The AI-native CRM that fills itself. Open source, self-hostable, and built for modern sales teams.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#integrations">Integrations</a></li>
+            <li><a href="#">Changelog</a></li>
+            <li><a href="#">Roadmap</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Developers</h4>
+          <ul>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">API Reference</a></li>
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">MCP Server</a></li>
+            <li><a href="#">Self-Hosting Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 NativeCRM. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="#" aria-label="GitHub">GH</a>
+          <a href="#" aria-label="Twitter/X">X</a>
+          <a href="#" aria-label="LinkedIn">LI</a>
+          <a href="#" aria-label="Discord">DC</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =============== JAVASCRIPT =============== -->
+  <script>
+    // ---- Scroll-reveal via IntersectionObserver ----
+    (function () {
+      var revealSelectors = '.reveal, .reveal-left, .reveal-right';
+      var elements = document.querySelectorAll(revealSelectors);
+
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.12,
+          rootMargin: '0px 0px -40px 0px'
+        });
+
+        elements.forEach(function (el) {
+          observer.observe(el);
+        });
+      } else {
+        // Fallback: show all
+        elements.forEach(function (el) {
+          el.classList.add('visible');
+        });
+      }
+    })();
+
+    // ---- Navbar scroll effect ----
+    (function () {
+      var nav = document.getElementById('nav');
+      var scrollThreshold = 20;
+
+      function onScroll() {
+        if (window.scrollY > scrollThreshold) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+
+    // ---- Mobile menu toggle ----
+    (function () {
+      var toggle = document.getElementById('mobileToggle');
+      var menu = document.getElementById('mobileMenu');
+
+      toggle.addEventListener('click', function () {
+        toggle.classList.toggle('active');
+        menu.classList.toggle('open');
+        document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+      });
+
+      // Close mobile menu on link click
+      var links = menu.querySelectorAll('a');
+      links.forEach(function (link) {
+        link.addEventListener('click', function () {
+          toggle.classList.remove('active');
+          menu.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+      });
+    })();
+
+    // ---- FAQ accordion ----
+    (function () {
+      var items = document.querySelectorAll('.faq-item');
+
+      items.forEach(function (item) {
+        var question = item.querySelector('.faq-question');
+        question.addEventListener('click', function () {
+          var isOpen = item.classList.contains('open');
+
+          // Close all
+          items.forEach(function (i) { i.classList.remove('open'); });
+
+          // Toggle current
+          if (!isOpen) {
+            item.classList.add('open');
+          }
+        });
+      });
+    })();
+
+    // ---- Smooth scroll for anchor links ----
+    (function () {
+      document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+        anchor.addEventListener('click', function (e) {
+          var href = this.getAttribute('href');
+          if (href === '#') return;
+
+          var target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            var navHeight = document.getElementById('nav').offsetHeight;
+            var top = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
