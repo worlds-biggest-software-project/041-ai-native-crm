@@ -22,9 +22,7 @@ export const reportsRouter = createRouter({
     )
     .query(async ({ ctx, input }) => {
       // Find the pipeline to get stage metadata
-      const pipelineConditions = [
-        eq(pipelines.workspaceId, ctx.workspaceId),
-      ];
+      const pipelineConditions = [eq(pipelines.workspaceId, ctx.workspaceId)];
       if (input.pipelineId) {
         pipelineConditions.push(eq(pipelines.id, input.pipelineId));
       }
@@ -63,9 +61,7 @@ export const reportsRouter = createRouter({
         .where(and(...dealConditions))
         .groupBy(deals.stageId);
 
-      const stageMap = new Map(
-        stageStats.map((s) => [s.stageId, s]),
-      );
+      const stageMap = new Map(stageStats.map((s) => [s.stageId, s]));
 
       const stageResults = stages.map((stage) => {
         const stats = stageMap.get(stage.id);
@@ -77,8 +73,12 @@ export const reportsRouter = createRouter({
       });
 
       const totalDeals = stageResults.reduce((acc, s) => acc + s.count, 0);
-      const totalValue = stageResults.reduce((acc, s) => acc + s.totalAmount, 0);
-      const avgDealSize = totalDeals > 0 ? Math.round(totalValue / totalDeals) : 0;
+      const totalValue = stageResults.reduce(
+        (acc, s) => acc + s.totalAmount,
+        0,
+      );
+      const avgDealSize =
+        totalDeals > 0 ? Math.round(totalValue / totalDeals) : 0;
 
       return {
         stages: stageResults,

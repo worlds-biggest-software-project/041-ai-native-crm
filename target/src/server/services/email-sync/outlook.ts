@@ -150,7 +150,8 @@ export class OutlookSyncService {
     top = 100,
   ): Promise<GraphMessageListResponse> {
     const endpoint =
-      url ?? `${GRAPH_BASE}/messages?$top=${top}&$orderby=receivedDateTime desc`;
+      url ??
+      `${GRAPH_BASE}/messages?$top=${top}&$orderby=receivedDateTime desc`;
     return this.graphFetch<GraphMessageListResponse>(endpoint);
   }
 
@@ -166,7 +167,11 @@ export class OutlookSyncService {
     options: { maxMessages?: number } = {},
   ): Promise<SyncResult> {
     const maxMessages = options.maxMessages ?? 500;
-    const result: SyncResult = { activitiesCreated: 0, contactsCreated: 0, errors: [] };
+    const result: SyncResult = {
+      activitiesCreated: 0,
+      contactsCreated: 0,
+      errors: [],
+    };
     const allRawEmails: RawEmail[] = [];
 
     try {
@@ -220,7 +225,11 @@ export class OutlookSyncService {
    * full or incremental sync.
    */
   async incrementalSync(deltaLink: string): Promise<SyncResult> {
-    const result: SyncResult = { activitiesCreated: 0, contactsCreated: 0, errors: [] };
+    const result: SyncResult = {
+      activitiesCreated: 0,
+      contactsCreated: 0,
+      errors: [],
+    };
     const allRawEmails: RawEmail[] = [];
 
     try {
@@ -228,7 +237,8 @@ export class OutlookSyncService {
 
       // Follow @odata.nextLink until we reach @odata.deltaLink (end of changes)
       do {
-        const response: GraphMessageListResponse = await this.graphFetch<GraphMessageListResponse>(nextLink);
+        const response: GraphMessageListResponse =
+          await this.graphFetch<GraphMessageListResponse>(nextLink);
 
         for (const msg of response.value) {
           try {
@@ -277,23 +287,20 @@ export class OutlookSyncService {
       Date.now() + 3 * 24 * 60 * 60 * 1000,
     ).toISOString();
 
-    const res = await fetch(
-      "https://graph.microsoft.com/v1.0/subscriptions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          changeType: "created,updated",
-          notificationUrl: webhookUrl,
-          resource: "me/messages",
-          expirationDateTime,
-          clientState: `crm-${this.workspaceId}`,
-        }),
+    const res = await fetch("https://graph.microsoft.com/v1.0/subscriptions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.accessToken}`,
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        changeType: "created,updated",
+        notificationUrl: webhookUrl,
+        resource: "me/messages",
+        expirationDateTime,
+        clientState: `crm-${this.workspaceId}`,
+      }),
+    });
 
     if (!res.ok) {
       const text = await res.text();

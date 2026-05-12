@@ -45,9 +45,7 @@ type ScoringJobData = ScoreDealJobData | ScoreLeadJobData | BatchRescoreJobData;
 async function processScoringJob(job: Job<ScoringJobData>) {
   const data = job.data;
 
-  console.log(
-    `[ScoringWorker] Processing job ${job.id} type=${data.type}`,
-  );
+  console.log(`[ScoringWorker] Processing job ${job.id} type=${data.type}`);
 
   switch (data.type) {
     case "score-deal": {

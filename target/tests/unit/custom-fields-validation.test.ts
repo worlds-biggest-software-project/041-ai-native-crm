@@ -49,7 +49,13 @@ const selectField: FieldDefinitionForValidation = {
   ],
 };
 
-const allDefs = [textField, requiredTextField, numberField, emailField, selectField];
+const allDefs = [
+  textField,
+  requiredTextField,
+  numberField,
+  emailField,
+  selectField,
+];
 
 // ---------------------------------------------------------------------------
 // Tests
@@ -57,10 +63,7 @@ const allDefs = [textField, requiredTextField, numberField, emailField, selectFi
 
 describe("validateCustomFields", () => {
   it("rejects unknown field key", () => {
-    const result = validateCustomFields(
-      { unknown_field: "value" },
-      allDefs,
-    );
+    const result = validateCustomFields({ unknown_field: "value" }, allDefs);
     expect(result.valid).toBe(false);
     expect(result.errors.length).toBeGreaterThan(0);
     expect(result.errors.some((e) => e.includes("unknown_field"))).toBe(true);
@@ -82,19 +85,15 @@ describe("validateCustomFields", () => {
   });
 
   it("rejects non-string for text field", () => {
-    const result = validateCustomFields(
-      { title: "Hello", bio: 123 },
-      allDefs,
-    );
+    const result = validateCustomFields({ title: "Hello", bio: 123 }, allDefs);
     expect(result.valid).toBe(false);
-    expect(result.errors.some((e) => e.includes("bio") && e.includes("string"))).toBe(true);
+    expect(
+      result.errors.some((e) => e.includes("bio") && e.includes("string")),
+    ).toBe(true);
   });
 
   it("accepts valid number field", () => {
-    const result = validateCustomFields(
-      { title: "Hello", score: 42 },
-      allDefs,
-    );
+    const result = validateCustomFields({ title: "Hello", score: 42 }, allDefs);
     expect(result.valid).toBe(true);
     expect(result.errors).toEqual([]);
   });
@@ -105,7 +104,9 @@ describe("validateCustomFields", () => {
       allDefs,
     );
     expect(result.valid).toBe(false);
-    expect(result.errors.some((e) => e.includes("score") && e.includes("number"))).toBe(true);
+    expect(
+      result.errors.some((e) => e.includes("score") && e.includes("number")),
+    ).toBe(true);
   });
 
   it("validates select field against options", () => {

@@ -25,42 +25,45 @@ function findStage(stages: PipelineStage[], stageId: string) {
 }
 
 export const dealsRouter = createRouter({
-  list: protectedProcedure.input(listDealsSchema).query(async ({ ctx, input }) => {
-    const conditions = [
-      eq(deals.workspaceId, ctx.workspaceId),
-      isNull(deals.deletedAt),
-    ];
+  list: protectedProcedure
+    .input(listDealsSchema)
+    .query(async ({ ctx, input }) => {
+      const conditions = [
+        eq(deals.workspaceId, ctx.workspaceId),
+        isNull(deals.deletedAt),
+      ];
 
-    if (input.pipelineId) conditions.push(eq(deals.pipelineId, input.pipelineId));
-    if (input.stageId) conditions.push(eq(deals.stageId, input.stageId));
-    if (input.ownerId) conditions.push(eq(deals.ownerId, input.ownerId));
+      if (input.pipelineId)
+        conditions.push(eq(deals.pipelineId, input.pipelineId));
+      if (input.stageId) conditions.push(eq(deals.stageId, input.stageId));
+      if (input.ownerId) conditions.push(eq(deals.ownerId, input.ownerId));
 
-    const sortColumn = {
-      name: deals.name,
-      amount: deals.amount,
-      createdAt: deals.createdAt,
-      updatedAt: deals.updatedAt,
-      expectedCloseDate: deals.expectedCloseDate,
-      healthScore: deals.healthScore,
-    }[input.sortBy];
+      const sortColumn = {
+        name: deals.name,
+        amount: deals.amount,
+        createdAt: deals.createdAt,
+        updatedAt: deals.updatedAt,
+        expectedCloseDate: deals.expectedCloseDate,
+        healthScore: deals.healthScore,
+      }[input.sortBy];
 
-    const orderFn = input.sortOrder === "asc" ? asc : desc;
+      const orderFn = input.sortOrder === "asc" ? asc : desc;
 
-    const items = await ctx.db
-      .select()
-      .from(deals)
-      .where(and(...conditions))
-      .orderBy(orderFn(sortColumn))
-      .limit(input.limit + 1);
+      const items = await ctx.db
+        .select()
+        .from(deals)
+        .where(and(...conditions))
+        .orderBy(orderFn(sortColumn))
+        .limit(input.limit + 1);
 
-    const hasMore = items.length > input.limit;
-    if (hasMore) items.pop();
+      const hasMore = items.length > input.limit;
+      if (hasMore) items.pop();
 
-    return {
-      items,
-      nextCursor: hasMore ? items[items.length - 1]?.id ?? null : null,
-    };
-  }),
+      return {
+        items,
+        nextCursor: hasMore ? (items[items.length - 1]?.id ?? null) : null,
+      };
+    }),
 
   getById: protectedProcedure
     .input(uuidSchema)
@@ -93,13 +96,19 @@ export const dealsRouter = createRouter({
         );
 
       if (!pipeline) {
-        throw new TRPCError({ code: "NOT_FOUND", message: "Pipeline not found" });
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Pipeline not found",
+        });
       }
 
       const stages = pipeline.stages as PipelineStage[];
       const stage = findStage(stages, input.stageId);
       if (!stage) {
-        throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid stage for this pipeline" });
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid stage for this pipeline",
+        });
       }
 
       const [deal] = await ctx.db
@@ -208,7 +217,10 @@ export const dealsRouter = createRouter({
         .where(eq(pipelines.id, deal.pipelineId));
 
       if (!pipeline) {
-        throw new TRPCError({ code: "NOT_FOUND", message: "Pipeline not found" });
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Pipeline not found",
+        });
       }
 
       const stages = pipeline.stages as PipelineStage[];
@@ -216,7 +228,10 @@ export const dealsRouter = createRouter({
       const newStage = findStage(stages, input.stageId);
 
       if (!newStage) {
-        throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid target stage" });
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid target stage",
+        });
       }
 
       const isClosing = newStage.type === "won" || newStage.type === "lost";
@@ -226,7 +241,9 @@ export const dealsRouter = createRouter({
         .set({
           stageId: input.stageId,
           stageEnteredAt: new Date(),
-          actualCloseDate: isClosing ? new Date().toISOString().slice(0, 10) : deal.actualCloseDate,
+          actualCloseDate: isClosing
+            ? new Date().toISOString().slice(0, 10)
+            : deal.actualCloseDate,
           updatedAt: new Date(),
         })
         .where(eq(deals.id, input.id))

@@ -66,9 +66,7 @@ export async function extractEntities(
         email:
           typeof entity["email"] === "string" ? entity["email"] : undefined,
         confidence:
-          typeof entity["confidence"] === "number"
-            ? entity["confidence"]
-            : 0.5,
+          typeof entity["confidence"] === "number" ? entity["confidence"] : 0.5,
       } satisfies ExtractedEntity;
     });
   } catch (error) {

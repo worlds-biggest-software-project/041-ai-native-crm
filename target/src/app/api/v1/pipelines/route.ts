@@ -8,7 +8,10 @@ import {
   badRequest,
 } from "@/server/lib/api-auth";
 import { z } from "zod";
-import { cursorPaginationSchema, sortOrderSchema } from "@/server/lib/validators";
+import {
+  cursorPaginationSchema,
+  sortOrderSchema,
+} from "@/server/lib/validators";
 
 const listPipelinesSchema = cursorPaginationSchema.extend({
   sortBy: z.enum(["name", "createdAt", "updatedAt"]).default("createdAt"),
@@ -54,11 +57,12 @@ export async function GET(req: NextRequest) {
 
     const conditions = [eq(pipelines.workspaceId, auth.workspaceId)];
 
-    const sortColumn = {
-      name: pipelines.name,
-      createdAt: pipelines.createdAt,
-      updatedAt: pipelines.updatedAt,
-    }[params.sortBy] ?? pipelines.createdAt;
+    const sortColumn =
+      {
+        name: pipelines.name,
+        createdAt: pipelines.createdAt,
+        updatedAt: pipelines.updatedAt,
+      }[params.sortBy] ?? pipelines.createdAt;
 
     const orderFn = params.sortOrder === "asc" ? asc : desc;
 

@@ -7,7 +7,9 @@ test.describe("Contact Import", () => {
     // TODO: Upload a file and verify step progression
   });
 
-  test.skip("imports a CSV file and shows success message", async ({ page }) => {
+  test.skip("imports a CSV file and shows success message", async ({
+    page,
+  }) => {
     await page.goto("/contacts/import");
     // TODO: Upload a CSV fixture, map columns, confirm, verify success step
   });

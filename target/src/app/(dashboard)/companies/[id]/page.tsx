@@ -16,9 +16,7 @@ export default async function CompanyDetailPage({
       {/* Company Header */}
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight">
-            Company Details
-          </h1>
+          <h1 className="text-2xl font-bold tracking-tight">Company Details</h1>
           <p className="text-muted-foreground">
             View and manage company information.
           </p>

@@ -10,40 +10,42 @@ import {
 import { writeAuditLog } from "@/server/lib/audit";
 
 export const companiesRouter = createRouter({
-  list: protectedProcedure.input(listCompaniesSchema).query(async ({ ctx, input }) => {
-    const conditions = [
-      eq(companies.workspaceId, ctx.workspaceId),
-      isNull(companies.deletedAt),
-    ];
+  list: protectedProcedure
+    .input(listCompaniesSchema)
+    .query(async ({ ctx, input }) => {
+      const conditions = [
+        eq(companies.workspaceId, ctx.workspaceId),
+        isNull(companies.deletedAt),
+      ];
 
-    if (input.search) {
-      conditions.push(ilike(companies.name, `%${input.search}%`));
-    }
+      if (input.search) {
+        conditions.push(ilike(companies.name, `%${input.search}%`));
+      }
 
-    const sortColumn = {
-      name: companies.name,
-      createdAt: companies.createdAt,
-      updatedAt: companies.updatedAt,
-      lastActivityAt: companies.lastActivityAt,
-    }[input.sortBy];
+      const sortColumn = {
+        name: companies.name,
+        createdAt: companies.createdAt,
+        updatedAt: companies.updatedAt,
+        lastActivityAt: companies.lastActivityAt,
+      }[input.sortBy];
 
-    const orderFn = input.sortOrder === "asc" ? asc : desc;
+      const orderFn = input.sortOrder === "asc" ? asc : desc;
 
-    const items = await ctx.db
-      .select()
-      .from(companies)
-      .where(and(...conditions))
-      .orderBy(orderFn(sortColumn))
-      .limit(input.limit + 1);
+      const items = await ctx.db
+        .select()
+        .from(companies)
+        .where(and(...conditions))
+        .orderBy(orderFn(sortColumn))
+        .limit(input.limit + 1);
 
-    const hasMore = items.length > input.limit;
-    if (hasMore) items.pop();
+      const hasMore = items.length > input.limit;
+      if (hasMore) items.pop();
 
-    return {
-      items,
-      nextCursor: hasMore ? items[items.length - 1]?.id ?? null : null,
-    };
-  }),
+      return {
+        items,
+        nextCursor: hasMore ? (items[items.length - 1]?.id ?? null) : null,
+      };
+    }),
 
   getById: protectedProcedure
     .input(uuidSchema)

@@ -81,7 +81,10 @@ export const settingsRouter = createRouter({
           updatedAt: new Date(),
         })
         .where(
-          and(eq(users.id, input.userId), eq(users.workspaceId, ctx.workspaceId)),
+          and(
+            eq(users.id, input.userId),
+            eq(users.workspaceId, ctx.workspaceId),
+          ),
         )
         .returning();
 
@@ -102,7 +105,10 @@ export const settingsRouter = createRouter({
           updatedAt: new Date(),
         })
         .where(
-          and(eq(users.id, input.userId), eq(users.workspaceId, ctx.workspaceId)),
+          and(
+            eq(users.id, input.userId),
+            eq(users.workspaceId, ctx.workspaceId),
+          ),
         )
         .returning();
 

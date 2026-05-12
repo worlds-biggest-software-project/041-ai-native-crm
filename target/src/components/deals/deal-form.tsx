@@ -203,9 +203,7 @@ export function DealForm({ deal, onSubmit, onCancel }: DealFormProps) {
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>
-        <Button type="submit">
-          {deal ? "Update Deal" : "Create Deal"}
-        </Button>
+        <Button type="submit">{deal ? "Update Deal" : "Create Deal"}</Button>
       </div>
     </form>
   );

@@ -474,9 +474,9 @@
 - [x] T214 [P] Add rate limiting middleware for /api/v1/* REST endpoints and MCP transport in target/src/server/lib/rate-limit.ts
 - [x] T215 [P] Configure Content Security Policy, CORS, and security headers in target/next.config.ts
 - [x] T216 Verify soft delete filtering is applied on all list/search queries (contacts, companies, deals, custom objects)
-- [ ] T219 Run full test suite: pnpm test && pnpm test:e2e
-- [ ] T220 Run TypeScript strict mode build: pnpm build with zero errors
-- [ ] T221 Run ESLint: pnpm lint with zero errors
+- [x] T219 Run full test suite: pnpm test && pnpm test:e2e
+- [x] T220 Run TypeScript strict mode build: pnpm build with zero errors
+- [x] T221 Run ESLint: pnpm lint with zero errors
 - [ ] T222 Verify Docker build succeeds: docker build .
 - [ ] T223 Validate quickstart.md by following setup steps on clean environment
 - [ ] T224 Run seed data script and verify dashboard, pipeline board, and activity timelines render correctly

@@ -8,20 +8,81 @@ const kpiCards = [
 ];
 
 const funnelStages = [
-  { name: "Lead", count: 45, totalValue: 850000, width: 100, color: "bg-blue-500" },
-  { name: "Qualified", count: 32, totalValue: 640000, width: 80, color: "bg-blue-400" },
-  { name: "Proposal", count: 20, totalValue: 480000, width: 60, color: "bg-indigo-500" },
-  { name: "Negotiation", count: 15, totalValue: 320000, width: 45, color: "bg-indigo-400" },
-  { name: "Closed Won", count: 10, totalValue: 200000, width: 30, color: "bg-green-500" },
-  { name: "Closed Lost", count: 5, totalValue: 90000, width: 15, color: "bg-red-400" },
+  {
+    name: "Lead",
+    count: 45,
+    totalValue: 850000,
+    width: 100,
+    color: "bg-blue-500",
+  },
+  {
+    name: "Qualified",
+    count: 32,
+    totalValue: 640000,
+    width: 80,
+    color: "bg-blue-400",
+  },
+  {
+    name: "Proposal",
+    count: 20,
+    totalValue: 480000,
+    width: 60,
+    color: "bg-indigo-500",
+  },
+  {
+    name: "Negotiation",
+    count: 15,
+    totalValue: 320000,
+    width: 45,
+    color: "bg-indigo-400",
+  },
+  {
+    name: "Closed Won",
+    count: 10,
+    totalValue: 200000,
+    width: 30,
+    color: "bg-green-500",
+  },
+  {
+    name: "Closed Lost",
+    count: 5,
+    totalValue: 90000,
+    width: 15,
+    color: "bg-red-400",
+  },
 ];
 
 const staleDeals = [
-  { name: "Enterprise License - Acme Corp", stage: "Proposal", daysSinceUpdate: 21, owner: "Alice Johnson" },
-  { name: "Annual Contract - Globex", stage: "Negotiation", daysSinceUpdate: 18, owner: "Bob Smith" },
-  { name: "Starter Plan - Initech", stage: "Qualified", daysSinceUpdate: 16, owner: "Alice Johnson" },
-  { name: "Premium Upgrade - Umbrella Co", stage: "Lead", daysSinceUpdate: 15, owner: "Carol Davis" },
-  { name: "Consulting Package - Wonka", stage: "Proposal", daysSinceUpdate: 14, owner: "Bob Smith" },
+  {
+    name: "Enterprise License - Acme Corp",
+    stage: "Proposal",
+    daysSinceUpdate: 21,
+    owner: "Alice Johnson",
+  },
+  {
+    name: "Annual Contract - Globex",
+    stage: "Negotiation",
+    daysSinceUpdate: 18,
+    owner: "Bob Smith",
+  },
+  {
+    name: "Starter Plan - Initech",
+    stage: "Qualified",
+    daysSinceUpdate: 16,
+    owner: "Alice Johnson",
+  },
+  {
+    name: "Premium Upgrade - Umbrella Co",
+    stage: "Lead",
+    daysSinceUpdate: 15,
+    owner: "Carol Davis",
+  },
+  {
+    name: "Consulting Package - Wonka",
+    stage: "Proposal",
+    daysSinceUpdate: 14,
+    owner: "Bob Smith",
+  },
 ];
 
 function formatCurrency(value: number): string {
@@ -52,7 +113,9 @@ export default function ReportsPage() {
             <p className="mt-2 text-3xl font-semibold text-gray-900">
               {card.value}
             </p>
-            <p className="mt-1 text-sm text-green-600">{card.change} from last month</p>
+            <p className="mt-1 text-sm text-green-600">
+              {card.change} from last month
+            </p>
           </div>
         ))}
       </div>

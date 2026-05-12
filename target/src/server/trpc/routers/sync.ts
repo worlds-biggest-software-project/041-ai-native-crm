@@ -42,9 +42,9 @@ function buildAuthUrl(
   workspaceId: string,
 ): string {
   const scopes = PROVIDER_SCOPES[provider];
-  const state = Buffer.from(
-    JSON.stringify({ provider, workspaceId }),
-  ).toString("base64url");
+  const state = Buffer.from(JSON.stringify({ provider, workspaceId })).toString(
+    "base64url",
+  );
 
   if (provider === "gmail" || provider === "google_calendar") {
     const params = new URLSearchParams({

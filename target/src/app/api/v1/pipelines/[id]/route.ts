@@ -39,10 +39,7 @@ export async function GET(req: NextRequest, context: RouteContext) {
       .select()
       .from(pipelines)
       .where(
-        and(
-          eq(pipelines.id, id),
-          eq(pipelines.workspaceId, auth.workspaceId),
-        ),
+        and(eq(pipelines.id, id), eq(pipelines.workspaceId, auth.workspaceId)),
       );
 
     if (!pipeline) return notFound();
@@ -76,10 +73,7 @@ export async function PATCH(req: NextRequest, context: RouteContext) {
         updatedAt: new Date(),
       })
       .where(
-        and(
-          eq(pipelines.id, id),
-          eq(pipelines.workspaceId, auth.workspaceId),
-        ),
+        and(eq(pipelines.id, id), eq(pipelines.workspaceId, auth.workspaceId)),
       )
       .returning();
 
@@ -105,10 +99,7 @@ export async function DELETE(req: NextRequest, context: RouteContext) {
     const [deleted] = await db
       .delete(pipelines)
       .where(
-        and(
-          eq(pipelines.id, id),
-          eq(pipelines.workspaceId, auth.workspaceId),
-        ),
+        and(eq(pipelines.id, id), eq(pipelines.workspaceId, auth.workspaceId)),
       )
       .returning();
 

@@ -28,9 +28,7 @@ export const enrichmentSources = pgTable(
       .notNull()
       .defaultNow(),
   },
-  (table) => [
-    index("enrichment_sources_workspace_idx").on(table.workspaceId),
-  ],
+  (table) => [index("enrichment_sources_workspace_idx").on(table.workspaceId)],
 );
 
 export type EnrichmentSource = typeof enrichmentSources.$inferSelect;

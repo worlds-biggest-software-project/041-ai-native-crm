@@ -44,10 +44,7 @@ export const companies = pgTable(
   },
   (table) => [
     index("companies_workspace_idx").on(table.workspaceId),
-    index("companies_workspace_domain_idx").on(
-      table.workspaceId,
-      table.domain,
-    ),
+    index("companies_workspace_domain_idx").on(table.workspaceId, table.domain),
     index("companies_workspace_name_idx").on(table.workspaceId, table.name),
   ],
 );

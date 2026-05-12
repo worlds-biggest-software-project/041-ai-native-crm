@@ -16,7 +16,9 @@ export function McpSettings() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({}),
       });
-      const data = (await response.json()) as { result?: { data?: { key?: string } } };
+      const data = (await response.json()) as {
+        result?: { data?: { key?: string } };
+      };
       const key = data.result?.data?.key;
       if (key) {
         setApiKey(key);
@@ -65,7 +67,9 @@ export function McpSettings() {
           </div>
 
           <div className="rounded-md border p-4">
-            <h4 className="mb-2 text-sm font-medium">Connection Instructions</h4>
+            <h4 className="mb-2 text-sm font-medium">
+              Connection Instructions
+            </h4>
             <ol className="list-inside list-decimal space-y-1 text-sm text-muted-foreground">
               <li>
                 MCP endpoint:{" "}

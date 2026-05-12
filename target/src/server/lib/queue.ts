@@ -8,6 +8,8 @@ export const calendarSyncQueue = new Queue("calendar-sync", { connection });
 export const aiJobsQueue = new Queue("ai-jobs", { connection });
 export const scoringQueue = new Queue("scoring", { connection });
 export const enrichmentQueue = new Queue("enrichment", { connection });
-export const webhookDispatchQueue = new Queue("webhook-dispatch", { connection });
+export const webhookDispatchQueue = new Queue("webhook-dispatch", {
+  connection,
+});
 export const webhookQueue = new Queue("webhook", { connection });
 export const aiSummaryQueue = new Queue("ai-summary", { connection });

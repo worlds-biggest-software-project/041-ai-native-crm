@@ -23,10 +23,7 @@ export async function dispatchWebhooks(
     .select()
     .from(webhooks)
     .where(
-      and(
-        eq(webhooks.workspaceId, workspaceId),
-        eq(webhooks.isActive, true),
-      ),
+      and(eq(webhooks.workspaceId, workspaceId), eq(webhooks.isActive, true)),
     );
 
   const matchingWebhooks = activeWebhooks.filter((wh) => {

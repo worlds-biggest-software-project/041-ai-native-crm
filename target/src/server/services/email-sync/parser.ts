@@ -137,10 +137,7 @@ export function extractUniqueContacts(
  *
  * Domain comparison is case-insensitive.
  */
-export function isFromUs(
-  email: RawEmail,
-  excludedDomains: string[],
-): boolean {
+export function isFromUs(email: RawEmail, excludedDomains: string[]): boolean {
   const domains = new Set(excludedDomains.map((d) => d.toLowerCase()));
 
   const allAddresses: EmailAddress[] = [

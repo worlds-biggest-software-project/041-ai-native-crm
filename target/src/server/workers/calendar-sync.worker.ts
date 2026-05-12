@@ -22,7 +22,9 @@ interface CalendarSyncJobData {
 async function processCalendarSync(job: Job<CalendarSyncJobData>) {
   const { provider, userId } = job.data;
 
-  console.log(`[CalendarSyncWorker] Processing job ${job.id} for provider=${provider}`);
+  console.log(
+    `[CalendarSyncWorker] Processing job ${job.id} for provider=${provider}`,
+  );
 
   // Load the OAuth connection for the job's user/provider
   const conditions = [eq(oauthConnections.isActive, true)];
@@ -38,7 +40,9 @@ async function processCalendarSync(job: Job<CalendarSyncJobData>) {
     .where(and(...conditions));
 
   if (connections.length === 0) {
-    console.warn(`[CalendarSyncWorker] No active connection found for provider=${provider}`);
+    console.warn(
+      `[CalendarSyncWorker] No active connection found for provider=${provider}`,
+    );
     return;
   }
 
@@ -51,7 +55,9 @@ async function processCalendarSync(job: Job<CalendarSyncJobData>) {
       const now = new Date();
       if (connection.tokenExpiresAt && connection.tokenExpiresAt < now) {
         // TODO: Implement token refresh logic
-        console.log(`[CalendarSyncWorker] Token expired for connection ${connection.id}, needs refresh`);
+        console.log(
+          `[CalendarSyncWorker] Token expired for connection ${connection.id}, needs refresh`,
+        );
         continue;
       }
 
@@ -63,18 +69,26 @@ async function processCalendarSync(job: Job<CalendarSyncJobData>) {
       if (provider === "google_calendar") {
         if (hasSyncToken) {
           // TODO: Implement GoogleCalendarSyncService.incrementalSync(accessToken, syncConfig)
-          console.log(`[CalendarSyncWorker] Google Calendar incremental sync for connection ${connection.id}`);
+          console.log(
+            `[CalendarSyncWorker] Google Calendar incremental sync for connection ${connection.id}`,
+          );
         } else {
           // TODO: Implement GoogleCalendarSyncService.initialSync(accessToken)
-          console.log(`[CalendarSyncWorker] Google Calendar initial sync for connection ${connection.id}`);
+          console.log(
+            `[CalendarSyncWorker] Google Calendar initial sync for connection ${connection.id}`,
+          );
         }
       } else if (provider === "outlook_calendar") {
         if (hasSyncToken) {
           // TODO: Implement OutlookCalendarSyncService.incrementalSync(accessToken, syncConfig)
-          console.log(`[CalendarSyncWorker] Outlook Calendar incremental sync for connection ${connection.id}`);
+          console.log(
+            `[CalendarSyncWorker] Outlook Calendar incremental sync for connection ${connection.id}`,
+          );
         } else {
           // TODO: Implement OutlookCalendarSyncService.initialSync(accessToken)
-          console.log(`[CalendarSyncWorker] Outlook Calendar initial sync for connection ${connection.id}`);
+          console.log(
+            `[CalendarSyncWorker] Outlook Calendar initial sync for connection ${connection.id}`,
+          );
         }
       }
 

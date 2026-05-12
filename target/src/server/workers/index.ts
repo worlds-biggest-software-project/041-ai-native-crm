@@ -137,10 +137,7 @@ async function gracefulShutdown(signal: string) {
   console.log(`[Workers] Received ${signal}, shutting down gracefully...`);
 
   try {
-    await Promise.all([
-      emailSyncWorker.close(),
-      calendarSyncWorker.close(),
-    ]);
+    await Promise.all([emailSyncWorker.close(), calendarSyncWorker.close()]);
     console.log("[Workers] All workers closed");
   } catch (error) {
     console.error("[Workers] Error during shutdown:", error);

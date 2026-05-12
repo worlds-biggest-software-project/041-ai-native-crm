@@ -140,10 +140,7 @@ export default function CustomFieldsSettingsPage() {
             Manage custom fields for your CRM entities.
           </p>
         </div>
-        <Button
-          onClick={() => setShowForm(true)}
-          className="gap-2"
-        >
+        <Button onClick={() => setShowForm(true)} className="gap-2">
           <Plus className="h-4 w-4" />
           Add Field
         </Button>
@@ -239,10 +236,7 @@ export default function CustomFieldsSettingsPage() {
           </div>
           <div className="flex gap-2">
             <Button onClick={handleAddField}>Save</Button>
-            <Button
-              variant="outline"
-              onClick={() => setShowForm(false)}
-            >
+            <Button variant="outline" onClick={() => setShowForm(false)}>
               Cancel
             </Button>
           </div>
@@ -257,10 +251,7 @@ export default function CustomFieldsSettingsPage() {
       ) : (
         <div className="divide-y divide-gray-200 rounded-lg border border-gray-200">
           {currentFields.map((field) => (
-            <div
-              key={field.id}
-              className="flex items-center gap-4 px-4 py-3"
-            >
+            <div key={field.id} className="flex items-center gap-4 px-4 py-3">
               {/* Drag handle (visual placeholder) */}
               <GripVertical className="h-4 w-4 shrink-0 cursor-grab text-gray-400" />
 

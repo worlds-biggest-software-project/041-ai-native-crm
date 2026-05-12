@@ -15,7 +15,10 @@ export interface CsvParseResult {
  * and newlines in quotes. Returns the fields and the character index
  * where the line ends.
  */
-function parseCsvLine(text: string, startIndex: number): { fields: string[]; endIndex: number } {
+function parseCsvLine(
+  text: string,
+  startIndex: number,
+): { fields: string[]; endIndex: number } {
   const fields: string[] = [];
   let current = "";
   let inQuotes = false;
@@ -99,7 +102,10 @@ function parseAllLines(text: string): string[][] {
   return lines;
 }
 
-export function parseCsv(csvText: string, options: CsvParseOptions): CsvParseResult {
+export function parseCsv(
+  csvText: string,
+  options: CsvParseOptions,
+): CsvParseResult {
   const records: Record<string, unknown>[] = [];
   const errors: { row: number; message: string }[] = [];
   let duplicates = 0;
@@ -122,7 +128,9 @@ export function parseCsv(csvText: string, options: CsvParseOptions): CsvParseRes
 
   // Build reverse mapping: column index -> target field name
   const indexToField = new Map<number, string>();
-  for (const [csvHeader, entityField] of Object.entries(options.columnMapping)) {
+  for (const [csvHeader, entityField] of Object.entries(
+    options.columnMapping,
+  )) {
     const idx = headers.indexOf(csvHeader);
     if (idx !== -1) {
       indexToField.set(idx, entityField);
@@ -156,7 +164,9 @@ export function parseCsv(csvText: string, options: CsvParseOptions): CsvParseRes
 
     // Deduplication
     if (options.deduplicateBy) {
-      const dedupeValue = String(record[options.deduplicateBy] ?? "").toLowerCase();
+      const dedupeValue = String(
+        record[options.deduplicateBy] ?? "",
+      ).toLowerCase();
       if (dedupeValue && seenValues.has(dedupeValue)) {
         duplicates++;
         continue;

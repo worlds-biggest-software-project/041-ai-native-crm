@@ -71,7 +71,11 @@ async function executeStep(
 export async function executeWorkflow(
   definition: WorkflowDefinition,
   context: WorkflowContext,
-): Promise<{ status: "completed" | "failed"; result?: unknown; error?: string }> {
+): Promise<{
+  status: "completed" | "failed";
+  result?: unknown;
+  error?: string;
+}> {
   const results: unknown[] = [];
 
   try {
@@ -82,8 +86,7 @@ export async function executeWorkflow(
 
     return { status: "completed", result: results };
   } catch (err) {
-    const errorMessage =
-      err instanceof Error ? err.message : "Unknown error";
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
     return { status: "failed", error: errorMessage };
   }
 }

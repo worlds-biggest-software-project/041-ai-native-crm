@@ -92,7 +92,9 @@ export async function scoreDeal(
   // 6. Store result in score_history
   // Use the active model ID, or the first scoring model for the workspace
   // as a fallback reference. If none exist, we still need a model_id for the FK.
-  const modelId = activeModel?.id ?? (await getOrCreateHeuristicModel(workspaceId, "deal_health"));
+  const modelId =
+    activeModel?.id ??
+    (await getOrCreateHeuristicModel(workspaceId, "deal_health"));
 
   await db.insert(scoreHistory).values({
     workspaceId,
@@ -188,7 +190,9 @@ export async function scoreLead(
     : heuristicLeadScore(features);
 
   // 6. Store result in score_history
-  const modelId = activeModel?.id ?? (await getOrCreateHeuristicModel(workspaceId, "lead_score"));
+  const modelId =
+    activeModel?.id ??
+    (await getOrCreateHeuristicModel(workspaceId, "lead_score"));
 
   await db.insert(scoreHistory).values({
     workspaceId,

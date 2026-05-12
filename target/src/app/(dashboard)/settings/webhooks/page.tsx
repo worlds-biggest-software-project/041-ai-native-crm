@@ -186,10 +186,7 @@ export default function WebhooksSettingsPage() {
       </div>
 
       {showForm && (
-        <AddWebhookForm
-          onAdd={handleAdd}
-          onCancel={() => setShowForm(false)}
-        />
+        <AddWebhookForm onAdd={handleAdd} onCancel={() => setShowForm(false)} />
       )}
 
       <div className="space-y-4">

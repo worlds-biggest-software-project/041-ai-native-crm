@@ -43,12 +43,13 @@ export async function GET(req: NextRequest) {
       conditions.push(ilike(companies.name, `%${params.search}%`));
     }
 
-    const sortColumn = {
-      name: companies.name,
-      createdAt: companies.createdAt,
-      updatedAt: companies.updatedAt,
-      lastActivityAt: companies.lastActivityAt,
-    }[params.sortBy] ?? companies.createdAt;
+    const sortColumn =
+      {
+        name: companies.name,
+        createdAt: companies.createdAt,
+        updatedAt: companies.updatedAt,
+        lastActivityAt: companies.lastActivityAt,
+      }[params.sortBy] ?? companies.createdAt;
 
     const orderFn = params.sortOrder === "asc" ? asc : desc;
 

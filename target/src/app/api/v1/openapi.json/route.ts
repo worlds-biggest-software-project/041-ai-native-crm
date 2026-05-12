@@ -25,7 +25,12 @@ export function GET() {
           summary: "Get contact",
           tags: ["Contacts"],
           parameters: [
-            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
           ],
           responses: { "200": { description: "Contact details" } },
         },
@@ -33,7 +38,12 @@ export function GET() {
           summary: "Update contact",
           tags: ["Contacts"],
           parameters: [
-            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
           ],
           responses: { "200": { description: "Contact updated" } },
         },
@@ -41,7 +51,12 @@ export function GET() {
           summary: "Delete contact",
           tags: ["Contacts"],
           parameters: [
-            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
           ],
           responses: { "204": { description: "Contact deleted" } },
         },
@@ -63,7 +78,12 @@ export function GET() {
           summary: "Get company",
           tags: ["Companies"],
           parameters: [
-            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
           ],
           responses: { "200": { description: "Company details" } },
         },
@@ -71,7 +91,12 @@ export function GET() {
           summary: "Update company",
           tags: ["Companies"],
           parameters: [
-            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
           ],
           responses: { "200": { description: "Company updated" } },
         },
@@ -79,7 +104,12 @@ export function GET() {
           summary: "Delete company",
           tags: ["Companies"],
           parameters: [
-            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
           ],
           responses: { "204": { description: "Company deleted" } },
         },
@@ -101,7 +131,12 @@ export function GET() {
           summary: "Get deal",
           tags: ["Deals"],
           parameters: [
-            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
           ],
           responses: { "200": { description: "Deal details" } },
         },
@@ -109,7 +144,12 @@ export function GET() {
           summary: "Update deal",
           tags: ["Deals"],
           parameters: [
-            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
           ],
           responses: { "200": { description: "Deal updated" } },
         },
@@ -117,7 +157,12 @@ export function GET() {
           summary: "Delete deal",
           tags: ["Deals"],
           parameters: [
-            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
           ],
           responses: { "204": { description: "Deal deleted" } },
         },

@@ -55,14 +55,15 @@ export async function GET(req: NextRequest) {
       conditions.push(eq(contacts.companyId, params.companyId));
     }
 
-    const sortColumn = {
-      fullName: contacts.fullName,
-      email: contacts.email,
-      createdAt: contacts.createdAt,
-      updatedAt: contacts.updatedAt,
-      lastActivityAt: contacts.lastActivityAt,
-      leadScore: contacts.leadScore,
-    }[params.sortBy] ?? contacts.createdAt;
+    const sortColumn =
+      {
+        fullName: contacts.fullName,
+        email: contacts.email,
+        createdAt: contacts.createdAt,
+        updatedAt: contacts.updatedAt,
+        lastActivityAt: contacts.lastActivityAt,
+        leadScore: contacts.leadScore,
+      }[params.sortBy] ?? contacts.createdAt;
 
     const orderFn = params.sortOrder === "asc" ? asc : desc;
 

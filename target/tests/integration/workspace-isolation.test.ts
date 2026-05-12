@@ -44,7 +44,9 @@ import { describe, it } from "vitest";
 // });
 
 describe("Workspace isolation — contacts", () => {
-  it.todo("contact created in workspace A is not returned when querying workspace B");
+  it.todo(
+    "contact created in workspace A is not returned when querying workspace B",
+  );
   // Expected:
   // 1. callerA.contacts.create({ fullName: "Workspace A Contact" })
   // 2. callerB.contacts.list({})
@@ -60,7 +62,9 @@ describe("Workspace isolation — contacts", () => {
 });
 
 describe("Workspace isolation — deals", () => {
-  it.todo("deal created in workspace A is not returned when querying workspace B");
+  it.todo(
+    "deal created in workspace A is not returned when querying workspace B",
+  );
   // Expected:
   // 1. callerA.deals.create({ name: "WS-A Deal", pipelineId: "...", stageId: "..." })
   // 2. callerB.deals.list({})
@@ -75,7 +79,9 @@ describe("Workspace isolation — deals", () => {
 });
 
 describe("Workspace isolation — companies", () => {
-  it.todo("company created in workspace A is not returned when querying workspace B");
+  it.todo(
+    "company created in workspace A is not returned when querying workspace B",
+  );
   // Expected:
   // 1. callerA.companies.create({ name: "WS-A Corp" })
   // 2. callerB.companies.list({})

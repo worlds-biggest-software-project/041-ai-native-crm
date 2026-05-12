@@ -103,9 +103,7 @@ describe("parseMeetingSummaryResponse", () => {
     });
 
     const result = parseMeetingSummaryResponse(raw);
-    expect(result.summary).toBe(
-      "Discussed Q4 targets and budget allocation.",
-    );
+    expect(result.summary).toBe("Discussed Q4 targets and budget allocation.");
     expect(result.sentiment).toBe("positive");
     expect(result.topics).toEqual(["budget", "revenue"]);
   });

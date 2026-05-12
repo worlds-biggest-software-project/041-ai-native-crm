@@ -31,10 +31,7 @@ export const users = pgTable(
       .defaultNow(),
   },
   (table) => [
-    uniqueIndex("users_workspace_email_idx").on(
-      table.workspaceId,
-      table.email,
-    ),
+    uniqueIndex("users_workspace_email_idx").on(table.workspaceId, table.email),
     index("users_workspace_idx").on(table.workspaceId),
   ],
 );

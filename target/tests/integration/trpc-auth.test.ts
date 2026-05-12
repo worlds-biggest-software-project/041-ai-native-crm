@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { TRPCError } from "@trpc/server";
 import {
   createRouter,
   createCallerFactory,
   protectedProcedure,
 } from "@/server/trpc/router";
+import type { Context } from "@/server/trpc/context";
 
 const testRouter = createRouter({
   secret: protectedProcedure.query(() => ({ data: "sensitive" })),
@@ -15,7 +15,7 @@ const createCaller = createCallerFactory(testRouter);
 describe("tRPC protectedProcedure", () => {
   it("rejects unauthenticated request", async () => {
     const caller = createCaller({
-      db: {} as any,
+      db: {} as unknown as Context["db"],
       session: null,
       workspaceId: null,
       userRole: null,
@@ -31,7 +31,7 @@ describe("tRPC protectedProcedure", () => {
 
   it("allows authenticated request", async () => {
     const caller = createCaller({
-      db: {} as any,
+      db: {} as unknown as Context["db"],
       session: {
         user: {
           id: "user-1",

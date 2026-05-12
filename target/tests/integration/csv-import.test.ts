@@ -5,5 +5,7 @@ describe("CSV import integration", () => {
 
   it.todo("deduplicates records by email when deduplicateBy is set");
 
-  it.todo("reports row-level errors for malformed rows without aborting the entire import");
+  it.todo(
+    "reports row-level errors for malformed rows without aborting the entire import",
+  );
 });

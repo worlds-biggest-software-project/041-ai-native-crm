@@ -24,7 +24,7 @@ function DropdownMenu({ children }: { children: React.ReactNode }) {
       // Delay to avoid closing immediately on the same click
       const id = setTimeout(
         () => document.addEventListener("click", handleClickOutside),
-        0
+        0,
       );
       return () => {
         clearTimeout(id);
@@ -78,7 +78,7 @@ const DropdownMenuContent = React.forwardRef<
         "absolute z-50 mt-1 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md",
         align === "end" && "right-0",
         align === "center" && "left-1/2 -translate-x-1/2",
-        className
+        className,
       )}
       {...props}
     >
@@ -101,7 +101,7 @@ const DropdownMenuItem = React.forwardRef<
       className={cn(
         "relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
         disabled && "pointer-events-none opacity-50",
-        className
+        className,
       )}
       onClick={(e) => {
         if (disabled) return;

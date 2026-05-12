@@ -29,7 +29,8 @@ export const exportRouter = createRouter({
         ),
       );
 
-    const header = "id,fullName,firstName,lastName,email,phone,jobTitle,city,countryCode,lifecycleStage,source";
+    const header =
+      "id,fullName,firstName,lastName,email,phone,jobTitle,city,countryCode,lifecycleStage,source";
     const lines = rows.map((r) =>
       toCsvRow([
         r.id,
@@ -96,7 +97,8 @@ export const exportRouter = createRouter({
         ),
       );
 
-    const header = "id,name,domain,industry,employeeCount,annualRevenue,countryCode";
+    const header =
+      "id,name,domain,industry,employeeCount,annualRevenue,countryCode";
     const lines = rows.map((r) =>
       toCsvRow([
         r.id,
@@ -120,13 +122,11 @@ export const exportRouter = createRouter({
       .select()
       .from(deals)
       .where(
-        and(
-          eq(deals.workspaceId, ctx.workspaceId),
-          isNull(deals.deletedAt),
-        ),
+        and(eq(deals.workspaceId, ctx.workspaceId), isNull(deals.deletedAt)),
       );
 
-    const header = "id,name,pipelineId,stageId,amount,currency,expectedCloseDate,actualCloseDate,source,priority";
+    const header =
+      "id,name,pipelineId,stageId,amount,currency,expectedCloseDate,actualCloseDate,source,priority";
     const lines = rows.map((r) =>
       toCsvRow([
         r.id,

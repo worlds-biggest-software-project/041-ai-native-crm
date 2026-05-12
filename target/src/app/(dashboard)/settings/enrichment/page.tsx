@@ -139,9 +139,7 @@ export default function EnrichmentSettingsPage() {
 
   function handleThresholdChange(id: string, value: number) {
     setSources((prev) =>
-      prev.map((s) =>
-        s.id === id ? { ...s, autoApplyThreshold: value } : s,
-      ),
+      prev.map((s) => (s.id === id ? { ...s, autoApplyThreshold: value } : s)),
     );
   }
 
@@ -152,9 +150,8 @@ export default function EnrichmentSettingsPage() {
           Enrichment Sources
         </h1>
         <p className="text-muted-foreground">
-          Configure data enrichment sources for contacts and companies.
-          Each source must have a documented GDPR legal basis before it can
-          be used.
+          Configure data enrichment sources for contacts and companies. Each
+          source must have a documented GDPR legal basis before it can be used.
         </p>
       </div>
 

@@ -1,10 +1,6 @@
 import { z } from "zod";
 import { eq, and, isNull, asc, gt } from "drizzle-orm";
-import {
-  protectedProcedure,
-  adminProcedure,
-  createRouter,
-} from "../init";
+import { protectedProcedure, adminProcedure, createRouter } from "../init";
 import {
   customObjectDefinitions,
   customObjectRecords,
@@ -102,7 +98,7 @@ export const customObjectsRouter = createRouter({
 
       return {
         items,
-        nextCursor: hasMore ? items[items.length - 1]?.id ?? null : null,
+        nextCursor: hasMore ? (items[items.length - 1]?.id ?? null) : null,
       };
     }),
 
@@ -132,9 +128,7 @@ export const customObjectsRouter = createRouter({
           fieldKey: d.fieldKey,
           fieldType: d.fieldType,
           isRequired: d.isRequired,
-          options: d.options as
-            | { value: string; label: string }[]
-            | null,
+          options: d.options as { value: string; label: string }[] | null,
         }),
       );
 
@@ -209,17 +203,12 @@ export const customObjectsRouter = createRouter({
             fieldKey: d.fieldKey,
             fieldType: d.fieldType,
             isRequired: d.isRequired,
-            options: d.options as
-              | { value: string; label: string }[]
-              | null,
+            options: d.options as { value: string; label: string }[] | null,
           }),
         );
 
         if (defsForValidation.length > 0) {
-          const result = validateCustomFields(
-            data.fields,
-            defsForValidation,
-          );
+          const result = validateCustomFields(data.fields, defsForValidation);
           if (!result.valid) {
             throw new TRPCError({
               code: "BAD_REQUEST",

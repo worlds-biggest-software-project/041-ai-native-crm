@@ -3,7 +3,10 @@ import {
   type McpServer,
 } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-export function registerResources(server: McpServer, workspaceId: string): void {
+export function registerResources(
+  server: McpServer,
+  workspaceId: string,
+): void {
   void workspaceId;
 
   server.resource("contacts-list", "crm://contacts", async (uri) => ({

@@ -37,9 +37,7 @@ export default function ActivitiesPage() {
             variant={activeFilter === filter.key ? "default" : "outline"}
             size="sm"
             onClick={() => setActiveFilter(filter.key)}
-            className={cn(
-              activeFilter === filter.key && "pointer-events-none",
-            )}
+            className={cn(activeFilter === filter.key && "pointer-events-none")}
           >
             {filter.label}
           </Button>

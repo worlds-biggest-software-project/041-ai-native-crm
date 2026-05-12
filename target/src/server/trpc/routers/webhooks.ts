@@ -21,8 +21,7 @@ export const webhooksRouter = createRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const secret =
-        input.secret ?? crypto.randomBytes(32).toString("hex");
+      const secret = input.secret ?? crypto.randomBytes(32).toString("hex");
 
       const [webhook] = await ctx.db
         .insert(webhooks)
@@ -53,10 +52,7 @@ export const webhooksRouter = createRouter({
         .update(webhooks)
         .set({ ...data, updatedAt: new Date() })
         .where(
-          and(
-            eq(webhooks.id, id),
-            eq(webhooks.workspaceId, ctx.workspaceId),
-          ),
+          and(eq(webhooks.id, id), eq(webhooks.workspaceId, ctx.workspaceId)),
         )
         .returning();
 

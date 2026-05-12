@@ -70,7 +70,9 @@ function CreateWorkflowForm({
   onAdd,
   onCancel,
 }: {
-  onAdd: (workflow: Omit<Workflow, "id" | "isActive" | "executionCount">) => void;
+  onAdd: (
+    workflow: Omit<Workflow, "id" | "isActive" | "executionCount">,
+  ) => void;
   onCancel: () => void;
 }) {
   const [name, setName] = React.useState("");
@@ -82,9 +84,7 @@ function CreateWorkflowForm({
   }
 
   function updateStepType(index: number, type: string) {
-    setSteps((prev) =>
-      prev.map((s, i) => (i === index ? { ...s, type } : s)),
-    );
+    setSteps((prev) => prev.map((s, i) => (i === index ? { ...s, type } : s)));
   }
 
   function removeStep(index: number) {
@@ -225,8 +225,8 @@ export default function WorkflowsSettingsPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Workflows</h1>
           <p className="text-muted-foreground">
-            Automate actions based on CRM events. Create workflows to
-            streamline your sales process.
+            Automate actions based on CRM events. Create workflows to streamline
+            your sales process.
           </p>
         </div>
         {!showForm && (

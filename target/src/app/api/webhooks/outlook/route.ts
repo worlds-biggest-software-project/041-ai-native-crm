@@ -19,7 +19,10 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  return NextResponse.json({ error: "Missing validationToken" }, { status: 400 });
+  return NextResponse.json(
+    { error: "Missing validationToken" },
+    { status: 400 },
+  );
 }
 
 export async function POST(request: NextRequest) {

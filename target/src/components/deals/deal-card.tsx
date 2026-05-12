@@ -26,7 +26,10 @@ export interface Deal {
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-function formatCurrency(amount?: number | null, currency?: string | null): string {
+function formatCurrency(
+  amount?: number | null,
+  currency?: string | null,
+): string {
   if (amount == null) return "—";
   const code = currency ?? "USD";
   try {

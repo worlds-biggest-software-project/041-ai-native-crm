@@ -42,8 +42,7 @@ function formatDateHeader(dateKey: string): string {
     weekday: "long",
     month: "long",
     day: "numeric",
-    year:
-      d.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
+    year: d.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
   });
 }
 
@@ -78,19 +77,13 @@ function groupByDate(
 export function ActivityTimeline({
   initialActivities = [],
 }: ActivityTimelineProps) {
-  const [activities, setActivities] =
-    React.useState<Activity[]>(initialActivities);
-  const [hasMore, setHasMore] = React.useState(initialActivities.length >= 20);
+  const [loadedMore, setLoadedMore] = React.useState(false);
 
-  // Sync with prop changes
-  React.useEffect(() => {
-    setActivities(initialActivities);
-    setHasMore(initialActivities.length >= 20);
-  }, [initialActivities]);
+  const activities = initialActivities;
+  const hasMore = !loadedMore && initialActivities.length >= 20;
 
   const handleLoadMore = () => {
-    // TODO: Wire to tRPC pagination — for now just disable the button
-    setHasMore(false);
+    setLoadedMore(true);
   };
 
   if (activities.length === 0) {

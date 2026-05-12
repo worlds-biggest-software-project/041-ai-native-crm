@@ -76,7 +76,7 @@ const DialogContent = React.forwardRef<
           ref={ref}
           className={cn(
             "relative z-50 grid w-full max-w-lg gap-4 border bg-background p-6 shadow-lg sm:rounded-lg",
-            className
+            className,
           )}
           {...props}
         >
@@ -103,7 +103,7 @@ function DialogHeader({
     <div
       className={cn(
         "flex flex-col space-y-1.5 text-center sm:text-left",
-        className
+        className,
       )}
       {...props}
     />
@@ -118,7 +118,7 @@ function DialogFooter({
     <div
       className={cn(
         "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-        className
+        className,
       )}
       {...props}
     />
@@ -133,7 +133,7 @@ const DialogTitle = React.forwardRef<
     ref={ref}
     className={cn(
       "text-lg font-semibold leading-none tracking-tight",
-      className
+      className,
     )}
     {...props}
   />

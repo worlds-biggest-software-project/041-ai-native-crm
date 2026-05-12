@@ -11,9 +11,7 @@ export default function LoginPage() {
           <h1 className="text-2xl font-bold tracking-tight text-gray-900">
             AI-Native CRM
           </h1>
-          <p className="mt-2 text-sm text-gray-500">
-            Sign in to your account
-          </p>
+          <p className="mt-2 text-sm text-gray-500">Sign in to your account</p>
         </div>
 
         {/* Sign-in buttons */}

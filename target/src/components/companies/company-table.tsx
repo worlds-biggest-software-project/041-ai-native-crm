@@ -52,9 +52,7 @@ const columns: ColumnDef<Company>[] = [
     cell: ({ getValue }) => {
       const domain = getValue() as string | null;
       if (!domain) return "—";
-      return (
-        <span className="text-muted-foreground">{domain}</span>
-      );
+      return <span className="text-muted-foreground">{domain}</span>;
     },
   },
   {
@@ -67,9 +65,7 @@ const columns: ColumnDef<Company>[] = [
     header: "Contact Count",
     cell: ({ getValue }) => {
       const count = getValue() as number | null;
-      return (
-        <span className="tabular-nums">{count ?? 0}</span>
-      );
+      return <span className="tabular-nums">{count ?? 0}</span>;
     },
   },
   {
@@ -77,9 +73,7 @@ const columns: ColumnDef<Company>[] = [
     header: "Open Deals",
     cell: ({ getValue }) => {
       const count = getValue() as number | null;
-      return (
-        <span className="tabular-nums">{count ?? 0}</span>
-      );
+      return <span className="tabular-nums">{count ?? 0}</span>;
     },
   },
   {
@@ -174,9 +168,7 @@ export function CompanyTable({
                 <TableRow
                   key={row.id}
                   className="cursor-pointer"
-                  onClick={() =>
-                    router.push(`/companies/${row.original.id}`)
-                  }
+                  onClick={() => router.push(`/companies/${row.original.id}`)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

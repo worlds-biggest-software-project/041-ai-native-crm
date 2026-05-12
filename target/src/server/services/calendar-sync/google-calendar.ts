@@ -68,8 +68,7 @@ export interface CalendarActivity {
 // Helpers
 // ---------------------------------------------------------------------------
 
-const CALENDAR_BASE =
-  "https://www.googleapis.com/calendar/v3/calendars";
+const CALENDAR_BASE = "https://www.googleapis.com/calendar/v3/calendars";
 
 function eventToActivity(event: GoogleCalendarEvent): CalendarActivity {
   const attendees = event.attendees ?? [];
@@ -91,7 +90,10 @@ function eventToActivity(event: GoogleCalendarEvent): CalendarActivity {
       description: event.description ?? "",
       location: event.location ?? "",
       organizer: event.organizer
-        ? { email: event.organizer.email, name: event.organizer.displayName ?? "" }
+        ? {
+            email: event.organizer.email,
+            name: event.organizer.displayName ?? "",
+          }
         : null,
       attendees: attendees.map((a) => ({
         email: a.email,
@@ -145,7 +147,11 @@ export class GoogleCalendarSyncService {
    * to CRM meeting activities.
    */
   async syncEvents(calendarId = "primary"): Promise<SyncResult> {
-    const result: SyncResult = { activitiesCreated: 0, contactsCreated: 0, errors: [] };
+    const result: SyncResult = {
+      activitiesCreated: 0,
+      contactsCreated: 0,
+      errors: [],
+    };
     const allContacts: EmailAddress[] = [];
 
     try {
@@ -179,9 +185,7 @@ export class GoogleCalendarSyncService {
             result.activitiesCreated++;
 
             // Collect attendee contacts
-            const contacts = this.mapAttendeesToContacts(
-              event.attendees ?? [],
-            );
+            const contacts = this.mapAttendeesToContacts(event.attendees ?? []);
             allContacts.push(...contacts);
           } catch (err) {
             result.errors.push(

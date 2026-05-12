@@ -5,10 +5,7 @@
  * For MVP, API calls are mocked and return simulated registration data.
  */
 
-import type {
-  EnrichmentSource,
-  EnrichmentResult,
-} from "../enrichment-engine";
+import type { EnrichmentSource, EnrichmentResult } from "../enrichment-engine";
 
 type Registry = "companies_house" | "sec_edgar";
 

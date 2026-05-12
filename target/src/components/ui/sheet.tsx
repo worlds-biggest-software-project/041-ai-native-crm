@@ -58,11 +58,12 @@ const sheetVariants = cva(
     defaultVariants: {
       side: "right",
     },
-  }
+  },
 );
 
 interface SheetContentProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof sheetVariants> {}
 
 const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
@@ -107,7 +108,7 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 SheetContent.displayName = "SheetContent";
 
@@ -119,7 +120,7 @@ function SheetHeader({
     <div
       className={cn(
         "flex flex-col space-y-2 text-center sm:text-left",
-        className
+        className,
       )}
       {...props}
     />
@@ -143,10 +144,7 @@ function SheetDescription({
   ...props
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p
-      className={cn("text-sm text-muted-foreground", className)}
-      {...props}
-    />
+    <p className={cn("text-sm text-muted-foreground", className)} {...props} />
   );
 }
 

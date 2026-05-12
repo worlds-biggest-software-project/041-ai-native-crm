@@ -10,9 +10,7 @@ interface DealDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function DealDetailPage({
-  params,
-}: DealDetailPageProps) {
+export default async function DealDetailPage({ params }: DealDetailPageProps) {
   const { id } = await params;
 
   return (
@@ -90,7 +88,8 @@ export default async function DealDetailPage({
               <FollowUpDraft
                 draft={{
                   subject: "",
-                  bodyText: "Generate a meeting summary first to create follow-up drafts.",
+                  bodyText:
+                    "Generate a meeting summary first to create follow-up drafts.",
                 }}
               />
             </div>

@@ -12,7 +12,10 @@
 import { Worker, type Job } from "bullmq";
 import { redis } from "@/server/lib/redis";
 import { db } from "@/server/db";
-import { enrichmentSources, enrichmentLogs } from "@/server/db/schema/enrichment";
+import {
+  enrichmentSources,
+  enrichmentLogs,
+} from "@/server/db/schema/enrichment";
 import { eq, and } from "drizzle-orm";
 import { validateEnrichmentGDPR } from "@/server/services/enrichment/gdpr-compliance";
 import type { EnrichmentConfig } from "@/server/services/enrichment/enrichment-engine";
@@ -166,8 +169,5 @@ enrichmentWorker.on("completed", (job) => {
 });
 
 enrichmentWorker.on("failed", (job, error) => {
-  console.error(
-    `[EnrichmentWorker] Job ${job?.id} failed:`,
-    error.message,
-  );
+  console.error(`[EnrichmentWorker] Job ${job?.id} failed:`, error.message);
 });

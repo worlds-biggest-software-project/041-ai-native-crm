@@ -48,14 +48,15 @@ export async function GET(req: NextRequest) {
       conditions.push(eq(deals.ownerId, params.ownerId));
     }
 
-    const sortColumn = {
-      name: deals.name,
-      amount: deals.amount,
-      createdAt: deals.createdAt,
-      updatedAt: deals.updatedAt,
-      expectedCloseDate: deals.expectedCloseDate,
-      healthScore: deals.healthScore,
-    }[params.sortBy] ?? deals.createdAt;
+    const sortColumn =
+      {
+        name: deals.name,
+        amount: deals.amount,
+        createdAt: deals.createdAt,
+        updatedAt: deals.updatedAt,
+        expectedCloseDate: deals.expectedCloseDate,
+        healthScore: deals.healthScore,
+      }[params.sortBy] ?? deals.createdAt;
 
     const orderFn = params.sortOrder === "asc" ? asc : desc;
 

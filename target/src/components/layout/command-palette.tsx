@@ -43,20 +43,22 @@ export function CommandPalette() {
     setLoading(false);
   }, []);
 
+  const toggle = useCallback(() => {
+    setOpen((prev) => {
+      if (prev) {
+        setQuery("");
+        setResults([]);
+        setLoading(false);
+      }
+      return !prev;
+    });
+  }, []);
+
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
-        setOpen((prev) => {
-          if (prev) {
-            // Closing — reset state
-            setQuery("");
-            setResults([]);
-            setLoading(false);
-            return false;
-          }
-          return true;
-        });
+        toggle();
       }
       if (e.key === "Escape") {
         close();
@@ -65,13 +67,21 @@ export function CommandPalette() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [close]);
+  }, [close, toggle]);
 
   useEffect(() => {
     if (open) {
       requestAnimationFrame(() => inputRef.current?.focus());
     }
   }, [open]);
+
+  const handleQueryChange = useCallback((value: string) => {
+    setQuery(value);
+    if (value.length < 2) {
+      setResults([]);
+      setLoading(false);
+    }
+  }, []);
 
   // Debounced search
   useEffect(() => {
@@ -80,20 +90,12 @@ export function CommandPalette() {
       timerRef.current = null;
     }
 
-    if (query.length < 2) {
-      setResults([]);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
+    if (query.length < 2) return;
 
     timerRef.current = setTimeout(async () => {
+      setLoading(true);
       try {
         // TODO: Wire to tRPC global search endpoint
-        // For MVP, simulate search results structure
-        // Once the search tRPC route is ready, replace with:
-        // const res = await trpc.search.global.query({ query, limit: 10 });
         const simulatedResults: SearchResult[] = [];
         setResults(simulatedResults);
       } catch {
@@ -149,7 +151,7 @@ export function CommandPalette() {
             ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => handleQueryChange(e.target.value)}
             placeholder="Search contacts, companies, deals..."
             className="flex-1 bg-transparent text-sm text-gray-900 outline-none placeholder:text-gray-400"
           />

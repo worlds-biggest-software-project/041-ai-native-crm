@@ -51,7 +51,9 @@ async function processAiSummary(job: Job<AiSummaryJobData>) {
   }
 
   // Load related deal context if available
-  let dealContext: { name: string; stageId: string; amount: number | null } | undefined;
+  let dealContext:
+    | { name: string; stageId: string; amount: number | null }
+    | undefined;
   if (activity.dealId) {
     const [deal] = await db
       .select()

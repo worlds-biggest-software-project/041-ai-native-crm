@@ -19,28 +19,32 @@ const INTEGRATIONS: Integration[] = [
   {
     id: "gmail",
     name: "Gmail",
-    description: "Sync emails from your Gmail account to automatically log communications with contacts.",
+    description:
+      "Sync emails from your Gmail account to automatically log communications with contacts.",
     provider: "gmail",
     connected: false,
   },
   {
     id: "outlook",
     name: "Outlook",
-    description: "Sync emails from your Outlook account to automatically log communications with contacts.",
+    description:
+      "Sync emails from your Outlook account to automatically log communications with contacts.",
     provider: "outlook",
     connected: false,
   },
   {
     id: "google_calendar",
     name: "Google Calendar",
-    description: "Sync calendar events to track meetings and schedule follow-ups with contacts.",
+    description:
+      "Sync calendar events to track meetings and schedule follow-ups with contacts.",
     provider: "google_calendar",
     connected: false,
   },
   {
     id: "outlook_calendar",
     name: "Outlook Calendar",
-    description: "Sync Outlook calendar events to track meetings and schedule follow-ups with contacts.",
+    description:
+      "Sync Outlook calendar events to track meetings and schedule follow-ups with contacts.",
     provider: "outlook_calendar",
     connected: false,
   },

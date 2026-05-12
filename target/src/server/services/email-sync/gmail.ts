@@ -84,7 +84,10 @@ function getHeader(
   headers: { name: string; value: string }[] | undefined,
   name: string,
 ): string {
-  return headers?.find((h) => h.name.toLowerCase() === name.toLowerCase())?.value ?? "";
+  return (
+    headers?.find((h) => h.name.toLowerCase() === name.toLowerCase())?.value ??
+    ""
+  );
 }
 
 function parseAddressList(raw: string): EmailAddress[] {
@@ -95,7 +98,10 @@ function parseAddressList(raw: string): EmailAddress[] {
     const trimmed = entry.trim();
     const match = trimmed.match(/^(.+?)\s*<(.+?)>$/);
     if (match) {
-      return { name: (match[1] ?? "").trim().replace(/^"|"$/g, ""), email: (match[2] ?? "").trim() };
+      return {
+        name: (match[1] ?? "").trim().replace(/^"|"$/g, ""),
+        email: (match[2] ?? "").trim(),
+      };
     }
     return { name: "", email: trimmed };
   });
@@ -151,7 +157,10 @@ function gmailMessageToRawEmail(msg: GmailMessage): RawEmail {
     messageId: msg.id,
     threadId: msg.threadId,
     subject: getHeader(headers, "Subject"),
-    from: parseAddressList(getHeader(headers, "From"))[0] ?? { email: "", name: "" },
+    from: parseAddressList(getHeader(headers, "From"))[0] ?? {
+      email: "",
+      name: "",
+    },
     to: parseAddressList(getHeader(headers, "To")),
     cc: parseAddressList(getHeader(headers, "Cc")) || undefined,
     date: msg.internalDate
@@ -234,7 +243,11 @@ export class GmailSyncService {
     options: { maxThreads?: number } = {},
   ): Promise<SyncResult> {
     const maxThreads = options.maxThreads ?? 200;
-    const result: SyncResult = { activitiesCreated: 0, contactsCreated: 0, errors: [] };
+    const result: SyncResult = {
+      activitiesCreated: 0,
+      contactsCreated: 0,
+      errors: [],
+    };
     const allRawEmails: RawEmail[] = [];
 
     try {
@@ -293,7 +306,11 @@ export class GmailSyncService {
    * the given history ID.
    */
   async incrementalSync(historyId: string): Promise<SyncResult> {
-    const result: SyncResult = { activitiesCreated: 0, contactsCreated: 0, errors: [] };
+    const result: SyncResult = {
+      activitiesCreated: 0,
+      contactsCreated: 0,
+      errors: [],
+    };
     const allRawEmails: RawEmail[] = [];
 
     try {

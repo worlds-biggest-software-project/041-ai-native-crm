@@ -83,10 +83,7 @@ export const pipelinesRouter = createRouter({
         .update(pipelines)
         .set({ ...data, updatedAt: new Date() })
         .where(
-          and(
-            eq(pipelines.id, id),
-            eq(pipelines.workspaceId, ctx.workspaceId),
-          ),
+          and(eq(pipelines.id, id), eq(pipelines.workspaceId, ctx.workspaceId)),
         )
         .returning();
 

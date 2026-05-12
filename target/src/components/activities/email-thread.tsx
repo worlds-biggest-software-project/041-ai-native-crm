@@ -48,9 +48,7 @@ function EmailRow({
 }) {
   const [expanded, setExpanded] = React.useState(defaultExpanded);
 
-  const toList = email.to
-    .map((r) => r.name || r.email)
-    .join(", ");
+  const toList = email.to.map((r) => r.name || r.email).join(", ");
 
   return (
     <div className="rounded-md border">
@@ -92,8 +90,8 @@ function EmailRow({
       {expanded && (
         <div className="space-y-2 px-4 py-3">
           <div className="text-xs text-muted-foreground">
-            <span className="font-medium">From:</span>{" "}
-            {email.from.name} &lt;{email.from.email}&gt;
+            <span className="font-medium">From:</span> {email.from.name} &lt;
+            {email.from.email}&gt;
           </div>
           <div className="text-xs text-muted-foreground">
             <span className="font-medium">To:</span> {toList}
@@ -128,8 +126,7 @@ export function EmailThread({ threadId, emails }: EmailThreadProps) {
     [emails],
   );
 
-  const threadSubject =
-    sorted[0]?.subject ?? "Untitled Thread";
+  const threadSubject = sorted[0]?.subject ?? "Untitled Thread";
 
   return (
     <div className="space-y-3">
@@ -152,9 +149,7 @@ export function EmailThread({ threadId, emails }: EmailThreadProps) {
         ))}
       </div>
 
-      <p className="text-xs text-muted-foreground">
-        Thread ID: {threadId}
-      </p>
+      <p className="text-xs text-muted-foreground">Thread ID: {threadId}</p>
     </div>
   );
 }

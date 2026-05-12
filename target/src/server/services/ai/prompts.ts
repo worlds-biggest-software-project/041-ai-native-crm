@@ -128,9 +128,9 @@ export function parseMeetingSummaryResponse(raw: string): MeetingSummaryOutput {
         };
       })
     : [];
-  const sentiment = (
-    ["positive", "neutral", "negative"] as const
-  ).includes(obj["sentiment"] as "positive" | "neutral" | "negative")
+  const sentiment = (["positive", "neutral", "negative"] as const).includes(
+    obj["sentiment"] as "positive" | "neutral" | "negative",
+  )
     ? (obj["sentiment"] as "positive" | "neutral" | "negative")
     : "neutral";
   const topics = Array.isArray(obj["topics"])

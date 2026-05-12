@@ -84,8 +84,7 @@ function eventToActivity(event: GraphCalendarEvent): CalendarActivity {
   const attendees = event.attendees ?? [];
   const attendeeResponses: Record<string, string> = {};
   for (const a of attendees) {
-    attendeeResponses[a.emailAddress.address] =
-      a.status?.response ?? "none";
+    attendeeResponses[a.emailAddress.address] = a.status?.response ?? "none";
   }
 
   return {
@@ -155,7 +154,11 @@ export class OutlookCalendarSyncService {
    */
   async syncEvents(options: { maxEvents?: number } = {}): Promise<SyncResult> {
     const maxEvents = options.maxEvents ?? 500;
-    const result: SyncResult = { activitiesCreated: 0, contactsCreated: 0, errors: [] };
+    const result: SyncResult = {
+      activitiesCreated: 0,
+      contactsCreated: 0,
+      errors: [],
+    };
     const allContacts: EmailAddress[] = [];
 
     try {
@@ -175,8 +178,7 @@ export class OutlookCalendarSyncService {
 
       do {
         const url = nextLink ?? initialUrl;
-        const response =
-          await this.graphFetch<GraphCalendarListResponse>(url);
+        const response = await this.graphFetch<GraphCalendarListResponse>(url);
 
         for (const event of response.value) {
           try {
@@ -187,9 +189,7 @@ export class OutlookCalendarSyncService {
             result.activitiesCreated++;
 
             // Collect attendee contacts
-            const contacts = this.mapAttendeesToContacts(
-              event.attendees ?? [],
-            );
+            const contacts = this.mapAttendeesToContacts(event.attendees ?? []);
             allContacts.push(...contacts);
           } catch (err) {
             result.errors.push(
@@ -229,7 +229,11 @@ export class OutlookCalendarSyncService {
    * Perform an incremental sync using the delta link from a previous sync.
    */
   async incrementalSync(deltaLink: string): Promise<SyncResult> {
-    const result: SyncResult = { activitiesCreated: 0, contactsCreated: 0, errors: [] };
+    const result: SyncResult = {
+      activitiesCreated: 0,
+      contactsCreated: 0,
+      errors: [],
+    };
     const allContacts: EmailAddress[] = [];
 
     try {
@@ -247,9 +251,7 @@ export class OutlookCalendarSyncService {
             // TODO: persist activity via database layer
             result.activitiesCreated++;
 
-            const contacts = this.mapAttendeesToContacts(
-              event.attendees ?? [],
-            );
+            const contacts = this.mapAttendeesToContacts(event.attendees ?? []);
             allContacts.push(...contacts);
           } catch (err) {
             result.errors.push(
@@ -298,23 +300,20 @@ export class OutlookCalendarSyncService {
       Date.now() + 3 * 24 * 60 * 60 * 1000,
     ).toISOString();
 
-    const res = await fetch(
-      "https://graph.microsoft.com/v1.0/subscriptions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          changeType: "created,updated,deleted",
-          notificationUrl: webhookUrl,
-          resource: "me/events",
-          expirationDateTime,
-          clientState: `crm-cal-${this.workspaceId}`,
-        }),
+    const res = await fetch("https://graph.microsoft.com/v1.0/subscriptions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.accessToken}`,
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        changeType: "created,updated,deleted",
+        notificationUrl: webhookUrl,
+        resource: "me/events",
+        expirationDateTime,
+        clientState: `crm-cal-${this.workspaceId}`,
+      }),
+    });
 
     if (!res.ok) {
       const text = await res.text();
@@ -323,7 +322,10 @@ export class OutlookCalendarSyncService {
       );
     }
 
-    const data = (await res.json()) as { id: string; expirationDateTime: string };
+    const data = (await res.json()) as {
+      id: string;
+      expirationDateTime: string;
+    };
     return {
       subscriptionId: data.id,
       expiration: data.expirationDateTime,
@@ -334,9 +336,7 @@ export class OutlookCalendarSyncService {
    * Map Microsoft Graph calendar attendees to CRM-style {@link EmailAddress}
    * records.
    */
-  mapAttendeesToContacts(
-    attendees: GraphCalendarAttendee[],
-  ): EmailAddress[] {
+  mapAttendeesToContacts(attendees: GraphCalendarAttendee[]): EmailAddress[] {
     return attendees.map((a) => ({
       email: a.emailAddress.address,
       name: a.emailAddress.name,

@@ -10,7 +10,11 @@ interface DomainExclusionProps {
   onRemove: (domain: string) => void;
 }
 
-export function DomainExclusion({ domains, onAdd, onRemove }: DomainExclusionProps) {
+export function DomainExclusion({
+  domains,
+  onAdd,
+  onRemove,
+}: DomainExclusionProps) {
   const [newDomain, setNewDomain] = React.useState("");
 
   function handleAdd() {

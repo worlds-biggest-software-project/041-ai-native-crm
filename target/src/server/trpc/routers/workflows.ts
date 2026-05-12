@@ -1,10 +1,7 @@
 import { z } from "zod";
 import { eq, and } from "drizzle-orm";
 import { adminProcedure, createRouter } from "../init";
-import {
-  workflows,
-  workflowExecutions,
-} from "@/server/db/schema/workflows";
+import { workflows, workflowExecutions } from "@/server/db/schema/workflows";
 
 const workflowDefinitionSchema = z.object({
   trigger: z.object({
@@ -63,10 +60,7 @@ export const workflowsRouter = createRouter({
         .update(workflows)
         .set({ ...data, updatedAt: new Date() })
         .where(
-          and(
-            eq(workflows.id, id),
-            eq(workflows.workspaceId, ctx.workspaceId),
-          ),
+          and(eq(workflows.id, id), eq(workflows.workspaceId, ctx.workspaceId)),
         )
         .returning();
 

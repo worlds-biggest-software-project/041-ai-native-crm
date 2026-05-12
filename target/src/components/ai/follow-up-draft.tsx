@@ -13,7 +13,11 @@ interface FollowUpDraftProps {
   onDiscard?: () => void;
 }
 
-export function FollowUpDraft({ draft, onSend, onDiscard }: FollowUpDraftProps) {
+export function FollowUpDraft({
+  draft,
+  onSend,
+  onDiscard,
+}: FollowUpDraftProps) {
   const [subject, setSubject] = useState(draft.subject);
   const [body, setBody] = useState(draft.bodyText);
 

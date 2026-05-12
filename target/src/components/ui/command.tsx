@@ -26,7 +26,7 @@ const Command = React.forwardRef<
         ref={ref}
         className={cn(
           "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
-          className
+          className,
         )}
         {...props}
       >
@@ -90,7 +90,7 @@ const CommandInput = React.forwardRef<
         onChange={(e) => setSearch(e.target.value)}
         className={cn(
           "flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
-          className
+          className,
         )}
         {...props}
       />
@@ -118,7 +118,10 @@ function CommandEmpty({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("py-6 text-center text-sm text-muted-foreground", className)}
+      className={cn(
+        "py-6 text-center text-sm text-muted-foreground",
+        className,
+      )}
       {...props}
     >
       {children ?? "No results found."}
@@ -134,10 +137,7 @@ const CommandGroup = React.forwardRef<HTMLDivElement, CommandGroupProps>(
   ({ className, heading, children, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn(
-        "overflow-hidden p-1 text-foreground",
-        className
-      )}
+      className={cn("overflow-hidden p-1 text-foreground", className)}
       {...props}
     >
       {heading && (
@@ -147,7 +147,7 @@ const CommandGroup = React.forwardRef<HTMLDivElement, CommandGroupProps>(
       )}
       {children}
     </div>
-  )
+  ),
 );
 CommandGroup.displayName = "CommandGroup";
 
@@ -165,7 +165,7 @@ const CommandItem = React.forwardRef<HTMLDivElement, CommandItemProps>(
       className={cn(
         "relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground",
         disabled && "pointer-events-none opacity-50",
-        className
+        className,
       )}
       onClick={(e) => {
         if (disabled) return;
@@ -174,7 +174,7 @@ const CommandItem = React.forwardRef<HTMLDivElement, CommandItemProps>(
       }}
       {...props}
     />
-  )
+  ),
 );
 CommandItem.displayName = "CommandItem";
 

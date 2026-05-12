@@ -20,7 +20,14 @@ export const createContactSchema = z.object({
   city: z.string().max(255).optional(),
   countryCode: z.string().length(2).optional(),
   lifecycleStage: z
-    .enum(["lead", "subscriber", "opportunity", "customer", "evangelist", "other"])
+    .enum([
+      "lead",
+      "subscriber",
+      "opportunity",
+      "customer",
+      "evangelist",
+      "other",
+    ])
     .default("lead"),
   companyId: z.string().uuid().optional(),
   ownerId: z.string().uuid().optional(),
@@ -39,7 +46,14 @@ export const updateContactSchema = z.object({
   city: z.string().max(255).optional(),
   countryCode: z.string().length(2).optional(),
   lifecycleStage: z
-    .enum(["lead", "subscriber", "opportunity", "customer", "evangelist", "other"])
+    .enum([
+      "lead",
+      "subscriber",
+      "opportunity",
+      "customer",
+      "evangelist",
+      "other",
+    ])
     .optional(),
   companyId: z.string().uuid().nullable().optional(),
   ownerId: z.string().uuid().nullable().optional(),
@@ -50,12 +64,26 @@ export const updateContactSchema = z.object({
 export const listContactsSchema = cursorPaginationSchema.extend({
   search: z.string().max(500).optional(),
   lifecycleStage: z
-    .enum(["lead", "subscriber", "opportunity", "customer", "evangelist", "other"])
+    .enum([
+      "lead",
+      "subscriber",
+      "opportunity",
+      "customer",
+      "evangelist",
+      "other",
+    ])
     .optional(),
   ownerId: z.string().uuid().optional(),
   companyId: z.string().uuid().optional(),
   sortBy: z
-    .enum(["fullName", "email", "createdAt", "updatedAt", "lastActivityAt", "leadScore"])
+    .enum([
+      "fullName",
+      "email",
+      "createdAt",
+      "updatedAt",
+      "lastActivityAt",
+      "leadScore",
+    ])
     .default("createdAt"),
   sortOrder: sortOrderSchema,
 });
@@ -88,7 +116,9 @@ export const updateCompanySchema = z.object({
 
 export const listCompaniesSchema = cursorPaginationSchema.extend({
   search: z.string().max(500).optional(),
-  sortBy: z.enum(["name", "createdAt", "updatedAt", "lastActivityAt"]).default("createdAt"),
+  sortBy: z
+    .enum(["name", "createdAt", "updatedAt", "lastActivityAt"])
+    .default("createdAt"),
   sortOrder: sortOrderSchema,
 });
 
@@ -136,7 +166,14 @@ export const listDealsSchema = cursorPaginationSchema.extend({
   stageId: z.string().uuid().optional(),
   ownerId: z.string().uuid().optional(),
   sortBy: z
-    .enum(["name", "amount", "createdAt", "updatedAt", "expectedCloseDate", "healthScore"])
+    .enum([
+      "name",
+      "amount",
+      "createdAt",
+      "updatedAt",
+      "expectedCloseDate",
+      "healthScore",
+    ])
     .default("createdAt"),
   sortOrder: sortOrderSchema,
 });
@@ -198,7 +235,10 @@ export function validateCustomFields(
     const value = fields[def.fieldKey];
 
     // Check required
-    if (def.isRequired && (value === undefined || value === null || value === "")) {
+    if (
+      def.isRequired &&
+      (value === undefined || value === null || value === "")
+    ) {
       errors.push(`Missing required field: "${def.fieldKey}"`);
       continue;
     }
@@ -225,13 +265,17 @@ export function validateCustomFields(
       }
       case "date": {
         if (typeof value !== "string" || !ISO_DATE_RE.test(value)) {
-          errors.push(`Field "${def.fieldKey}" must be a date string in ISO format (YYYY-MM-DD)`);
+          errors.push(
+            `Field "${def.fieldKey}" must be a date string in ISO format (YYYY-MM-DD)`,
+          );
         }
         break;
       }
       case "datetime": {
         if (typeof value !== "string" || !ISO_DATETIME_RE.test(value)) {
-          errors.push(`Field "${def.fieldKey}" must be a datetime string in ISO format`);
+          errors.push(
+            `Field "${def.fieldKey}" must be a datetime string in ISO format`,
+          );
         }
         break;
       }
@@ -253,13 +297,18 @@ export function validateCustomFields(
         } else if (def.options) {
           const allowed = new Set(def.options.map((o) => o.value));
           if (!allowed.has(value)) {
-            errors.push(`Field "${def.fieldKey}" has invalid option: "${value}"`);
+            errors.push(
+              `Field "${def.fieldKey}" has invalid option: "${value}"`,
+            );
           }
         }
         break;
       }
       case "multi_select": {
-        if (!Array.isArray(value) || !value.every((v) => typeof v === "string")) {
+        if (
+          !Array.isArray(value) ||
+          !value.every((v) => typeof v === "string")
+        ) {
           errors.push(`Field "${def.fieldKey}" must be an array of strings`);
         } else if (def.options) {
           const allowed = new Set(def.options.map((o) => o.value));

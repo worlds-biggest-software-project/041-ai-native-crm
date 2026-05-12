@@ -121,11 +121,12 @@ export function PipelineBoard({
 }: PipelineBoardProps) {
   const [activeDeal, setActiveDeal] = React.useState<Deal | null>(null);
   const [localDeals, setLocalDeals] = React.useState<Deal[]>(deals);
+  const [prevDeals, setPrevDeals] = React.useState(deals);
 
-  // Keep local state in sync with prop changes
-  React.useEffect(() => {
+  if (prevDeals !== deals) {
+    setPrevDeals(deals);
     setLocalDeals(deals);
-  }, [deals]);
+  }
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -188,7 +189,7 @@ export function PipelineBoard({
     setLocalDeals((prev) =>
       prev.map((d) =>
         d.id === activeId
-          ? { ...d, stageId: targetStageId } as Deal & { stageId: string }
+          ? ({ ...d, stageId: targetStageId } as Deal & { stageId: string })
           : d,
       ),
     );
@@ -216,9 +217,7 @@ export function PipelineBoard({
     }
   }
 
-  const sortedStages = [...pipeline.stages].sort(
-    (a, b) => a.order - b.order,
-  );
+  const sortedStages = [...pipeline.stages].sort((a, b) => a.order - b.order);
 
   return (
     <DndContext

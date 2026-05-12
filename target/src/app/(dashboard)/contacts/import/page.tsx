@@ -25,12 +25,16 @@ function parseSimpleCsv(text: string): { headers: string[]; rows: string[][] } {
   const lines = text.split(/\r?\n/).filter((l) => l.trim() !== "");
   if (lines.length === 0) return { headers: [], rows: [] };
   const headers = (lines[0] ?? "").split(",").map((h) => h.trim());
-  const rows = lines.slice(1).map((line) => line.split(",").map((c) => c.trim()));
+  const rows = lines
+    .slice(1)
+    .map((line) => line.split(",").map((c) => c.trim()));
   return { headers, rows };
 }
 
 function parseSimpleVCard(text: string): ParsedRow[] {
-  const blocks = text.split(/END:VCARD/i).filter((b) => b.includes("BEGIN:VCARD"));
+  const blocks = text
+    .split(/END:VCARD/i)
+    .filter((b) => b.includes("BEGIN:VCARD"));
   return blocks.map((block) => {
     const row: ParsedRow = {};
     const lines = block.split(/\r?\n/);
@@ -61,7 +65,9 @@ export default function ImportPage() {
   const [csvHeaders, setCsvHeaders] = useState<string[]>([]);
   const [csvRows, setCsvRows] = useState<string[][]>([]);
   const [vcfRecords, setVcfRecords] = useState<ParsedRow[]>([]);
-  const [columnMapping, setColumnMapping] = useState<Record<string, string>>({});
+  const [columnMapping, setColumnMapping] = useState<Record<string, string>>(
+    {},
+  );
   const [importCount, setImportCount] = useState(0);
   const [duplicateCount] = useState(0);
 
@@ -89,9 +95,7 @@ export default function ImportPage() {
         const autoMap: Record<string, string> = {};
         for (const header of headers) {
           const lower = header.toLowerCase().replace(/[_\s]/g, "");
-          const match = CONTACT_FIELDS.find(
-            (f) => f.toLowerCase() === lower,
-          );
+          const match = CONTACT_FIELDS.find((f) => f.toLowerCase() === lower);
           if (match) autoMap[header] = match;
         }
         setColumnMapping(autoMap);
@@ -108,7 +112,9 @@ export default function ImportPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900">Import Contacts</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">
+          Import Contacts
+        </h1>
         <p className="mt-1 text-sm text-gray-500">
           Upload a CSV or vCard file to import contacts
         </p>
@@ -116,20 +122,26 @@ export default function ImportPage() {
 
       {/* Step indicators */}
       <div className="flex items-center gap-2 text-sm text-gray-500">
-        {(["upload", "preview", ...(fileType === "csv" ? ["mapping"] : []), "confirm", "success"] as const).map(
-          (s, i) => (
-            <span
-              key={s}
-              className={`rounded-full px-3 py-1 text-xs font-medium ${
-                step === s
-                  ? "bg-blue-100 text-blue-700"
-                  : "bg-gray-100 text-gray-400"
-              }`}
-            >
-              {i + 1}. {s.charAt(0).toUpperCase() + s.slice(1)}
-            </span>
-          ),
-        )}
+        {(
+          [
+            "upload",
+            "preview",
+            ...(fileType === "csv" ? ["mapping"] : []),
+            "confirm",
+            "success",
+          ] as const
+        ).map((s, i) => (
+          <span
+            key={s}
+            className={`rounded-full px-3 py-1 text-xs font-medium ${
+              step === s
+                ? "bg-blue-100 text-blue-700"
+                : "bg-gray-100 text-gray-400"
+            }`}
+          >
+            {i + 1}. {s.charAt(0).toUpperCase() + s.slice(1)}
+          </span>
+        ))}
       </div>
 
       {/* Upload Step */}
@@ -187,28 +199,36 @@ export default function ImportPage() {
               <table className="min-w-full divide-y divide-gray-200 text-sm">
                 <thead>
                   <tr>
-                    {["fullName", "firstName", "lastName", "email", "phone"].map(
-                      (h) => (
-                        <th
-                          key={h}
-                          className="px-3 py-2 text-left text-xs font-medium uppercase text-gray-500"
-                        >
-                          {h}
-                        </th>
-                      ),
-                    )}
+                    {[
+                      "fullName",
+                      "firstName",
+                      "lastName",
+                      "email",
+                      "phone",
+                    ].map((h) => (
+                      <th
+                        key={h}
+                        className="px-3 py-2 text-left text-xs font-medium uppercase text-gray-500"
+                      >
+                        {h}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {vcfRecords.slice(0, 5).map((rec, i) => (
                     <tr key={i}>
-                      {["fullName", "firstName", "lastName", "email", "phone"].map(
-                        (field) => (
-                          <td key={field} className="px-3 py-2 text-gray-700">
-                            {rec[field] ?? ""}
-                          </td>
-                        ),
-                      )}
+                      {[
+                        "fullName",
+                        "firstName",
+                        "lastName",
+                        "email",
+                        "phone",
+                      ].map((field) => (
+                        <td key={field} className="px-3 py-2 text-gray-700">
+                          {rec[field] ?? ""}
+                        </td>
+                      ))}
                     </tr>
                   ))}
                 </tbody>
@@ -252,9 +272,7 @@ export default function ImportPage() {
                 <span className="text-gray-400">&rarr;</span>
                 <select
                   value={columnMapping[header] ?? ""}
-                  onChange={(e) =>
-                    handleMappingChange(header, e.target.value)
-                  }
+                  onChange={(e) => handleMappingChange(header, e.target.value)}
                   className="rounded border px-3 py-1.5 text-sm text-gray-700"
                 >
                   <option value="">-- Skip --</option>
@@ -287,7 +305,9 @@ export default function ImportPage() {
       {/* Confirm Step */}
       {step === "confirm" && (
         <div className="rounded-lg border bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-gray-900">Confirm Import</h2>
+          <h2 className="mb-4 text-lg font-semibold text-gray-900">
+            Confirm Import
+          </h2>
           <div className="space-y-2 text-sm text-gray-700">
             <p>
               <span className="font-medium">{importCount}</span> records to

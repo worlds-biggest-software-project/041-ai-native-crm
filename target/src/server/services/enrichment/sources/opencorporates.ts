@@ -6,10 +6,7 @@
  * status). For MVP, the API call is mocked.
  */
 
-import type {
-  EnrichmentSource,
-  EnrichmentResult,
-} from "../enrichment-engine";
+import type { EnrichmentSource, EnrichmentResult } from "../enrichment-engine";
 
 export class OpenCorporatesSource implements EnrichmentSource {
   name = "OpenCorporates";

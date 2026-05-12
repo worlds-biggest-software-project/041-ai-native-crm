@@ -10,59 +10,61 @@ import {
 import { writeAuditLog } from "@/server/lib/audit";
 
 export const contactsRouter = createRouter({
-  list: protectedProcedure.input(listContactsSchema).query(async ({ ctx, input }) => {
-    const conditions = [
-      eq(contacts.workspaceId, ctx.workspaceId),
-      isNull(contacts.deletedAt),
-    ];
+  list: protectedProcedure
+    .input(listContactsSchema)
+    .query(async ({ ctx, input }) => {
+      const conditions = [
+        eq(contacts.workspaceId, ctx.workspaceId),
+        isNull(contacts.deletedAt),
+      ];
 
-    if (input.lifecycleStage) {
-      conditions.push(eq(contacts.lifecycleStage, input.lifecycleStage));
-    }
-    if (input.ownerId) {
-      conditions.push(eq(contacts.ownerId, input.ownerId));
-    }
-    if (input.companyId) {
-      conditions.push(eq(contacts.companyId, input.companyId));
-    }
-    if (input.search) {
-      conditions.push(
-        or(
-          ilike(contacts.fullName, `%${input.search}%`),
-          ilike(contacts.email, `%${input.search}%`),
-        )!,
-      );
-    }
-    if (input.cursor) {
-      conditions.push(eq(contacts.id, input.cursor));
-    }
+      if (input.lifecycleStage) {
+        conditions.push(eq(contacts.lifecycleStage, input.lifecycleStage));
+      }
+      if (input.ownerId) {
+        conditions.push(eq(contacts.ownerId, input.ownerId));
+      }
+      if (input.companyId) {
+        conditions.push(eq(contacts.companyId, input.companyId));
+      }
+      if (input.search) {
+        conditions.push(
+          or(
+            ilike(contacts.fullName, `%${input.search}%`),
+            ilike(contacts.email, `%${input.search}%`),
+          )!,
+        );
+      }
+      if (input.cursor) {
+        conditions.push(eq(contacts.id, input.cursor));
+      }
 
-    const sortColumn = {
-      fullName: contacts.fullName,
-      email: contacts.email,
-      createdAt: contacts.createdAt,
-      updatedAt: contacts.updatedAt,
-      lastActivityAt: contacts.lastActivityAt,
-      leadScore: contacts.leadScore,
-    }[input.sortBy];
+      const sortColumn = {
+        fullName: contacts.fullName,
+        email: contacts.email,
+        createdAt: contacts.createdAt,
+        updatedAt: contacts.updatedAt,
+        lastActivityAt: contacts.lastActivityAt,
+        leadScore: contacts.leadScore,
+      }[input.sortBy];
 
-    const orderFn = input.sortOrder === "asc" ? asc : desc;
+      const orderFn = input.sortOrder === "asc" ? asc : desc;
 
-    const items = await ctx.db
-      .select()
-      .from(contacts)
-      .where(and(...conditions))
-      .orderBy(orderFn(sortColumn))
-      .limit(input.limit + 1);
+      const items = await ctx.db
+        .select()
+        .from(contacts)
+        .where(and(...conditions))
+        .orderBy(orderFn(sortColumn))
+        .limit(input.limit + 1);
 
-    const hasMore = items.length > input.limit;
-    if (hasMore) items.pop();
+      const hasMore = items.length > input.limit;
+      if (hasMore) items.pop();
 
-    return {
-      items,
-      nextCursor: hasMore ? items[items.length - 1]?.id ?? null : null,
-    };
-  }),
+      return {
+        items,
+        nextCursor: hasMore ? (items[items.length - 1]?.id ?? null) : null,
+      };
+    }),
 
   getById: protectedProcedure
     .input(uuidSchema)

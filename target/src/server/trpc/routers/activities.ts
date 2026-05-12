@@ -9,39 +9,39 @@ import {
 import { writeAuditLog } from "@/server/lib/audit";
 
 export const activitiesRouter = createRouter({
-  timeline: protectedProcedure.input(timelineSchema).query(async ({ ctx, input }) => {
-    const conditions = [
-      eq(activities.workspaceId, ctx.workspaceId),
-    ];
+  timeline: protectedProcedure
+    .input(timelineSchema)
+    .query(async ({ ctx, input }) => {
+      const conditions = [eq(activities.workspaceId, ctx.workspaceId)];
 
-    if (input.contactId) {
-      conditions.push(eq(activities.contactId, input.contactId));
-    }
-    if (input.companyId) {
-      conditions.push(eq(activities.companyId, input.companyId));
-    }
-    if (input.dealId) {
-      conditions.push(eq(activities.dealId, input.dealId));
-    }
-    if (input.activityType) {
-      conditions.push(eq(activities.activityType, input.activityType));
-    }
+      if (input.contactId) {
+        conditions.push(eq(activities.contactId, input.contactId));
+      }
+      if (input.companyId) {
+        conditions.push(eq(activities.companyId, input.companyId));
+      }
+      if (input.dealId) {
+        conditions.push(eq(activities.dealId, input.dealId));
+      }
+      if (input.activityType) {
+        conditions.push(eq(activities.activityType, input.activityType));
+      }
 
-    const items = await ctx.db
-      .select()
-      .from(activities)
-      .where(and(...conditions))
-      .orderBy(desc(activities.occurredAt))
-      .limit(input.limit + 1);
+      const items = await ctx.db
+        .select()
+        .from(activities)
+        .where(and(...conditions))
+        .orderBy(desc(activities.occurredAt))
+        .limit(input.limit + 1);
 
-    const hasMore = items.length > input.limit;
-    if (hasMore) items.pop();
+      const hasMore = items.length > input.limit;
+      if (hasMore) items.pop();
 
-    return {
-      items,
-      nextCursor: hasMore ? items[items.length - 1]?.id ?? null : null,
-    };
-  }),
+      return {
+        items,
+        nextCursor: hasMore ? (items[items.length - 1]?.id ?? null) : null,
+      };
+    }),
 
   create: protectedProcedure
     .input(createActivitySchema)
@@ -50,7 +50,9 @@ export const activitiesRouter = createRouter({
         .insert(activities)
         .values({
           ...input,
-          occurredAt: input.occurredAt ? new Date(input.occurredAt) : new Date(),
+          occurredAt: input.occurredAt
+            ? new Date(input.occurredAt)
+            : new Date(),
           workspaceId: ctx.workspaceId,
           ownerId: ctx.session.user.id,
         })

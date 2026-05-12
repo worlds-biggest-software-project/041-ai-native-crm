@@ -10,5 +10,7 @@ import { describe, it } from "vitest";
 describe("GDPR erasure request — integration", () => {
   it.todo("reverts enriched fields to pre-enrichment values and deletes logs");
 
-  it.todo("handles erasure request when no enrichment logs exist for the entity");
+  it.todo(
+    "handles erasure request when no enrichment logs exist for the entity",
+  );
 });

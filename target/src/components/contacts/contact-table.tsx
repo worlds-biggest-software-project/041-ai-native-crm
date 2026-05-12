@@ -183,8 +183,7 @@ export function ContactTable({
     columns,
     state: { sorting, pagination },
     onSortingChange: (updater) => {
-      const next =
-        typeof updater === "function" ? updater(sorting) : updater;
+      const next = typeof updater === "function" ? updater(sorting) : updater;
       setSorting(next);
       onSort?.(next);
     },
@@ -251,9 +250,7 @@ export function ContactTable({
                 <TableRow
                   key={row.id}
                   className="cursor-pointer"
-                  onClick={() =>
-                    router.push(`/contacts/${row.original.id}`)
-                  }
+                  onClick={() => router.push(`/contacts/${row.original.id}`)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

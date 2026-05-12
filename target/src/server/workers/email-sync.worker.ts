@@ -25,7 +25,9 @@ interface EmailSyncJobData {
 async function processEmailSync(job: Job<EmailSyncJobData>) {
   const { provider, userId } = job.data;
 
-  console.log(`[EmailSyncWorker] Processing job ${job.id} for provider=${provider}`);
+  console.log(
+    `[EmailSyncWorker] Processing job ${job.id} for provider=${provider}`,
+  );
 
   // Load the OAuth connection for the job's user/provider
   const conditions = [eq(oauthConnections.isActive, true)];
@@ -41,7 +43,9 @@ async function processEmailSync(job: Job<EmailSyncJobData>) {
     .where(and(...conditions));
 
   if (connections.length === 0) {
-    console.warn(`[EmailSyncWorker] No active connection found for provider=${provider}`);
+    console.warn(
+      `[EmailSyncWorker] No active connection found for provider=${provider}`,
+    );
     return;
   }
 
@@ -56,7 +60,9 @@ async function processEmailSync(job: Job<EmailSyncJobData>) {
         // TODO: Implement token refresh logic
         // - Call provider's token refresh endpoint with connection.refreshToken
         // - Update the oauth_connection record with new tokens
-        console.log(`[EmailSyncWorker] Token expired for connection ${connection.id}, needs refresh`);
+        console.log(
+          `[EmailSyncWorker] Token expired for connection ${connection.id}, needs refresh`,
+        );
         continue;
       }
 
@@ -68,18 +74,26 @@ async function processEmailSync(job: Job<EmailSyncJobData>) {
       if (provider === "gmail") {
         if (hasLastHistoryId) {
           // TODO: Implement GmailSyncService.incrementalSync(accessToken, syncConfig)
-          console.log(`[EmailSyncWorker] Gmail incremental sync for connection ${connection.id}`);
+          console.log(
+            `[EmailSyncWorker] Gmail incremental sync for connection ${connection.id}`,
+          );
         } else {
           // TODO: Implement GmailSyncService.initialSync(accessToken)
-          console.log(`[EmailSyncWorker] Gmail initial sync for connection ${connection.id}`);
+          console.log(
+            `[EmailSyncWorker] Gmail initial sync for connection ${connection.id}`,
+          );
         }
       } else if (provider === "outlook") {
         if (hasLastHistoryId) {
           // TODO: Implement OutlookSyncService.incrementalSync(accessToken, syncConfig)
-          console.log(`[EmailSyncWorker] Outlook incremental sync for connection ${connection.id}`);
+          console.log(
+            `[EmailSyncWorker] Outlook incremental sync for connection ${connection.id}`,
+          );
         } else {
           // TODO: Implement OutlookSyncService.initialSync(accessToken)
-          console.log(`[EmailSyncWorker] Outlook initial sync for connection ${connection.id}`);
+          console.log(
+            `[EmailSyncWorker] Outlook initial sync for connection ${connection.id}`,
+          );
         }
       }
 

@@ -59,7 +59,10 @@ function truncate(text: string, maxLength: number): string {
   return text.slice(0, maxLength).trimEnd() + "…";
 }
 
-const ICON_CONFIG: Record<string, { icon: typeof Mail; bg: string; text: string }> = {
+const ICON_CONFIG: Record<
+  string,
+  { icon: typeof Mail; bg: string; text: string }
+> = {
   email: { icon: Mail, bg: "bg-blue-100", text: "text-blue-600" },
   meeting: { icon: Calendar, bg: "bg-purple-100", text: "text-purple-600" },
   call: { icon: Phone, bg: "bg-green-100", text: "text-green-600" },
@@ -103,8 +106,7 @@ function MeetingContent({
   occurredAt: string | Date;
 }) {
   const attendees = Array.isArray(detail.attendees) ? detail.attendees : null;
-  const d =
-    typeof occurredAt === "string" ? new Date(occurredAt) : occurredAt;
+  const d = typeof occurredAt === "string" ? new Date(occurredAt) : occurredAt;
   const timeStr = d.toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
@@ -115,7 +117,8 @@ function MeetingContent({
       <span>{timeStr}</span>
       {attendees && (
         <span>
-          &middot; {attendees.length} attendee{attendees.length !== 1 ? "s" : ""}
+          &middot; {attendees.length} attendee
+          {attendees.length !== 1 ? "s" : ""}
         </span>
       )}
     </div>

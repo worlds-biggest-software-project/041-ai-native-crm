@@ -35,13 +35,15 @@ const updateCompanySchema = createCompanySchema.partial();
 
 /** Standard success envelope for a single company */
 const companyResponseEnvelopeSchema = z.object({
-  data: z.object({
-    id: z.string().uuid(),
-    workspaceId: z.string().uuid(),
-    name: z.string(),
-    createdAt: z.string().datetime(),
-    updatedAt: z.string().datetime(),
-  }).passthrough(),
+  data: z
+    .object({
+      id: z.string().uuid(),
+      workspaceId: z.string().uuid(),
+      name: z.string(),
+      createdAt: z.string().datetime(),
+      updatedAt: z.string().datetime(),
+    })
+    .passthrough(),
 });
 
 /** Standard success envelope for a paginated company list */
@@ -238,9 +240,7 @@ describe("Companies API — :id parameter validation", () => {
   const uuidSchema = z.string().uuid();
 
   it("accepts a valid UUID v4", () => {
-    const result = uuidSchema.safeParse(
-      "c0a80121-0001-4000-8000-000000000001",
-    );
+    const result = uuidSchema.safeParse("c0a80121-0001-4000-8000-000000000001");
     expect(result.success).toBe(true);
   });
 

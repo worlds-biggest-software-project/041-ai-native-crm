@@ -20,21 +20,17 @@ export function registerPrompts(server: McpServer, workspaceId: string): void {
     }),
   );
 
-  server.prompt(
-    "deal_summary",
-    { dealId: z.string() },
-    async (_args) => ({
-      messages: [
-        {
-          role: "user" as const,
-          content: {
-            type: "text" as const,
-            text: "TODO: implement deal summary prompt",
-          },
+  server.prompt("deal_summary", { dealId: z.string() }, async (_args) => ({
+    messages: [
+      {
+        role: "user" as const,
+        content: {
+          type: "text" as const,
+          text: "TODO: implement deal summary prompt",
         },
-      ],
-    }),
-  );
+      },
+    ],
+  }));
 
   server.prompt(
     "follow_up_draft",

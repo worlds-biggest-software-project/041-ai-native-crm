@@ -51,10 +51,14 @@ const TrendIcon = {
 // Component
 // ---------------------------------------------------------------------------
 
-export function ScoreBadge({ score, label, trend, timestamp }: ScoreBadgeProps) {
+export function ScoreBadge({
+  score,
+  label,
+  trend,
+  timestamp,
+}: ScoreBadgeProps) {
   const normalizedLabel = label.toLowerCase();
-  const colorClass =
-    LABEL_COLORS[normalizedLabel] ?? LABEL_COLORS["cold"];
+  const colorClass = LABEL_COLORS[normalizedLabel] ?? LABEL_COLORS["cold"];
   const Icon = trend ? TrendIcon[trend] : null;
 
   return (
