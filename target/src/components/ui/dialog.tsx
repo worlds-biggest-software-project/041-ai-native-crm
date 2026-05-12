@@ -152,6 +152,11 @@ const DialogDescription = React.forwardRef<
 ));
 DialogDescription.displayName = "DialogDescription";
 
+function useDialogClose() {
+  const { setOpen } = React.useContext(DialogContext);
+  return React.useCallback(() => setOpen(false), [setOpen]);
+}
+
 export {
   Dialog,
   DialogTrigger,
@@ -160,4 +165,5 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
+  useDialogClose,
 };

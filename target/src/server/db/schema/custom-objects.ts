@@ -52,7 +52,7 @@ export const customObjectRecords = pgTable(
     workspaceId: uuid("workspace_id")
       .notNull()
       .references(() => workspaces.id, { onDelete: "cascade" }),
-    objectDefId: uuid("object_def_id")
+    objectDefId: uuid("def_id")
       .notNull()
       .references(() => customObjectDefinitions.id, { onDelete: "cascade" }),
     displayName: varchar("display_name", { length: 500 }),
